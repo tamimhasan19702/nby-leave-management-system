@@ -59,6 +59,11 @@ CREATE TABLE `tbldepartments` (
 -- Dumping data for table `tbldepartments`
 --
 
+INSERT INTO `tbldepartments` (`id`, `DepartmentName`, `DepartmentShortName`, `DepartmentCode`, `CreationDate`) VALUES
+(1, 'Human Resource', 'HR', 'HR01', '2023-08-31 14:50:20'),
+(2, 'Information Technology', 'IT', 'IT01', '2023-08-31 14:50:56'),
+(3, 'Accounts', 'Accounts', 'ACCNT01', '2023-08-31 14:51:26'),
+(4, 'ADMIN', 'Admin', 'ADMN01', '2023-09-01 11:35:50');
 
 -- --------------------------------------------------------
 
@@ -88,6 +93,11 @@ CREATE TABLE `tblemployees` (
 -- Dumping data for table `tblemployees`
 --
 
+INSERT INTO `tblemployees` (`id`, `EmpId`, `FirstName`, `LastName`, `EmailId`, `Password`, `Gender`, `Dob`, `Department`, `Address`, `City`, `Country`, `Phonenumber`, `Status`, `RegDate`) VALUES
+(1, '10805121', 'Rahul', 'Kumar', 'rk1995@test.com', 'f925916e2754e5e03f75dd58a5733251', 'Male', '3 August, 1995', 'Information Technology', 'A 123 XYZ Apartment ', 'New Delhi', 'India', '12121212', 1, '2023-08-31 14:56:23'),
+(2, '10235612', 'Garima', 'Yadav', 'grama123@gmail.com', 'f925916e2754e5e03f75dd58a5733251', 'Female', '2 January, 1997', 'Accounts', 'Hno 123 ABC Colony', 'New Delhi', 'India', '7485963210', 1, '2023-08-31 15:02:47'),
+(5, '7856214', 'John', 'Doe', 'jhn12@gmail.com', 'f925916e2754e5e03f75dd58a5733251', 'Male', '3 January, 1995', 'Accounts', 'H no 1', 'Ghaziabad ', 'India', '23232323', 1, '2023-09-01 11:38:23');
+
 -- --------------------------------------------------------
 
 --
@@ -112,7 +122,9 @@ CREATE TABLE `tblleaves` (
 -- Dumping data for table `tblleaves`
 --
 
-
+INSERT INTO `tblleaves` (`id`, `LeaveType`, `ToDate`, `FromDate`, `Description`, `PostingDate`, `AdminRemark`, `AdminRemarkDate`, `Status`, `IsRead`, `empid`) VALUES
+(11, 'Casual Leaves', '17/09/2023', '10/09/2023', 'I need leave to visit my home town. ', '2023-08-31 15:06:21', 'Approved', '2023-08-31 20:39:40 ', 1, 1, 1),
+(12, 'Casual Leaves', '15/09/2023', '09/09/2023', 'Need casual leaves for some personal work.', '2023-09-01 11:42:40', 'Leave approved', '2023-09-01 17:13:20 ', 1, 1, 5);
 
 -- --------------------------------------------------------
 
@@ -131,7 +143,11 @@ CREATE TABLE `tblleavetype` (
 -- Dumping data for table `tblleavetype`
 --
 
-
+INSERT INTO `tblleavetype` (`id`, `LeaveType`, `Description`, `CreationDate`) VALUES
+(1, 'Casual Leaves', 'Casual Leaves', '2023-08-31 14:52:22'),
+(2, 'Earned Leaves', 'Earned Leaves', '2023-08-31 14:52:49'),
+(3, 'Sick Leaves', 'Sick Leaves', '2023-08-31 14:53:15'),
+(4, 'RH (Restricted Leaves)', 'Restricted Leaves', '2023-09-01 11:37:06');
 
 --
 -- Indexes for dumped tables

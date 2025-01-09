@@ -145,16 +145,17 @@ else{
                 <ul class="sidebar-menu collapsible collapsible-accordion" data-collapsible="accordion" style="">
                     <li>&nbsp;</li>
                     <li class="no-padding"><a class="waves-effect waves-grey" href="index.php"><i
-                                class="material-icons">account_box</i>Employee Login</a></li>
+                                class="material-icons login-menu-sidebar">account_box</i>Employee Login</a></li>
                     <li class="no-padding"><a class="waves-effect waves-grey" href="forgot-password.php"><i
-                                class="material-icons">account_box</i>Employee Password Recovery</a></li>
+                                class="material-icons login-menu-sidebar">account_box</i>Employee Password Recovery</a>
+                    </li>
 
                     <li class="no-padding"><a class="waves-effect waves-grey" href="admin/"><i
-                                class="material-icons">account_box</i>Admin Login</a></li>
+                                class="material-icons login-menu-sidebar">account_box</i>Admin Login</a></li>
 
                 </ul>
                 <div class="footer">
-                    <p class="copyright">ELMS ©</p>
+                    <p class="copyright">NBYIT Leave Management System</p>
 
                 </div>
             </div>
@@ -176,9 +177,9 @@ else{
                                 <div class="row">
                                     <form class="col s12" name="signin" method="post">
                                         <div class="input-field col s12">
-                                            <input id="username" type="text" name="username" class="validate"
+                                            <input id="username" type="email" name="username" class="validate"
                                                 autocomplete="off" required>
-                                            <label for="email">Email Id</label>
+                                            <label for="email">Email Address</label>
                                         </div>
                                         <div class="input-field col s12">
                                             <input id="password" type="password" class="validate" name="password"
