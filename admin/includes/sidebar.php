@@ -1,85 +1,106 @@
-     <aside id="slide-out" class="side-nav white fixed">
-         <div class="side-nav-wrapper">
-             <div class="sidebar-profile">
-                 <div class="sidebar-profile-image">
-                     <img src="../assets/images/profile-image.png" class="circle" alt="">
-                 </div>
-                 <div class="sidebar-profile-info">
+<?php 
 
-                     <p>Admin</p>
+session_start();
+error_reporting(0);
+include('includes/config.php');
 
+if(strlen($_SESSION['alogin'])==0) {   
+    header('location:index.php');
+} else {
+    // Fetch the details of the logged-in admin
+    $adminUsername = $_SESSION['alogin']; // Assuming this is the username stored in session
+    $sql = "SELECT id, UserName, EmailId, Image FROM admin WHERE UserName = :username"; // Adjust the query to match your database schema
+    $query = $dbh->prepare($sql);
+    $query->bindParam(':username', $adminUsername, PDO::PARAM_STR);
+    $query->execute();
+    $result = $query->fetch(PDO::FETCH_OBJ);
 
-                 </div>
-             </div>
-
-             <ul class="sidebar-menu collapsible collapsible-accordion" data-collapsible="accordion">
-                 <li class="no-padding"><a class="waves-effect waves-grey" href="dashboard.php"><i
-                             class="material-icons">settings_input_svideo</i>Dashboard</a></li>
-                 <li class="no-padding">
-                     <a class="collapsible-header waves-effect waves-grey"><i
-                             class="material-icons">apps</i>Department<i
-                             class="nav-drop-icon material-icons">keyboard_arrow_right</i></a>
-                     <div class="collapsible-body">
-                         <ul>
-                             <li><a href="adddepartment.php">Add Department</a></li>
-                             <li><a href="managedepartments.php">Manage Department</a></li>
-                         </ul>
-                     </div>
-                 </li>
-                 <li class="no-padding">
-                     <a class="collapsible-header waves-effect waves-grey"><i class="material-icons">code</i>Leave
-                         Type<i class="nav-drop-icon material-icons">keyboard_arrow_right</i></a>
-                     <div class="collapsible-body">
-                         <ul>
-                             <li><a href="addleavetype.php">Add Leave Type</a></li>
-                             <li><a href="manageleavetype.php">Manage Leave Type</a></li>
-                         </ul>
-                     </div>
-                 </li>
-                 <li class="no-padding">
-                     <a class="collapsible-header waves-effect waves-grey"><i
-                             class="material-icons">account_box</i>Employees<i
-                             class="nav-drop-icon material-icons">keyboard_arrow_right</i></a>
-                     <div class="collapsible-body">
-                         <ul>
-                             <li><a href="addemployee.php">Add Employee</a></li>
-                             <li><a href="manageemployee.php">Manage Employee</a></li>
-
-                         </ul>
-                     </div>
-                 </li>
-
-                 <li class="no-padding">
-                     <a class="collapsible-header waves-effect waves-grey"><i
-                             class="material-icons">desktop_windows</i>Leave Management<i
-                             class="nav-drop-icon material-icons">keyboard_arrow_right</i></a>
-                     <div class="collapsible-body">
-                         <ul>
-                             <li><a href="leaves.php">All Leaves </a></li>
-                             <li><a href="pending-leavehistory.php">Pending Leaves </a></li>
-                             <li><a href="approvedleave-history.php">Approved Leaves</a></li>
-                             <li><a href="notapproved-leaves.php">Not Approved Leaves</a></li>
-
-                         </ul>
-                     </div>
-                 </li>
+    // Check if the result is found
+    if ($result) {
+        $adminId = $result->id;
+        $adminUserName = $result->UserName;
+        $adminEmail = $result->EmailId;
+        $adminImage = $result->Image;
+    } else {
+        $adminEmail = "Email not found"; // Handle case where email is not found
+        $adminUserName = "User not found"; // Handle case where username is not found
+        $adminImage = "default.png"; // Default image if not found
+    }
+?>
 
 
-                 <li class="no-padding"><a class="waves-effect waves-grey" href="changepassword.php"><i
-                             class="material-icons">settings_input_svideo</i>Chnage Password</a></li>
+<aside id="slide-out" class="side-nav white fixed">
+    <div class="side-nav-wrapper">
+        <div class="sidebar-profile">
+            <div class="sidebar-profile-image">
+                <img src="../assets/images/profile-image.png" class="circle" alt="">
+            </div>
+            <div class="sidebar-profile-info">
+                <p><?php echo htmlentities($adminUserName); ?></p>
+                <p><?php echo htmlentities($adminEmail); ?></p>
+            </div>
+        </div>
 
-                 <li class="no-padding">
-                     <a class="waves-effect waves-grey" href="logout.php"><i class="material-icons">exit_to_app</i>Sign
-                         Out</a>
-                 </li>
+        <ul class="sidebar-menu collapsible collapsible-accordion" data-collapsible="accordion">
+            <li class="no-padding"><a class="waves-effect waves-grey" href="dashboard.php"><i
+                        class="material-icons">settings_input_svideo</i>Dashboard</a></li>
+            <li class="no-padding">
+                <a class="collapsible-header waves-effect waves-grey"><i class="material-icons">apps</i>Department<i
+                        class="nav-drop-icon material-icons">keyboard_arrow_right</i></a>
+                <div class="collapsible-body">
+                    <ul>
+                        <li><a href="adddepartment.php">Add Department</a></li>
+                        <li><a href="managedepartments.php">Manage Department</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="no-padding">
+                <a class="collapsible-header waves-effect waves-grey"><i class="material-icons">code</i>Leave
+                    Type<i class="nav-drop-icon material-icons">keyboard_arrow_right</i></a>
+                <div class="collapsible-body">
+                    <ul>
+                        <li><a href="addleavetype.php">Add Leave Type</a></li>
+                        <li><a href="manageleavetype.php">Manage Leave Type</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="no-padding">
+                <a class="collapsible-header waves-effect waves-grey"><i
+                        class="material-icons">account_box</i>Employees<i
+                        class="nav-drop-icon material-icons">keyboard_arrow_right</i></a>
+                <div class="collapsible-body">
+                    <ul>
+                        <li><a href="addemployee.php">Add Employee</a></li>
+                        <li><a href="manageemployee.php">Manage Employee</a></li>
+                    </ul>
+                </div>
+            </li>
 
+            <li class="no-padding">
+                <a class="collapsible-header waves-effect waves-grey"><i class="material-icons">desktop_windows</i>Leave
+                    Management<i class="nav-drop-icon material-icons">keyboard_arrow_right</i></a>
+                <div class="collapsible-body">
+                    <ul>
+                        <li><a href="leaves.php">All Leaves </a></li>
+                        <li><a href="pending-leavehistory.php">Pending Leaves </a></li>
+                        <li><a href="approvedleave-history.php">Approved Leaves</a></li>
+                        <li><a href="notapproved-leaves.php">Not Approved Leaves</a></li>
+                    </ul>
+                </div>
+            </li>
 
+            <li class="no-padding"><a class="waves-effect waves-grey" href="changepassword.php"><i
+                        class="material-icons">settings_input_svideo</i>Change Password</a></li>
 
+            <li class="no-padding">
+                <a class="waves-effect waves-grey" href="logout.php"><i class="material-icons">exit_to_app</i>Sign
+                    Out</a>
+            </li>
+        </ul>
+        <div class="footer">
+            <p class="copyright">NBYIT Leave Management System</p>
+        </div>
+    </div>
+</aside>
 
-             </ul>
-             <div class="footer">
-                 <p class="copyright">NBYIT Leave Management System</p>
-
-             </div>
-         </div>
-     </aside>
+<?php } ?>

@@ -27,7 +27,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `admin`
 --
 CREATE TABLE `admin` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `UserName` varchar(100) NOT NULL,
   `Password` varchar(100) NOT NULL,
   `EmailId` varchar(120) NOT NULL,
@@ -54,7 +54,7 @@ INSERT INTO `admin` (`id`, `UserName`, `Password`, `EmailId`, `Image`, `updation
 --
 
 CREATE TABLE `tbldepartments` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `DepartmentName` varchar(150) DEFAULT NULL,
   `DepartmentShortName` varchar(100) DEFAULT NULL,
   `DepartmentCode` varchar(50) DEFAULT NULL,
@@ -78,7 +78,7 @@ INSERT INTO `tbldepartments` (`id`, `DepartmentName`, `DepartmentShortName`, `De
 --
 
 CREATE TABLE `tblemployees` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `EmpId` varchar(100) NOT NULL,
   `FirstName` varchar(150) DEFAULT NULL,
   `LastName` varchar(150) DEFAULT NULL,
@@ -91,6 +91,7 @@ CREATE TABLE `tblemployees` (
   `City` varchar(200) DEFAULT NULL,
   `Country` varchar(150) DEFAULT NULL,
   `Phonenumber` char(11) DEFAULT NULL,
+  `Username` varchar(100) NOT NULL,
   `Status` int(1) DEFAULT NULL,
   `RegDate` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
@@ -99,10 +100,10 @@ CREATE TABLE `tblemployees` (
 -- Dumping data for table `tblemployees`
 --
 
-INSERT INTO `tblemployees` (`id`, `EmpId`, `FirstName`, `LastName`, `EmailId`, `Password`, `Gender`, `Dob`, `Department`, `Address`, `City`, `Country`, `Phonenumber`, `Status`, `RegDate`) VALUES
-(1, '10805121', 'Rahul', 'Kumar', 'rk1995@test.com', 'f925916e2754e5e03f75dd58a5733251', 'Male', '3 August, 1995', 'Information Technology', 'A 123 XYZ Apartment ', 'New Delhi', 'India', '12121212', 1, '2023-08-31 14:56:23'),
-(2, '10235612', 'Garima', 'Yadav', 'grama123@gmail.com', 'f925916e2754e5e03f75dd58a5733251', 'Female', '2 January, 1997', 'Accounts', 'Hno 123 ABC Colony', 'New Delhi', 'India', '7485963210', 1, '2023-08-31 15:02:47'),
-(5, '7856214', 'John', 'Doe', 'jhn12@gmail.com', 'f925916e2754e5e03f75dd58a5733251', 'Male', '3 January, 1995', 'Accounts', 'H no 1', 'Ghaziabad ', 'India', '23232323', 1, '2023-09-01 11:38:23');
+INSERT INTO `tblemployees` (`id`, `EmpId`, `FirstName`, `LastName`, `EmailId`, `Password`, `Gender`, `Dob`, `Department`, `Address`, `City`, `Country`, `Phonenumber`, `Username`, `Status`, `RegDate`) VALUES
+(1, '10805121', 'Rakesh', 'Singh', 'rksingh@test.com', 'f925916e2754e5e03f75dd58a5733251', 'Male', '3 August, 1995', 'Information Technology', 'A 123 XYZ Apartment ', 'New Delhi', 'India', '12121212', 'rakesh123', 1, '2023-08-31 14:56:23'),
+(2, '10235612', 'Shivani', 'Yadav', 'shivani123@gmail.com', 'f925916e2754e5e03f75dd58a5733251', 'Female', '2 January, 1997', 'Accounts', 'Hno 123 ABC Colony', 'New Delhi', 'India', '7485963210', 'shivani123', 1, '2023-08-31 15:02:47'),
+(5, '7856214', 'Raj', 'Verma', 'rajverma123@gmail.com', 'f925916e2754e5e03f75dd58a5733251', 'Male', '3 January, 1995', 'Accounts', 'H no 1', 'Ghaziabad ', 'India', '23232323', 'rajverma123', 1, '2023-09-01 11:38:23');
 
 -- --------------------------------------------------------
 
@@ -111,7 +112,7 @@ INSERT INTO `tblemployees` (`id`, `EmpId`, `FirstName`, `LastName`, `EmailId`, `
 --
 
 CREATE TABLE `tblleaves` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `LeaveType` varchar(110) DEFAULT NULL,
   `ToDate` varchar(120) DEFAULT NULL,
   `FromDate` varchar(120) DEFAULT NULL,
@@ -139,7 +140,7 @@ INSERT INTO `tblleaves` (`id`, `LeaveType`, `ToDate`, `FromDate`, `Description`,
 --
 
 CREATE TABLE `tblleavetype` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `LeaveType` varchar(200) DEFAULT NULL,
   `Description` mediumtext DEFAULT NULL,
   `CreationDate` timestamp NOT NULL DEFAULT current_timestamp()
