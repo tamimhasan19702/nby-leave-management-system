@@ -5,7 +5,7 @@ include('includes/config.php');
 
 if (isset($_POST['signin'])) {
     // Retrieve username or email and password from the form
-    $username_or_email = $_POST['username_or_email'];
+    $username_or_email = $_POST['username_or_email']; // Ensure this matches the input name
     $password = md5($_POST['password']); // Hash the password for security
 
     // Update the SQL query to check both EmailId and Username
@@ -40,6 +40,7 @@ if (isset($_POST['signin'])) {
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -178,16 +179,16 @@ if (isset($_POST['signin'])) {
                     <div class="col s12 m6 l8 offset-l2 offset-m3">
                         <div class="card white darken-1">
 
-                            <div class="card-content ">
+                            <div class="card-content">
                                 <span class="card-title" style="font-size:20px;">Employee Login</span>
                                 <?php if($msg){?><div class="errorWrap"><strong>Error</strong> :
                                     <?php echo htmlentities($msg); ?> </div><?php }?>
                                 <div class="row">
                                     <form class="col s12" name="signin" method="post">
                                         <div class="input-field col s12">
-                                            <input id="nby-username" type="email" name="username" class="nby-validate"
-                                                autocomplete="off" required>
-                                            <label for="nby-username">Email Address or Username</label>
+                                            <input id="username_or_email" type="text" name="username_or_email"
+                                                class="nby-validate" autocomplete="off" required>
+                                            <label for="username_or_email">Email Address or Username</label>
                                         </div>
                                         <div class="input-field col s12">
                                             <input id="password" type="password" class="validate" name="password"
@@ -195,13 +196,14 @@ if (isset($_POST['signin'])) {
                                             <label for="password">Password</label>
                                         </div>
                                         <div class="col s12 right-align m-t-sm">
-
                                             <input type="submit" name="signin" value="Sign in"
                                                 class="waves-effect waves-light btn teal">
                                         </div>
                                     </form>
                                 </div>
                             </div>
+
+
                         </div>
                     </div>
                 </div>

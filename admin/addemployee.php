@@ -3,64 +3,64 @@ session_start();
 error_reporting(0);
 include('includes/config.php');
 if(strlen($_SESSION['alogin'])==0)
-    {   
-header('location:index.php');
+{   
+    header('location:index.php');
 }
 else{
-if(isset($_POST['add']))
-{
-$empid=$_POST['empcode'];
-$fname=$_POST['firstName'];
-$lname=$_POST['lastName'];   
-$email=$_POST['email']; 
-$password=md5($_POST['password']); 
-$gender=$_POST['gender']; 
-$dob=$_POST['dob']; 
-$department=$_POST['department']; 
-$address=$_POST['address']; 
-$city=$_POST['city']; 
-$country=$_POST['country']; 
-$mobileno=$_POST['mobileno']; 
-$status=1;
+    if(isset($_POST['add']))
+    {
+        $empid = $_POST['empcode'];
+        $fname = $_POST['firstName'];
+        $lname = $_POST['lastName'];   
+        $email = $_POST['email']; 
+        $username = $_POST['username']; // New field for username
+        $password = md5($_POST['password']); 
+        $gender = $_POST['gender']; 
+        $dob = $_POST['dob']; 
+        $department = $_POST['department']; 
+        $address = $_POST['address']; 
+        $city = $_POST['city']; 
+        $country = $_POST['country']; 
+        $mobileno = $_POST['mobileno']; 
+        $status = 1;
 
-$sql="INSERT INTO tblemployees(EmpId,FirstName,LastName,EmailId,Password,Gender,Dob,Department,Address,City,Country,Phonenumber,Status) VALUES(:empid,:fname,:lname,:email,:password,:gender,:dob,:department,:address,:city,:country,:mobileno,:status)";
-$query = $dbh->prepare($sql);
-$query->bindParam(':empid',$empid,PDO::PARAM_STR);
-$query->bindParam(':fname',$fname,PDO::PARAM_STR);
-$query->bindParam(':lname',$lname,PDO::PARAM_STR);
-$query->bindParam(':email',$email,PDO::PARAM_STR);
-$query->bindParam(':password',$password,PDO::PARAM_STR);
-$query->bindParam(':gender',$gender,PDO::PARAM_STR);
-$query->bindParam(':dob',$dob,PDO::PARAM_STR);
-$query->bindParam(':department',$department,PDO::PARAM_STR);
-$query->bindParam(':address',$address,PDO::PARAM_STR);
-$query->bindParam(':city',$city,PDO::PARAM_STR);
-$query->bindParam(':country',$country,PDO::PARAM_STR);
-$query->bindParam(':mobileno',$mobileno,PDO::PARAM_STR);
-$query->bindParam(':status',$status,PDO::PARAM_STR);
-$query->execute();
-$lastInsertId = $dbh->lastInsertId();
-if($lastInsertId)
-{
-$msg="Employee record added Successfully";
-}
-else 
-{
-$error="Something went wrong. Please try again";
-}
-
-}
-
-    ?>
+        // Updated SQL query to include Username
+        $sql = "INSERT INTO tblemployees(EmpId, FirstName, LastName, EmailId, Username, Password, Gender, Dob, Department, Address, City, Country, Phonenumber, Status) 
+                VALUES(:empid, :fname, :lname, :email, :username, :password, :gender, :dob, :department, :address, :city, :country, :mobileno, :status)";
+        $query = $dbh->prepare($sql);
+        $query->bindParam(':empid', $empid, PDO::PARAM_STR);
+        $query->bindParam(':fname', $fname, PDO::PARAM_STR);
+        $query->bindParam(':lname', $lname, PDO::PARAM_STR);
+        $query->bindParam(':email', $email, PDO::PARAM_STR);
+        $query->bindParam(':username', $username, PDO::PARAM_STR); // Bind the new username field
+        $query->bindParam(':password', $password, PDO::PARAM_STR);
+        $query->bindParam(':gender', $gender, PDO::PARAM_STR);
+        $query->bindParam(':dob', $dob, PDO::PARAM_STR);
+        $query->bindParam(':department', $department, PDO::PARAM_STR);
+        $query->bindParam(':address', $address, PDO::PARAM_STR);
+        $query->bindParam(':city', $city, PDO::PARAM_STR);
+        $query->bindParam(':country', $country, PDO::PARAM_STR);
+        $query->bindParam(':mobileno', $mobileno, PDO::PARAM_STR);
+        $query->bindParam(':status', $status, PDO::PARAM_STR);
+        $query->execute();
+        $lastInsertId = $dbh->lastInsertId();
+        if($lastInsertId)
+        {
+            $msg = "Employee record added Successfully";
+        }
+        else 
+        {
+            $error = "Something went wrong. Please try again";
+        }
+    }
+?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-
     <!-- Title -->
     <title>Admin | Add Employee</title>
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta charset="UTF-8">
     <meta name="description" content="Responsive Admin Dashboard Template" />
@@ -135,13 +135,10 @@ $error="Something went wrong. Please try again";
     }
     </script>
 
-
-
 </head>
 
 <body>
     <?php include('includes/header.php');?>
-
     <?php include('includes/sidebar.php');?>
     <main class="mn-inner">
         <div class="row">
@@ -162,11 +159,12 @@ $error="Something went wrong. Please try again";
                                                     <?php if($error){?><div class="errorWrap">
                                                         <strong>ERROR</strong>:<?php echo htmlentities($error); ?>
                                                     </div><?php } 
-                else if($msg){?><div class="succWrap"><strong>SUCCESS</strong>:<?php echo htmlentities($msg); ?> </div>
+                                                    else if($msg){?><div class="succWrap">
+                                                        <strong>SUCCESS</strong>:<?php echo htmlentities($msg); ?>
+                                                    </div>
                                                     <?php }?>
 
-
-                                                    <div class="input-field col  s12">
+                                                    <div class="input-field col s12">
                                                         <label for="empcode">Employee Code(Must be unique)</label>
                                                         <input name="empcode" id="empcode"
                                                             onBlur="checkAvailabilityEmpid()" type="text"
@@ -174,6 +172,12 @@ $error="Something went wrong. Please try again";
                                                         <span id="empid-availability" style="font-size:12px;"></span>
                                                     </div>
 
+                                                    <div class="input-field col s12">
+                                                        <label for="username">Username (Must be unique)</label>
+                                                        <input name="username" id="username" type="text"
+                                                            autocomplete="off" required>
+                                                        <span id="username-availability" style="font-size:12px;"></span>
+                                                    </div>
 
                                                     <div class="input-field col m6 s12">
                                                         <label for="firstName">First name</label>
@@ -225,25 +229,24 @@ $error="Something went wrong. Please try again";
                                                             autocomplete="off">
                                                     </div>
 
-
-
                                                     <div class="input-field col m6 s12">
                                                         <select name="department" autocomplete="off">
                                                             <option value="">Department...</option>
-                                                            <?php $sql = "SELECT DepartmentName from tbldepartments";
-$query = $dbh -> prepare($sql);
-$query->execute();
-$results=$query->fetchAll(PDO::FETCH_OBJ);
-$cnt=1;
-if($query->rowCount() > 0)
-{
-foreach($results as $result)
-{   ?>
+                                                            <?php 
+                                                            $sql = "SELECT DepartmentName from tbldepartments";
+                                                            $query = $dbh->prepare($sql);
+                                                            $query->execute();
+                                                            $results = $query->fetchAll(PDO::FETCH_OBJ);
+                                                            if($query->rowCount() > 0)
+                                                            {
+                                                                foreach($results as $result)
+                                                                { ?>
                                                             <option
                                                                 value="<?php echo htmlentities($result->DepartmentName);?>">
                                                                 <?php echo htmlentities($result->DepartmentName);?>
                                                             </option>
-                                                            <?php }} ?>
+                                                            <?php }
+                                                            } ?>
                                                         </select>
                                                     </div>
 
@@ -265,28 +268,21 @@ foreach($results as $result)
                                                             autocomplete="off" required>
                                                     </div>
 
-
                                                     <div class="input-field col s12">
                                                         <label for="phone">Mobile number</label>
                                                         <input id="phone" name="mobileno" type="tel" maxlength="10"
                                                             autocomplete="off" required>
                                                     </div>
 
-
                                                     <div class="input-field col s12">
                                                         <button type="submit" name="add" onclick="return valid();"
                                                             id="add"
                                                             class="waves-effect waves-light btn indigo m-b-xs">ADD</button>
-
                                                     </div>
-
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </section>
-
-
                                 </section>
                             </div>
                         </form>

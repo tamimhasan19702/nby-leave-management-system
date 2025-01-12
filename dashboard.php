@@ -51,6 +51,8 @@ else{
 
                 <a href="leavehistory.php" target="blank">
                     <div class="col s12 m12 l4">
+
+
                         <div class="card stats-card">
                             <div class="card-content">
                                 <span class="card-title">Total Leaves</span>

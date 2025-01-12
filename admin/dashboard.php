@@ -7,6 +7,28 @@ if(strlen($_SESSION['alogin'])==0)
 header('location:index.php');
 }
 else{
+
+    // Fetch the details of the logged-in admin
+    $adminUsername = $_SESSION['alogin']; // Assuming this is the username stored in session
+    $sql = "SELECT id, UserName, EmailId, Image FROM admin WHERE UserName = :username"; // Adjust the query to match your database schema
+    $query = $dbh->prepare($sql);
+    $query->bindParam(':username', $adminUsername, PDO::PARAM_STR);
+    $query->execute();
+    $result = $query->fetch(PDO::FETCH_OBJ);
+
+    // Check if the result is found
+    if ($result) {
+        $adminId = $result->id;
+        $adminUserName = $result->UserName;
+        $adminEmail = $result->EmailId;
+        $adminImage = $result->Image;
+    } else {
+        $adminEmail = "Email not found"; // Handle case where email is not found
+        $adminUserName = "User not found"; // Handle case where username is not found
+        $adminImage = "default.png"; // Default image if not found
+    }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -46,6 +68,10 @@ else{
         <div class="">
             <div class="row no-m-t no-m-b">
                 <a href="manageemployee.php" target="blank">
+
+
+                    <h1 class="nby-title">Welcome, <?php echo $adminUserName; ?></h1>
+
                     <div class="col s12 m12 l4">
                         <div class="card stats-card">
                             <div class="card-content">
