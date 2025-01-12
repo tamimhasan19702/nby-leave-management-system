@@ -1356,7 +1356,7 @@ nav .nav-wrapper ul li span.badge {
   height: calc(100% - 60px) !important;
   margin-top: 60px;
   z-index: 997;
-  width: 220px;
+  width: 400px;
 }
 
 #sidenav-overlay {
@@ -1378,6 +1378,7 @@ nav .nav-wrapper ul li span.badge {
   min-height: 100% !important;
   padding-bottom: 96px;
   position: relative;
+  width: 100% !important;
 }
 
 .side-nav ul li,
@@ -3827,9 +3828,14 @@ body.search-app .search-input input:-ms-input-placeholder {
 .signin-page {
   height: 100%;
   width: 100%;
+  background: linear-gradient(rgba(235, 100, 30, 0.7), rgba(0, 0, 0, 0.7)),
+    url("../images/mountains2.jpg") no-repeat;
+  background-size: cover;
 }
 
 .signup-page {
+  background: url("../images/mountains3.png") no-repeat;
+  background-size: cover;
 }
 
 .pattern-lock-screen {

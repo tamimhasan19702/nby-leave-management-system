@@ -49,7 +49,7 @@ if(isset($_POST['signin']))
 
 <body class="signin-page">
 
-    <div class="mn-content valign-wrapper">
+    <div class="mn-content valign-wrapper nbyit-admin">
         <main class="mn-inner container">
             <div class="nbyit-logo">
                 <img src="../assets/images/Logo-of-NBY-IT.webp" alt="nbyit">

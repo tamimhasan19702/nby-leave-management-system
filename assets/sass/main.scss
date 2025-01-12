@@ -1,2 +1,39 @@
 /** @format */
 @import "admin/admin";
+
+.nby-sidebar-menu {
+  background-color: #ffffff; // White background for a clean look
+  border-radius: 8px; // Rounded corners
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); // Subtle shadow for depth
+  padding: 20px; // Padding around the menu
+  margin: 0; // Remove default margin
+
+  li {
+    list-style: none; // Remove default list styling
+    margin: 15px 0; // Space between menu items
+
+    a {
+      display: flex; // Flexbox for alignment
+      align-items: center; // Center items vertically
+      padding: 10px 15px; // Padding for links
+      border-radius: 5px; // Rounded corners for links
+      color: #495057; // Text color
+      text-decoration: none; // Remove underline
+      transition: background-color 0.3s; // Smooth background transition
+
+      &:hover {
+        background-color: #e9ecef; // Light grey background on hover
+        color: #007bff; // Change text color on hover
+      }
+
+      &.active {
+        background-color: #007bff; // Active background color
+        color: #ffffff; // Active text color
+      }
+    }
+  }
+}
+
+.material-icons {
+  margin-right: 10px; // Space between icon and text
+}

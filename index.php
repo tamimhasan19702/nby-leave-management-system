@@ -142,30 +142,31 @@ else{
             <div class="side-nav-wrapper">
 
 
-                <ul class="sidebar-menu collapsible collapsible-accordion" data-collapsible="accordion" style="">
-                    <li>&nbsp;</li>
-                    <li><a class="waves-effect waves-grey" href="index.php"><i
-                                class="material-icons login-menu-sidebar">account_box</i>Employee Login</a></li>
-                    <li><a class="waves-effect waves-grey" href="forgot-password.php"><i
-                                class="material-icons login-menu-sidebar">account_box</i>Employee Password Recovery</a>
-                    </li>
-
-                    <li><a class="waves-effect waves-grey" href="admin/"><i
-                                class="material-icons login-menu-sidebar">account_box</i>Admin Login</a></li>
-
+                <ul class="nby-sidebar-menu nby-collapsible nby-collapsible-accordion" data-collapsible="accordion">
+                    <li><a class="" href="index.php"><i class="material-icons">account_box</i>Employee Login</a></li>
+                    <li><a class="" href="forgot-password.php"><i class="material-icons">account_box</i>Employee
+                            Password Recovery</a></li>
+                    <li><a class="" href="admin/"><i class="material-icons">account_box</i>Admin Login</a></li>
                 </ul>
+
+
+
+
                 <div class="footer">
                     <p class="copyright">NBYIT Leave Management System</p>
 
                 </div>
             </div>
         </aside>
+
         <main class="mn-inner">
             <div class="row">
                 <div class="col s12">
-                    <img src="./assets/images/Logo-of-NBY-IT.webp" alt="nby" class="responsive-img">
-                    <div class="page-title">
-                        <h4>Welcome to Employee Leave Management System</h4>
+                    <div class="col s12 m6 l8 offset-l2 offset-m3">
+                        <img src="./assets/images/Logo-of-NBY-IT.webp" alt="nby" class="responsive-img">
+                        <h4 class="nby-title">NBYIT Employee Leave Management System </a>
+                        </h4>
+                        <h2 class="nby-subtitle">EmployeeLogin</h2>
                     </div>
 
                     <div class="col s12 m6 l8 offset-l2 offset-m3">
