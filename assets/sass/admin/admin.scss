@@ -1,5 +1,5 @@
 /** @format */
-/** @format */
+
 .toggle-password {
   position: absolute;
   top: 15px;
@@ -13,9 +13,8 @@
   color: #000;
   line-height: 1.2;
   margin-bottom: 10px;
-}
-@media (max-width: 768px) {
-  .nby-title {
+
+  @media (max-width: 768px) {
     font-size: 2rem;
   }
 }
@@ -25,9 +24,8 @@
   font-weight: 400;
   color: #000;
   line-height: 1.5;
-}
-@media (max-width: 768px) {
-  .nby-subtitle {
+
+  @media (max-width: 768px) {
     font-size: 1.25rem;
   }
 }
@@ -44,11 +42,8 @@
   font-weight: 400;
   color: #00a2ff;
   line-height: 1.5;
-}
-@media (max-width: 768px) {
-  .nby-backlink {
+
+  @media (max-width: 768px) {
     font-size: 1.25rem;
   }
 }
-
-/*# sourceMappingURL=custom.css.map */

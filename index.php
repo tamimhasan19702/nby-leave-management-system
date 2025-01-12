@@ -144,13 +144,13 @@ else{
 
                 <ul class="sidebar-menu collapsible collapsible-accordion" data-collapsible="accordion" style="">
                     <li>&nbsp;</li>
-                    <li class="no-padding"><a class="waves-effect waves-grey" href="index.php"><i
+                    <li><a class="waves-effect waves-grey" href="index.php"><i
                                 class="material-icons login-menu-sidebar">account_box</i>Employee Login</a></li>
-                    <li class="no-padding"><a class="waves-effect waves-grey" href="forgot-password.php"><i
+                    <li><a class="waves-effect waves-grey" href="forgot-password.php"><i
                                 class="material-icons login-menu-sidebar">account_box</i>Employee Password Recovery</a>
                     </li>
 
-                    <li class="no-padding"><a class="waves-effect waves-grey" href="admin/"><i
+                    <li><a class="waves-effect waves-grey" href="admin/"><i
                                 class="material-icons login-menu-sidebar">account_box</i>Admin Login</a></li>
 
                 </ul>
@@ -163,6 +163,7 @@ else{
         <main class="mn-inner">
             <div class="row">
                 <div class="col s12">
+                    <img src="./assets/images/Logo-of-NBY-IT.webp" alt="nby" class="responsive-img">
                     <div class="page-title">
                         <h4>Welcome to Employee Leave Management System</h4>
                     </div>

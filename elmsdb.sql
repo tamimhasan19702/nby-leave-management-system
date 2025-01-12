@@ -26,20 +26,26 @@ SET time_zone = "+00:00";
 --
 -- Table structure for table `admin`
 --
-
 CREATE TABLE `admin` (
   `id` int(11) NOT NULL,
   `UserName` varchar(100) NOT NULL,
   `Password` varchar(100) NOT NULL,
-  `updationDate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE current_timestamp()
+  `EmailId` varchar(120) NOT NULL,
+  `Image` varchar(255) NOT NULL DEFAULT '/assets/images/NBY_IT_SOLUTION_LOGO_SYMBLE-removebg-preview.png',
+  `updationDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `admin`
 --
 
-INSERT INTO `admin` (`id`, `UserName`, `Password`, `updationDate`) VALUES
-(1, 'admin', '5c428d8875d2948607f3e3fe134d71b4', '2023-08-31 11:42:58');
+INSERT INTO `admin` (`id`, `UserName`, `Password`, `EmailId`, `Image`, `updationDate`) VALUES
+(1, 'admin', 'admin123', 'admin@admin.com', '/assets/images/NBY_IT_SOLUTION_LOGO_SYMBLE-removebg-preview.png', '2023-08-31 14:49:11');
+
+--
+-- Dumping data for table `admin`
+--
+
 
 -- --------------------------------------------------------
 
