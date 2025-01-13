@@ -128,44 +128,49 @@ $approvedleaves=$query->rowCount();
                         <div class="card stats-card">
                             <div class="card-content">
                                 <span class="card-title">Enjoyed Leaves</span>
-                                <?php
-if (isset($_SESSION['eid'])) {
-    $employee_id = $_SESSION['eid'];
-
-    $sql = "SELECT AnnualLeave, SickLeave FROM tblemployees WHERE id = :employee_id";
-    $query = $dbh->prepare($sql);
-    $query->bindParam(':employee_id', $employee_id, PDO::PARAM_INT);
-    $query->execute();
-
-    $result = $query->fetch(PDO::FETCH_ASSOC);
-    
-    if ($result) {
-        $annualLeave = $result['AnnualLeave'];
-        $sickLeave = $result['SickLeave'];
-        
-        // Now you can use $annualLeave and $sickLeave as needed
-    } else {
-        // Handle case where no employee is found
-        echo "No employee found.";
-    }
-} else {
-    // Handle case where session is not set
-    echo "User not logged in.";
-}
-?>
                                 <div class="nby-remaining">
                                     <span class="stats-counter">
-                                        <p>Annual Leave</p>
-                                        <span class="counter"><?php echo htmlentities($annualLeave);?></span>
 
+
+                                        <?php
+                if (isset($_SESSION['eid'])) {
+                    $employee_id = $_SESSION['eid'];
+
+                    // Fetch the current leave balance and initial leave values
+                    $sql = "SELECT AnnualLeave, SickLeave FROM tblemployees WHERE id = :employee_id";
+                    $query = $dbh->prepare($sql);
+                    $query->bindParam(':employee_id', $employee_id, PDO::PARAM_INT);
+                    $query->execute();
+
+                    $result = $query->fetch(PDO::FETCH_ASSOC);
+
+                    $EnjoyedAnnualLeave = 22 - $result['AnnualLeave'];
+                    $EnjoyedSickLeave = 7 - $result['SickLeave'];
+                    
+                    if ($result) {
+                        $annualLeave = $result['AnnualLeave'];
+                        $sickLeave = $result['SickLeave'];
+                        
+                    } else {
+                        // Handle case where no employee is found
+                        echo "No employee found.";
+                    }
+                } else {
+                    // Handle case where session is not set
+                    echo "User  not logged in.";
+                }
+                ?>
+
+                                        <p>Annual Leave</p>
+                                        <span class="counter"
+                                            id="enjoyedAnnualLeave"><?php echo htmlentities($EnjoyedAnnualLeave);?></span>
                                     </span>
                                     <span class="stats-counter">
                                         <p>Sick Leave</p>
-                                        <span class="counter"><?php echo htmlentities($sickLeave);?></span>
+                                        <span class="counter"
+                                            id="enjoyedSickLeave"><?php echo htmlentities($EnjoyedSickLeave);?></span>
                                     </span>
                                 </div>
-
-
                             </div>
                             <div class="progress stats-card-progress">
                                 <div class="success" style="width: 70%"></div>
@@ -174,51 +179,59 @@ if (isset($_SESSION['eid'])) {
                     </div>
                 </a>
 
-
-
                 <a href="leavehistory.php" target="blank">
                     <div class="col s12 m12 l4">
                         <div class="card stats-card">
                             <div class="card-content">
                                 <span class="card-title">Remaining Leaves</span>
-                                <?php
+
+
+                                <?php 
 if (isset($_SESSION['eid'])) {
     $employee_id = $_SESSION['eid'];
-
-    $sql = "SELECT AnnualLeave, SickLeave FROM tblemployees WHERE id = :employee_id";
-    $query = $dbh->prepare($sql);
-    $query->bindParam(':employee_id', $employee_id, PDO::PARAM_INT);
-    $query->execute();
-
-    $result = $query->fetch(PDO::FETCH_ASSOC);
     
-    if ($result) {
-        $annualLeave = $result['AnnualLeave'];
-        $sickLeave = $result['SickLeave'];
-        
-        // Now you can use $annualLeave and $sickLeave as needed
-    } else {
-        // Handle case where no employee is found
-        echo "No employee found.";
+    $sql = "SELECT * FROM tblleaves WHERE empid = :employee_id";
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':employee_id', $employee_id, PDO::PARAM_INT); // Bind the employee ID
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch all matching rows as an associative array
+
+    $totalDuration = 0; // Variable to store the sum of durations
+
+    foreach ($result as $row) {
+        // Extract the numeric value of duration (assuming format like "2 days")
+        preg_match('/\d+/', $row['Duration'], $matches);
+        $duration = isset($matches[0]) ? (int)$matches[0] : 0;
+
+        $totalDuration += $duration; // Add to total
     }
+
+    $remainingAnnualLeave = 22 - $totalDuration;
+    $remainingSickLeave = 7 - $totalDuration;
+
+    echo "<br><strong>Total Duration:</strong> " . $totalDuration . " days";
+
 } else {
-    // Handle case where session is not set
-    echo "User not logged in.";
+    echo "Employee ID is not set in the session.";
 }
 ?>
+
+
+
+
+
                                 <div class="nby-remaining">
                                     <span class="stats-counter">
                                         <p>Annual Leave</p>
-                                        <span class="counter"><?php echo htmlentities($annualLeave);?></span>
-
+                                        <span class="counter"
+                                            id="remainingAnnualLeave"><?php echo htmlentities($annualLeave); ?></span>
                                     </span>
                                     <span class="stats-counter">
                                         <p>Sick Leave</p>
-                                        <span class="counter"><?php echo htmlentities($sickLeave);?></span>
+                                        <span class="counter"
+                                            id="remainingSickLeave"><?php echo htmlentities($sickLeave); ?></span>
                                     </span>
                                 </div>
-
-
                             </div>
                             <div class="progress stats-card-progress">
                                 <div class="success" style="width: 70%"></div>

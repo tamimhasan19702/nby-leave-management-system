@@ -19,37 +19,38 @@ if (strlen($_SESSION['emplogin']) == 0) {
         $isread = 0;
 
         // Calculate duration
-        // Calculate duration
-$fromDateTime = new DateTime($fromdate);
-$toDateTime = new DateTime($todate);
-$duration = $fromDateTime->diff($toDateTime)->days; // Get the difference in days
+        $fromDateTime = new DateTime($fromdate);
+        $toDateTime = new DateTime($todate);
+        $durationDays = $fromDateTime->diff($toDateTime)->days; // Get the difference in days
 
-if ($fromdate > $todate) {
-    $error = "ToDate should be greater than FromDate";
-} else {
-    $sql = "INSERT INTO tblleaves (LeaveType, ToDate, FromDate, Description, Status, IsRead, empid, Username, EmailId, Phonenumber, Duration) 
-            VALUES (:leavetype, :todate, :fromdate, :description, :status, :isread, :empid, :username, :emailid, :phonenumber, :duration)";
-    $query = $dbh->prepare($sql);
-    $query->bindParam(':leavetype', $leavetype, PDO::PARAM_STR);
-    $query->bindParam(':fromdate', $fromdate, PDO::PARAM_STR);
-    $query->bindParam(':todate', $todate, PDO::PARAM_STR);
-    $query->bindParam(':description', $description, PDO::PARAM_STR);
-    $query->bindParam(':status', $status, PDO::PARAM_STR);
-    $query->bindParam(':isread', $isread, PDO::PARAM_STR);
-    $query->bindParam(':empid', $empid, PDO::PARAM_STR);
-    $query->bindParam(':username', $username, PDO::PARAM_STR);
-    $query->bindParam(':emailid', $emailId, PDO::PARAM_STR);
-    $query->bindParam(':phonenumber', $phonenumber, PDO::PARAM_STR);
-    $query->bindParam(':duration', $duration, PDO::PARAM_INT); // Bind duration as an integer
-    $query->execute();
-    $lastInsertId = $dbh->lastInsertId();
-    if ($lastInsertId) {
-        $msg = "Leave applied successfully";
-    } else {
-        $error = "Something went wrong. Please try again";
-    }
-}
+        // Format duration
+        $duration = $durationDays . ' days'; // Format as "X days"
 
+        if ($fromdate > $todate) {
+            $error = "ToDate should be greater than FromDate";
+        } else {
+            $sql = "INSERT INTO tblleaves (LeaveType, ToDate, FromDate, Description, Status, IsRead, empid, Username, EmailId, Phonenumber, Duration) 
+                    VALUES (:leavetype, :todate, :fromdate, :description, :status, :isread, :empid, :username, :emailid, :phonenumber, :duration)";
+            $query = $dbh->prepare($sql);
+            $query->bindParam(':leavetype', $leavetype, PDO::PARAM_STR);
+            $query->bindParam(':fromdate', $fromdate, PDO::PARAM_STR);
+            $query->bindParam(':todate', $todate, PDO::PARAM_STR);
+            $query->bindParam(':description', $description, PDO::PARAM_STR);
+            $query->bindParam(':status', $status, PDO::PARAM_STR);
+            $query->bindParam(':isread', $isread, PDO::PARAM_STR);
+            $query->bindParam(':empid', $empid, PDO::PARAM_STR);
+            $query->bindParam(':username', $username, PDO::PARAM_STR);
+            $query->bindParam(':emailid', $emailId, PDO::PARAM_STR);
+            $query->bindParam(':phonenumber', $phonenumber, PDO::PARAM_STR);
+            $query->bindParam(':duration', $duration, PDO::PARAM_STR); // Bind formatted duration
+            $query->execute();
+            $lastInsertId = $dbh->lastInsertId();
+            if ($lastInsertId) {
+                $msg = "Leave applied successfully";
+            } else {
+                $error = "Something went wrong. Please try again";
+            }
+        }
     }
 ?>
 
