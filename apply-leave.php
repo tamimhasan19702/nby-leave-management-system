@@ -18,30 +18,38 @@ if (strlen($_SESSION['emplogin']) == 0) {
         $status = 0;
         $isread = 0;
 
-        if ($fromdate > $todate) {
-            $error = "ToDate should be greater than FromDate";
-        } else {
-            $sql = "INSERT INTO tblleaves (LeaveType, ToDate, FromDate, Description, Status, IsRead, empid, Username, EmailId, Phonenumber) 
-                    VALUES (:leavetype, :todate, :fromdate, :description, :status, :isread, :empid, :username, :emailid, :phonenumber)";
-            $query = $dbh->prepare($sql);
-            $query->bindParam(':leavetype', $leavetype, PDO::PARAM_STR);
-            $query->bindParam(':fromdate', $fromdate, PDO::PARAM_STR);
-            $query->bindParam(':todate', $todate, PDO::PARAM_STR);
-            $query->bindParam(':description', $description, PDO::PARAM_STR);
-            $query->bindParam(':status', $status, PDO::PARAM_STR);
-            $query->bindParam(':isread', $isread, PDO::PARAM_STR);
-            $query->bindParam(':empid', $empid, PDO::PARAM_STR);
-            $query->bindParam(':username', $username, PDO::PARAM_STR);
-            $query->bindParam(':emailid', $emailId, PDO::PARAM_STR);
-            $query->bindParam(':phonenumber', $phonenumber, PDO::PARAM_STR);
-            $query->execute();
-            $lastInsertId = $dbh->lastInsertId();
-            if ($lastInsertId) {
-                $msg = "Leave applied successfully";
-            } else {
-                $error = "Something went wrong. Please try again";
-            }
-        }
+        // Calculate duration
+        // Calculate duration
+$fromDateTime = new DateTime($fromdate);
+$toDateTime = new DateTime($todate);
+$duration = $fromDateTime->diff($toDateTime)->days; // Get the difference in days
+
+if ($fromdate > $todate) {
+    $error = "ToDate should be greater than FromDate";
+} else {
+    $sql = "INSERT INTO tblleaves (LeaveType, ToDate, FromDate, Description, Status, IsRead, empid, Username, EmailId, Phonenumber, Duration) 
+            VALUES (:leavetype, :todate, :fromdate, :description, :status, :isread, :empid, :username, :emailid, :phonenumber, :duration)";
+    $query = $dbh->prepare($sql);
+    $query->bindParam(':leavetype', $leavetype, PDO::PARAM_STR);
+    $query->bindParam(':fromdate', $fromdate, PDO::PARAM_STR);
+    $query->bindParam(':todate', $todate, PDO::PARAM_STR);
+    $query->bindParam(':description', $description, PDO::PARAM_STR);
+    $query->bindParam(':status', $status, PDO::PARAM_STR);
+    $query->bindParam(':isread', $isread, PDO::PARAM_STR);
+    $query->bindParam(':empid', $empid, PDO::PARAM_STR);
+    $query->bindParam(':username', $username, PDO::PARAM_STR);
+    $query->bindParam(':emailid', $emailId, PDO::PARAM_STR);
+    $query->bindParam(':phonenumber', $phonenumber, PDO::PARAM_STR);
+    $query->bindParam(':duration', $duration, PDO::PARAM_INT); // Bind duration as an integer
+    $query->execute();
+    $lastInsertId = $dbh->lastInsertId();
+    if ($lastInsertId) {
+        $msg = "Leave applied successfully";
+    } else {
+        $error = "Something went wrong. Please try again";
+    }
+}
+
     }
 ?>
 
@@ -106,7 +114,6 @@ if (strlen($_SESSION['emplogin']) == 0) {
                                                     <?php echo htmlentities($msg); ?> </div>
                                                 <?php } ?>
 
-
                                                 <div class="input-field col s12">
                                                     <input id="username" name="username" type="text" required>
                                                     <label for="username">Username</label>
@@ -121,7 +128,6 @@ if (strlen($_SESSION['emplogin']) == 0) {
                                                     <input id="phonenumber" name="phonenumber" type="text" required>
                                                     <label for="phonenumber">Phone Number</label>
                                                 </div>
-
 
                                                 <div class="input-field col s12">
                                                     <select name="leavetype" autocomplete="off">
@@ -142,12 +148,18 @@ if (strlen($_SESSION['emplogin']) == 0) {
 
                                                 <div class="input-field col m6 s12">
                                                     <span>From Date</span>
-                                                    <input id="fromdate" name="fromdate" type="date" required>
+                                                    <input id="fromdate" name="fromdate" type="date" required
+                                                        onchange="calculateDuration()">
                                                 </div>
 
                                                 <div class="input-field col m6 s12">
                                                     <span>To Date</span>
-                                                    <input id="todate" name="todate" type="date" required>
+                                                    <input id="todate" name="todate" type="date" required
+                                                        onchange="calculateDuration()">
+                                                </div>
+
+                                                <div class="input-field col s12">
+                                                    <span>Duration: <span id="durationDisplay">0</span> days</span>
                                                 </div>
 
                                                 <div class="input-field col m12 s12">
@@ -170,9 +182,7 @@ if (strlen($_SESSION['emplogin']) == 0) {
                 </div>
             </div>
         </div>
-        </div>
     </main>
-    </div>
     <div class="left-sidebar-hover"></div>
 
     <!-- Javascripts -->
@@ -184,6 +194,23 @@ if (strlen($_SESSION['emplogin']) == 0) {
     <script src="assets/js/pages/form_elements.js"></script>
     <script src="assets/js/pages/form-input-mask.js"></script>
     <script src="assets/plugins/jquery-inputmask/jquery.inputmask.bundle.js"></script>
+
+    <script>
+    function calculateDuration() {
+        const fromDate = document.getElementById('fromdate').value;
+        const toDate = document.getElementById('todate').value;
+
+        if (fromDate && toDate) {
+            const start = new Date(fromDate);
+            const end = new Date(toDate);
+            const duration = Math.ceil((end - start) / (1000 * 60 * 60 * 24)); // Calculate duration in days
+
+            document.getElementById('durationDisplay').innerText = duration >= 0 ? duration : 0; // Display duration
+        } else {
+            document.getElementById('durationDisplay').innerText = 0; // Reset if dates are not selected
+        }
+    }
+    </script>
 </body>
 
 </html>
