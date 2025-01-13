@@ -123,7 +123,8 @@ CREATE TABLE `tblleaves` (
   `empid` int(11) DEFAULT NULL,
   `Username` varchar(100) NOT NULL,
   `EmailId` varchar(200) DEFAULT NULL,
-  `Phonenumber` char(11) DEFAULT NULL
+  `Phonenumber` char(11) DEFAULT NULL,
+  `Duration` varchar(120) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
@@ -132,10 +133,10 @@ CREATE TABLE `tblleaves` (
 
 -- Dumping data for table tblleaves
 
-INSERT INTO tblleaves (id, LeaveType, ToDate, FromDate, Description, PostingDate, AdminRemark, AdminRemarkDate, Status, IsRead, empid, Username, EmailId, Phonenumber) VALUES
-(11, 'Casual Leave', '2023-09-17', '2023-09-10', 'Need leave to visit my family.', '2023-08-31 15:06:21', 'Approved by admin.', '2023-08-31 20:39:40', 1, 1, 1, 'Tareq123', 'tareq@example.com', '1714270830'),
-(12, 'Casual Leave', '2023-09-15', '2023-09-09', 'Requesting casual leave for personal reasons.', '2023-09-01 11:42:40', 'Leave approved by admin.', '2023-09-01 17:13:20', 1, 1, 5, 'Tareq123', 'tareq@example.com', '1714270830'),
-(13, 'Sick Leave', '2025-03-03', '2025-01-01', 'Feeling unwell and need to rest.', '2025-01-13 06:05:53', 'Approved by admin.', '2025-01-13 11:36:27', 1, 1, 6, 'Tareq123', 'tareq@example.com', '1714270830');
+INSERT INTO tblleaves (id, LeaveType, ToDate, FromDate, Description, PostingDate, AdminRemark, AdminRemarkDate, Status, IsRead, empid, Username, EmailId, Phonenumber, Duration) VALUES
+(11, 'Casual Leave', '2023-09-17', '2023-09-10', 'Need leave to visit my family.', '2023-08-31 15:06:21', 'Approved by admin.', '2023-08-31 20:39:40', 1, 1, 1, 'Tareq123', 'tareq@example.com', '1714270830', '7 days'),
+(12, 'Casual Leave', '2023-09-15', '2023-09-09', 'Requesting casual leave for personal reasons.', '2023-09-01 11:42:40', 'Leave approved by admin.', '2023-09-01 17:13:20', 1, 1, 5, 'Tareq123', 'tareq@example.com', '1714270830', '6 days'),
+(13, 'Sick Leave', '2025-03-03', '2025-01-01', 'Feeling unwell and need to rest.', '2025-01-13 06:05:53', 'Approved by admin.', '2025-01-13 11:36:27', 1, 1, 6, 'Tareq123', 'tareq@example.com', '1714270830', '2 days');
 
 
 -- --------------------------------------------------------

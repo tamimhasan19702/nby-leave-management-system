@@ -21,7 +21,8 @@ if (strlen($_SESSION['emplogin']) == 0) {
                    tblleaves.PostingDate, 
                    tblleaves.Status, 
                    tblleaves.AdminRemark, 
-                   tblleaves.AdminRemarkDate 
+                   tblleaves.AdminRemarkDate,
+                   tblleaves.Duration 
             FROM tblleaves 
             JOIN tblemployees ON tblleaves.empid = tblemployees.id 
             WHERE tblleaves.id = :lid";
@@ -77,6 +78,11 @@ if (strlen($_SESSION['emplogin']) == 0) {
                 $leaveDetails['AdminRemarkDate'] = htmlentities($result->AdminRemarkDate);
             } else {
                 $leaveDetails['AdminRemarkDate'] = "NA"; // Default message if empty
+            }
+            if (!empty($result->Duration)) {
+                $leaveDetails['Duration'] = htmlentities($result->Duration);
+            }else {
+                $leaveDetails['Duration'] = "NA";
             }
         }
     }
@@ -153,8 +159,8 @@ if (strlen($_SESSION['emplogin']) == 0) {
                                     <td><?php echo $leaveDetails['EmailId'] ?? 'N/A'; ?></td>
                                     <td style="font-size:16px;"><b>Emp Contact No. :</b></td>
                                     <td><?php echo $leaveDetails['Phonenumber'] ?? 'N/A'; ?></td>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
+                                    <td style="font-size:16px;"><b>Leave Duration:</b></td>
+                                    <td><?php echo $leaveDetails['Duration'] ?? 'N/A'; ?></td>
                                 </tr>
 
                                 <tr>

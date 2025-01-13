@@ -141,9 +141,12 @@ if (strlen($_SESSION['emplogin']) == 0) {
                                                 </div>
 
                                                 <div class="input-field col m6 s12">
+                                                    <span>From Date</span>
                                                     <input id="fromdate" name="fromdate" type="date" required>
                                                 </div>
+
                                                 <div class="input-field col m6 s12">
+                                                    <span>To Date</span>
                                                     <input id="todate" name="todate" type="date" required>
                                                 </div>
 
