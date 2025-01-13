@@ -243,12 +243,12 @@ if (isset($_SESSION['eid'])) {
                             <table id="example" class="display responsive-table ">
                                 <thead>
                                     <tr>
-                                        <th>#</th>
+                                        <th width="50">No</th>
                                         <th width="200">Employe Name</th>
                                         <th width="120">Leave Type</th>
                                         <th width="180">Posting Date</th>
-                                        <th>Status</th>
-                                        <th align="center">Action</th>
+                                        <th width="180">Status</th>
+                                        <th width="180">Action</th>
                                     </tr>
                                 </thead>
 
@@ -284,7 +284,7 @@ foreach($results as $result)
 
                                         </td>
 
-                                        <td>
+
                                         <td><a href="leave-details.php?leaveid=<?php echo htmlentities($result->lid);?>"
                                                 class="waves-effect waves-light btn blue m-b-xs"> View Details</a></td>
                                     </tr>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 12, 2025 at 11:55 AM
+-- Generation Time: Jan 13, 2025 at 09:18 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -93,7 +93,7 @@ CREATE TABLE `tblemployees` (
   `Status` int(1) DEFAULT NULL,
   `RegDate` timestamp NULL DEFAULT current_timestamp(),
   `AnnualLeave` int(11) DEFAULT NULL,
-  `SickLeave` int(11) DEFAULT NULL 
+  `SickLeave` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
@@ -101,7 +101,7 @@ CREATE TABLE `tblemployees` (
 --
 
 INSERT INTO `tblemployees` (`id`, `EmpId`, `FirstName`, `LastName`, `EmailId`, `Password`, `Gender`, `Dob`, `Department`, `Address`, `City`, `Country`, `Phonenumber`, `Username`, `Image`, `Status`, `RegDate`, `AnnualLeave`, `SickLeave`) VALUES
-(6, '3600', 'Tareq', 'monower', 'tamimhasancu@gmail.com', '0307eb0498c744fb1d336c546d5b33bb', 'Male', '1 January, 2000', 'Department of Web Development', '488 boro khan bari bokaul bari road', 'chandpur, Bangladesh', 'Bangladesh', '1714270830', 'Tareq123', 'NBY_IT_SOLUTION_LOGO_SYMBLE-removebg-preview.png', 1, '2025-01-12 09:39:14', 22, 7),
+(6, '3600', 'Tareq', 'monower', 'tamimhasancu@gmail.com', '0307eb0498c744fb1d336c546d5b33bb', 'Male', '1 January, 2000', 'Department of Web Development', '488 boro khan bari bokaul bari road', 'chandpur, Bangladesh', 'Bangladesh', '01714270830', 'Tareq123', 'NBY_IT_SOLUTION_LOGO_SYMBLE-removebg-preview.png', 1, '2025-01-12 09:39:14', 22, 7),
 (7, '19', 'Al Muktadir', 'Aquibe', 'aquibe@nbyit.com', '0d7c35767559f9f94fb41db42d2ecfa6', 'Male', '29 December, 2001', 'Department of Marketing', 'Dhaka', 'Dhaka', 'Bangladesh', '1670966929', 'aquibe123', 'NBY_IT_SOLUTION_LOGO_SYMBLE-removebg-preview.png', 1, '2025-01-12 09:53:42', 22, 7);
 
 -- --------------------------------------------------------
@@ -109,7 +109,6 @@ INSERT INTO `tblemployees` (`id`, `EmpId`, `FirstName`, `LastName`, `EmailId`, `
 --
 -- Table structure for table `tblleaves`
 --
-
 CREATE TABLE `tblleaves` (
   `id` int(11) NOT NULL,
   `LeaveType` varchar(110) DEFAULT NULL,
@@ -121,16 +120,23 @@ CREATE TABLE `tblleaves` (
   `AdminRemarkDate` varchar(120) DEFAULT NULL,
   `Status` int(1) DEFAULT NULL,
   `IsRead` int(1) DEFAULT NULL,
-  `empid` int(11) DEFAULT NULL
+  `empid` int(11) DEFAULT NULL,
+  `Username` varchar(100) NOT NULL,
+  `EmailId` varchar(200) DEFAULT NULL,
+  `Phonenumber` char(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `tblleaves`
 --
 
-INSERT INTO `tblleaves` (`id`, `LeaveType`, `ToDate`, `FromDate`, `Description`, `PostingDate`, `AdminRemark`, `AdminRemarkDate`, `Status`, `IsRead`, `empid`) VALUES
-(11, 'Casual Leaves', '17/09/2023', '10/09/2023', 'I need leave to visit my home town. ', '2023-08-31 15:06:21', 'Approved', '2023-08-31 20:39:40 ', 1, 1, 1),
-(12, 'Casual Leaves', '15/09/2023', '09/09/2023', 'Need casual leaves for some personal work.', '2023-09-01 11:42:40', 'Leave approved', '2023-09-01 17:13:20 ', 1, 1, 5);
+-- Dumping data for table tblleaves
+
+INSERT INTO tblleaves (id, LeaveType, ToDate, FromDate, Description, PostingDate, AdminRemark, AdminRemarkDate, Status, IsRead, empid, Username, EmailId, Phonenumber) VALUES
+(11, 'Casual Leave', '2023-09-17', '2023-09-10', 'Need leave to visit my family.', '2023-08-31 15:06:21', 'Approved by admin.', '2023-08-31 20:39:40', 1, 1, 1, 'Tareq123', 'tareq@example.com', '1714270830'),
+(12, 'Casual Leave', '2023-09-15', '2023-09-09', 'Requesting casual leave for personal reasons.', '2023-09-01 11:42:40', 'Leave approved by admin.', '2023-09-01 17:13:20', 1, 1, 5, 'Tareq123', 'tareq@example.com', '1714270830'),
+(13, 'Sick Leave', '2025-03-03', '2025-01-01', 'Feeling unwell and need to rest.', '2025-01-13 06:05:53', 'Approved by admin.', '2025-01-13 11:36:27', 1, 1, 6, 'Tareq123', 'tareq@example.com', '1714270830');
+
 
 -- --------------------------------------------------------
 
@@ -150,10 +156,8 @@ CREATE TABLE `tblleavetype` (
 --
 
 INSERT INTO `tblleavetype` (`id`, `LeaveType`, `Description`, `CreationDate`) VALUES
-(1, 'Casual Leaves', 'Casual Leaves', '2023-08-31 14:52:22'),
-(2, 'Earned Leaves', 'Earned Leaves', '2023-08-31 14:52:49'),
-(3, 'Sick Leaves', 'Sick Leaves', '2023-08-31 14:53:15'),
-(4, 'RH (Restricted Leaves)', 'Restricted Leaves', '2023-09-01 11:37:06');
+(1, 'Annual Leaves', 'Annual Leaves', '2023-08-31 14:52:22'),
+(3, 'Sick Leaves', 'Sick Leaves', '2023-08-31 14:53:15');
 
 --
 -- Indexes for dumped tables
@@ -216,7 +220,7 @@ ALTER TABLE `tblemployees`
 -- AUTO_INCREMENT for table `tblleaves`
 --
 ALTER TABLE `tblleaves`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `tblleavetype`
