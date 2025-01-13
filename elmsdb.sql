@@ -41,7 +41,6 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`id`, `UserName`, `Password`, `EmailId`, `Image`, `updationDate`) VALUES
-(1, 'admin', 'admin123', 'admin@admin.com', 'NBY_IT_SOLUTION_LOGO_SYMBLE-removebg-preview.png', '2023-08-31 14:49:11'),
 (3, 'Tareq', '0307eb0498c744fb1d336c546d5b33bb', 'tareq@nbyit.com', 'NBY_IT_SOLUTION_LOGO_SYMBLE-removebg-preview.png', '2025-01-12 08:41:23');
 
 -- --------------------------------------------------------
@@ -92,16 +91,18 @@ CREATE TABLE `tblemployees` (
   `Username` varchar(100) NOT NULL,
   `Image` varchar(255) NOT NULL DEFAULT 'NBY_IT_SOLUTION_LOGO_SYMBLE-removebg-preview.png',
   `Status` int(1) DEFAULT NULL,
-  `RegDate` timestamp NULL DEFAULT current_timestamp()
+  `RegDate` timestamp NULL DEFAULT current_timestamp(),
+  `AnnualLeave` int(11) DEFAULT NULL,
+  `SickLeave` int(11) DEFAULT NULL 
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `tblemployees`
 --
 
-INSERT INTO `tblemployees` (`id`, `EmpId`, `FirstName`, `LastName`, `EmailId`, `Password`, `Gender`, `Dob`, `Department`, `Address`, `City`, `Country`, `Phonenumber`, `Username`, `Image`, `Status`, `RegDate`) VALUES
-(6, '3600', 'Tareq', 'monower', 'tamimhasancu@gmail.com', '0307eb0498c744fb1d336c546d5b33bb', 'Male', '1 January, 2000', 'Department of Web Development', '488 boro khan bari bokaul bari road', 'chandpur, Bangladesh', 'Bangladesh', '1714270830', 'Tareq123', 'NBY_IT_SOLUTION_LOGO_SYMBLE-removebg-preview.png', 1, '2025-01-12 09:39:14'),
-(7, '19', 'Al Muktadir', 'Aquibe', 'aquibe@nbyit.com', '0d7c35767559f9f94fb41db42d2ecfa6', 'Male', '29 December, 2001', 'Department of Marketing', 'Dhaka', 'Dhaka', 'Bangladesh', '1670966929', 'aquibe123', 'NBY_IT_SOLUTION_LOGO_SYMBLE-removebg-preview.png', 1, '2025-01-12 09:53:42');
+INSERT INTO `tblemployees` (`id`, `EmpId`, `FirstName`, `LastName`, `EmailId`, `Password`, `Gender`, `Dob`, `Department`, `Address`, `City`, `Country`, `Phonenumber`, `Username`, `Image`, `Status`, `RegDate`, `AnnualLeave`, `SickLeave`) VALUES
+(6, '3600', 'Tareq', 'monower', 'tamimhasancu@gmail.com', '0307eb0498c744fb1d336c546d5b33bb', 'Male', '1 January, 2000', 'Department of Web Development', '488 boro khan bari bokaul bari road', 'chandpur, Bangladesh', 'Bangladesh', '1714270830', 'Tareq123', 'NBY_IT_SOLUTION_LOGO_SYMBLE-removebg-preview.png', 1, '2025-01-12 09:39:14', 22, 7),
+(7, '19', 'Al Muktadir', 'Aquibe', 'aquibe@nbyit.com', '0d7c35767559f9f94fb41db42d2ecfa6', 'Male', '29 December, 2001', 'Department of Marketing', 'Dhaka', 'Dhaka', 'Bangladesh', '1670966929', 'aquibe123', 'NBY_IT_SOLUTION_LOGO_SYMBLE-removebg-preview.png', 1, '2025-01-12 09:53:42', 22, 7);
 
 -- --------------------------------------------------------
 

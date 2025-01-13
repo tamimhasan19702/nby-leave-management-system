@@ -1,0 +1,17 @@
+/** @format */
+
+.nby-remaining {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  .stats-counter p {
+    font-size: 1rem;
+    color: #000;
+  }
+
+  .counter {
+    color: #000;
+    font-size: 1rem;
+  }
+}

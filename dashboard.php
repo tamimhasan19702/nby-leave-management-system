@@ -123,7 +123,109 @@ $approvedleaves=$query->rowCount();
                 </a>
 
 
+                <a href="leavehistory.php" target="blank">
+                    <div class="col s12 m12 l4">
+                        <div class="card stats-card">
+                            <div class="card-content">
+                                <span class="card-title">Enjoyed Leaves</span>
+                                <?php
+if (isset($_SESSION['eid'])) {
+    $employee_id = $_SESSION['eid'];
 
+    $sql = "SELECT AnnualLeave, SickLeave FROM tblemployees WHERE id = :employee_id";
+    $query = $dbh->prepare($sql);
+    $query->bindParam(':employee_id', $employee_id, PDO::PARAM_INT);
+    $query->execute();
+
+    $result = $query->fetch(PDO::FETCH_ASSOC);
+    
+    if ($result) {
+        $annualLeave = $result['AnnualLeave'];
+        $sickLeave = $result['SickLeave'];
+        
+        // Now you can use $annualLeave and $sickLeave as needed
+    } else {
+        // Handle case where no employee is found
+        echo "No employee found.";
+    }
+} else {
+    // Handle case where session is not set
+    echo "User not logged in.";
+}
+?>
+                                <div class="nby-remaining">
+                                    <span class="stats-counter">
+                                        <p>Annual Leave</p>
+                                        <span class="counter"><?php echo htmlentities($annualLeave);?></span>
+
+                                    </span>
+                                    <span class="stats-counter">
+                                        <p>Sick Leave</p>
+                                        <span class="counter"><?php echo htmlentities($sickLeave);?></span>
+                                    </span>
+                                </div>
+
+
+                            </div>
+                            <div class="progress stats-card-progress">
+                                <div class="success" style="width: 70%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+
+
+                <a href="leavehistory.php" target="blank">
+                    <div class="col s12 m12 l4">
+                        <div class="card stats-card">
+                            <div class="card-content">
+                                <span class="card-title">Remaining Leaves</span>
+                                <?php
+if (isset($_SESSION['eid'])) {
+    $employee_id = $_SESSION['eid'];
+
+    $sql = "SELECT AnnualLeave, SickLeave FROM tblemployees WHERE id = :employee_id";
+    $query = $dbh->prepare($sql);
+    $query->bindParam(':employee_id', $employee_id, PDO::PARAM_INT);
+    $query->execute();
+
+    $result = $query->fetch(PDO::FETCH_ASSOC);
+    
+    if ($result) {
+        $annualLeave = $result['AnnualLeave'];
+        $sickLeave = $result['SickLeave'];
+        
+        // Now you can use $annualLeave and $sickLeave as needed
+    } else {
+        // Handle case where no employee is found
+        echo "No employee found.";
+    }
+} else {
+    // Handle case where session is not set
+    echo "User not logged in.";
+}
+?>
+                                <div class="nby-remaining">
+                                    <span class="stats-counter">
+                                        <p>Annual Leave</p>
+                                        <span class="counter"><?php echo htmlentities($annualLeave);?></span>
+
+                                    </span>
+                                    <span class="stats-counter">
+                                        <p>Sick Leave</p>
+                                        <span class="counter"><?php echo htmlentities($sickLeave);?></span>
+                                    </span>
+                                </div>
+
+
+                            </div>
+                            <div class="progress stats-card-progress">
+                                <div class="success" style="width: 70%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
 
 
 
@@ -170,7 +272,7 @@ foreach($results as $result)
                                         <td><?php echo htmlentities($result->LeaveType);?></td>
                                         <td><?php echo htmlentities($result->PostingDate);?></td>
                                         <td><?php $stats=$result->Status;
-if($stats==1){
+                                        if($stats==1){
                                              ?>
                                             <span style="color: green">Approved</span>
                                             <?php } if($stats==2)  { ?>

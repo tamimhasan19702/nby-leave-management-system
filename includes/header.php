@@ -47,7 +47,10 @@
                 </div>
             </div>
         </div>
+
         <div class="mn-content fixed-sidebar">
+
+
             <header class="mn-header navbar-fixed">
                 <nav class="cyan darken-1">
                     <div class="nav-wrapper row">
