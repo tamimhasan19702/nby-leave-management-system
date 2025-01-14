@@ -23,10 +23,12 @@ else{
         $country = $_POST['country']; 
         $mobileno = $_POST['mobileno']; 
         $status = 1;
+        $annualLeave = $_POST['annual_leave'];
+        $sickLeave = $_POST['sick_leave'];
 
         // Updated SQL query to include Username
-        $sql = "INSERT INTO tblemployees(EmpId, FirstName, LastName, EmailId, Username, Password, Gender, Dob, Department, Address, City, Country, Phonenumber, Status) 
-                VALUES(:empid, :fname, :lname, :email, :username, :password, :gender, :dob, :department, :address, :city, :country, :mobileno, :status)";
+        $sql = "INSERT INTO tblemployees(EmpId, FirstName, LastName, EmailId, Username, Password, Gender, Dob, Department, Address, City, Country, Phonenumber, Status, AnnualLeave, SickLeave) 
+                VALUES(:empid, :fname, :lname, :email, :username, :password, :gender, :dob, :department, :address, :city, :country, :mobileno, :status, :annualLeave, :sickLeave)";
         $query = $dbh->prepare($sql);
         $query->bindParam(':empid', $empid, PDO::PARAM_STR);
         $query->bindParam(':fname', $fname, PDO::PARAM_STR);
@@ -42,6 +44,8 @@ else{
         $query->bindParam(':country', $country, PDO::PARAM_STR);
         $query->bindParam(':mobileno', $mobileno, PDO::PARAM_STR);
         $query->bindParam(':status', $status, PDO::PARAM_STR);
+        $query->bindParam(':annualLeave', $annualLeave, PDO::PARAM_STR);
+        $query->bindParam(':sickLeave', $sickLeave, PDO::PARAM_STR);
         $query->execute();
         $lastInsertId = $dbh->lastInsertId();
         if($lastInsertId)
@@ -273,6 +277,20 @@ else{
                                                         <input id="phone" name="mobileno" type="tel" maxlength="10"
                                                             autocomplete="off" required>
                                                     </div>
+
+
+                                                    <div class="input-field col s12">
+                                                        <label for="annual_leave">Set Annual Leave</label>
+                                                        <input id="annual_leave" name="annual_leave" type="number"
+                                                            autocomplete="off" required>
+                                                    </div>
+
+                                                    <div class="input-field col s12">
+                                                        <label for="sick_leave">Set Sick Leave</label>
+                                                        <input id="sick_leave" name="sick_leave" type="number"
+                                                            autocomplete="off" required>
+                                                    </div>
+
 
                                                     <div class="input-field col s12">
                                                         <button type="submit" name="add" onclick="return valid();"

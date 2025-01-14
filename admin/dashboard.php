@@ -231,13 +231,13 @@ $approvedleaves=$query->rowCount();
                             <table id="example" class="display responsive-table ">
                                 <thead>
                                     <tr>
-                                        <th>#</th>
+                                        <th>No</th>
                                         <th width="200">Employe Name</th>
                                         <th width="120">Leave Type</th>
 
-                                        <th width="180">Posting Date</th>
+                                        <th width="120">Posting Date</th>
                                         <th>Status</th>
-                                        <th align="center">Action</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
 
@@ -273,7 +273,7 @@ if($stats==1){
 
                                         </td>
 
-                                        <td>
+
                                         <td><a href="leave-details.php?leaveid=<?php echo htmlentities($result->lid);?>"
                                                 class="waves-effect waves-light btn blue m-b-xs"> View Details</a></td>
                                     </tr>

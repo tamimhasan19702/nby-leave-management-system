@@ -50,5 +50,51 @@
   min-width: 100px; /* Minimum width for buttons */
 }
 
-.nby-leave-date {
+/* Table Row Styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+td {
+  padding: 10px;
+  border: 1px solid #ddd; /* Add border to table cells */
+}
+
+/* Action Button Styles */
+td a {
+  display: flex;
+  align-items: center; /* Center align icon and text */
+  text-decoration: none; /* Remove underline from links */
+  color: #333; /* Default text color */
+  margin-right: 10px; /* Space between buttons */
+  padding: 5px 10px; /* Padding around buttons */
+  border-radius: 4px; /* Rounded corners */
+  transition: background-color 0.3s; /* Smooth background transition */
+}
+
+/* Icon Styles */
+td a i {
+  margin-right: 5px; /* Space between icon and text */
+}
+
+/* Button Hover Effects */
+td a:hover {
+  background-color: #f0f0f0; /* Light gray background on hover */
+}
+
+/* Specific Button Colors */
+.waves-effect.waves-green {
+  background-color: #4caf50; /* Green for Active */
+  color: white; /* White text */
+}
+
+.waves-effect.waves-red {
+  background-color: #f44336; /* Red for Inactive */
+  color: white; /* White text */
+}
+
+.waves-effect.waves-green:hover,
+.waves-effect.waves-red:hover {
+  opacity: 0.8; /* Slightly transparent on hover */
 }

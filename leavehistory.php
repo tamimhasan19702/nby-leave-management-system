@@ -75,7 +75,7 @@ else{
                         <table id="example" class="display responsive-table ">
                             <thead>
                                 <tr>
-                                    <th>#</th>
+                                    <th>no</th>
                                     <th width="120">Leave Type</th>
                                     <th>From</th>
                                     <th>To</th>
