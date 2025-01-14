@@ -123,61 +123,7 @@ $approvedleaves=$query->rowCount();
                 </a>
 
 
-                <a href="leavehistory.php" target="blank">
-                    <div class="col s12 m12 l4">
-                        <div class="card stats-card">
-                            <div class="card-content">
-                                <span class="card-title">Enjoyed Leaves</span>
-                                <div class="nby-remaining">
-                                    <span class="stats-counter">
 
-
-                                        <?php
-                if (isset($_SESSION['eid'])) {
-                    $employee_id = $_SESSION['eid'];
-
-                    // Fetch the current leave balance and initial leave values
-                    $sql = "SELECT AnnualLeave, SickLeave FROM tblemployees WHERE id = :employee_id";
-                    $query = $dbh->prepare($sql);
-                    $query->bindParam(':employee_id', $employee_id, PDO::PARAM_INT);
-                    $query->execute();
-
-                    $result = $query->fetch(PDO::FETCH_ASSOC);
-
-                    $EnjoyedAnnualLeave = 22 - $result['AnnualLeave'];
-                    $EnjoyedSickLeave = 7 - $result['SickLeave'];
-                    
-                    if ($result) {
-                        $annualLeave = $result['AnnualLeave'];
-                        $sickLeave = $result['SickLeave'];
-                        
-                    } else {
-                        // Handle case where no employee is found
-                        echo "No employee found.";
-                    }
-                } else {
-                    // Handle case where session is not set
-                    echo "User  not logged in.";
-                }
-                ?>
-
-                                        <p>Annual Leave</p>
-                                        <span class="counter"
-                                            id="enjoyedAnnualLeave"><?php echo htmlentities($EnjoyedAnnualLeave);?></span>
-                                    </span>
-                                    <span class="stats-counter">
-                                        <p>Sick Leave</p>
-                                        <span class="counter"
-                                            id="enjoyedSickLeave"><?php echo htmlentities($EnjoyedSickLeave);?></span>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="progress stats-card-progress">
-                                <div class="success" style="width: 70%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
 
                 <a href="leavehistory.php" target="blank">
                     <div class="col s12 m12 l4">
@@ -185,51 +131,82 @@ $approvedleaves=$query->rowCount();
                             <div class="card-content">
                                 <span class="card-title">Remaining Leaves</span>
 
-
                                 <?php 
-if (isset($_SESSION['eid'])) {
-    $employee_id = $_SESSION['eid'];
-    
-    $sql = "SELECT * FROM tblleaves WHERE empid = :employee_id";
-    $stmt = $dbh->prepare($sql);
-    $stmt->bindParam(':employee_id', $employee_id, PDO::PARAM_INT); // Bind the employee ID
-    $stmt->execute();
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch all matching rows as an associative array
+                // Declare global variables
+                global $remainingAnnualLeave, $remainingSickLeave;
 
-    $totalDuration = 0; // Variable to store the sum of durations
+                if (isset($_SESSION['eid'])) {
+                    $employee_id = $_SESSION['eid'];
+                    
+                    // Fetch leave records to calculate remaining leaves
+                    $sql = "SELECT * FROM tblleaves WHERE empid = :employee_id";
+                    $stmt = $dbh->prepare($sql);
+                    $stmt->bindParam(':employee_id', $employee_id, PDO::PARAM_INT); // Bind the employee ID
+                    $stmt->execute();
+                    $result = $stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch all matching rows as an associative array
 
-    foreach ($result as $row) {
-        // Extract the numeric value of duration (assuming format like "2 days")
-        preg_match('/\d+/', $row['Duration'], $matches);
-        $duration = isset($matches[0]) ? (int)$matches[0] : 0;
+                    // Variables to store the sum of durations for each leave type
+                    $totalAnnualLeaveDuration = 0; 
+                    $totalSickLeaveDuration = 0; 
 
-        $totalDuration += $duration; // Add to total
-    }
+                    foreach ($result as $row) {
+                        // Extract the numeric value of duration (assuming format like "2 days")
+                        preg_match('/\d+/', $row['Duration'], $matches);
+                        $duration = isset($matches[0]) ? (int)$matches[0] : 0;
 
-    $remainingAnnualLeave = 22 - $totalDuration;
-    $remainingSickLeave = 7 - $totalDuration;
+                        // Check LeaveType and Status
+                        if ($row['LeaveType'] === 'Annual Leave' && $row['Status'] == 1) {
+                            $totalAnnualLeaveDuration += $duration; // Add to total annual leave duration
+                        } elseif ($row['LeaveType'] === 'Sick Leave' && $row['Status'] == 1) {
+                            $totalSickLeaveDuration += $duration; // Add to total sick leave duration
+                        }
+                    }
 
-    echo "<br><strong>Total Duration:</strong> " . $totalDuration . " days";
+                    // Calculate remaining leave days
+                    $remainingAnnualLeave = 22 - $totalAnnualLeaveDuration;
+                    $remainingSickLeave = 7 - $totalSickLeaveDuration;
 
-} else {
-    echo "Employee ID is not set in the session.";
-}
-?>
-
-
-
-
+                    // Update the tblemployees table with the remaining leave values
+                    $updateSql = "UPDATE tblemployees SET AnnualLeave = :remainingAnnualLeave, SickLeave = :remainingSickLeave WHERE id = :employee_id";
+                    $updateStmt = $dbh->prepare($updateSql);
+                    $updateStmt->bindParam(':remainingAnnualLeave', $remainingAnnualLeave, PDO::PARAM_INT);
+                    $updateStmt->bindParam(':remainingSickLeave', $remainingSickLeave , PDO::PARAM_INT);
+                    $updateStmt->bindParam(':employee_id', $employee_id, PDO::PARAM_INT);
+                    
+                    $updateStmt->execute();
+                } else {
+                    echo "Employee ID is not set in the session.";
+                }
+                ?>
 
                                 <div class="nby-remaining">
                                     <span class="stats-counter">
                                         <p>Annual Leave</p>
-                                        <span class="counter"
-                                            id="remainingAnnualLeave"><?php echo htmlentities($annualLeave); ?></span>
+                                        <span class="counter" id="remainingAnnualLeave">
+                                            <?php 
+                            // Fetch updated remaining leave values
+                            $sql = "SELECT AnnualLeave FROM tblemployees WHERE id = :employee_id";
+                            $query = $dbh->prepare($sql);
+                            $query->bindParam(':employee_id', $employee_id, PDO::PARAM_INT);
+                            $query->execute();
+                            $result = $query->fetch(PDO::FETCH_ASSOC);
+                            echo htmlentities($result['AnnualLeave']);
+                            ?>
+                                        </span>
                                     </span>
                                     <span class="stats-counter">
                                         <p>Sick Leave</p>
-                                        <span class="counter"
-                                            id="remainingSickLeave"><?php echo htmlentities($sickLeave); ?></span>
+                                        <span class="counter" id="remainingSickLeave">
+                                            <?php 
+                            // Fetch updated remaining sick leave value
+                            $sql = "SELECT SickLeave FROM tblemployees WHERE id = :employee_id";
+                            $query = $dbh->prepare($sql);
+                            $query->bindParam(':employee_id', $employee_id, PDO::PARAM_INT);
+                            $query->execute();
+                            $result = $query->fetch(PDO::FETCH_ASSOC);
+                            echo htmlentities($result['SickLeave']);
+                            ?>
+                                        </span>
                                     </span>
                                 </div>
                             </div>
@@ -241,6 +218,59 @@ if (isset($_SESSION['eid'])) {
                 </a>
 
 
+
+                <a href="leavehistory.php" target="blank">
+                    <div class="col s12 m12 l4">
+                        <div class="card stats-card">
+                            <div class="card-content">
+                                <span class="card-title">Enjoyed Leaves</span>
+                                <div class="nby-remaining">
+                                    <span class="stats-counter">
+                                        <?php
+                        if (isset($_SESSION['eid'])) {
+                            $employee_id = $_SESSION['eid'];
+
+                            // Fetch the current leave balance
+                            $sql = "SELECT AnnualLeave, SickLeave FROM tblemployees WHERE id = :employee_id";
+                            $query = $dbh->prepare($sql);
+                            $query->bindParam(':employee_id', $employee_id, PDO::PARAM_INT);
+                            $query->execute();
+
+                            $result = $query->fetch(PDO::FETCH_ASSOC);
+
+                            if ($result) {
+                                $annualLeave = $result['AnnualLeave'];
+                                $sickLeave = $result['SickLeave'];
+
+                                // Calculate enjoyed leaves
+                                $EnjoyedAnnualLeave = 22 - $remainingAnnualLeave;
+                                $EnjoyedSickLeave = 7 - $remainingSickLeave;
+                            } else {
+                                // Handle case where no employee is found
+                                echo "No employee found.";
+                            }
+                        } else {
+                            // Handle case where session is not set
+                            echo "User  not logged in.";
+                        }
+                        ?>
+                                        <p>Annual Leave</p>
+                                        <span class="counter"
+                                            id="enjoyedAnnualLeave"><?php echo htmlentities($EnjoyedAnnualLeave); ?></span>
+                                    </span>
+                                    <span class="stats-counter">
+                                        <p>Sick Leave</p>
+                                        <span class="counter"
+                                            id="enjoyedSickLeave"><?php echo htmlentities($EnjoyedSickLeave); ?></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="progress stats-card-progress">
+                                <div class="success" style="width: 70%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
 
 
             </div>
