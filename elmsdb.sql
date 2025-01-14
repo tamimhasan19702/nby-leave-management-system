@@ -93,7 +93,7 @@ CREATE TABLE `tblemployees` (
   `Status` int(1) DEFAULT NULL,
   `RegDate` timestamp NULL DEFAULT current_timestamp(),
   `AnnualLeave` int(11) DEFAULT NULL,
-  `SickLeave` int(11) DEFAULT NULL
+  `SickLeave` int(11) DEFAULT NULL,
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --

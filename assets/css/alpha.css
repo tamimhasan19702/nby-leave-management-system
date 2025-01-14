@@ -2450,13 +2450,13 @@ blockquote {
 }
 
 .stats-card-progress {
-  background: #b2ebf2;
+  background: #ffa172 !important;
   border-bottom-left-radius: 2px !important;
   border-bottom-right-radius: 2px !important;
 }
 
 .stats-card-progress .determinate {
-  background: #26c6da;
+  background: #eb641e !important;
   border-bottom-left-radius: 2px;
 }
 

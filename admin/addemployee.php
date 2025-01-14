@@ -2,17 +2,16 @@
 session_start();
 error_reporting(0);
 include('includes/config.php');
-if(strlen($_SESSION['alogin'])==0)
-{   
+
+if(strlen($_SESSION['alogin'])==0) {   
     header('location:index.php');
-}
-else{
+} else {
     if(isset($_POST['add'])) {
         $empid = $_POST['empcode'];
         $fname = $_POST['firstName'];
         $lname = $_POST['lastName'];   
         $email = $_POST['email']; 
-        $username = $_POST['username']; // New field for username
+        $username = $_POST['username']; 
         $password = md5($_POST['password']); 
         $gender = $_POST['gender']; 
         $dob = $_POST['dob']; 
@@ -24,7 +23,20 @@ else{
         $status = 1;
         $annualLeave = $_POST['annual_leave'];
         $sickLeave = $_POST['sick_leave'];
+
+        $imageData = null;
+        if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] == 0) {
+            $fileTmpPath = $_FILES['profile_picture']['tmp_name'];
+            $imageData = file_get_contents($fileTmpPath);
+            $imageData = base64_encode($imageData); // Encode the image data
+        }
     
+        // Insert the image into employee_files table
+        $sql = "INSERT INTO tblemployees(Image) VALUES(:image)";
+        $query = $dbh->prepare($sql);
+        $query->bindParam(':image', $imageData, PDO::PARAM_STR);
+        $query->execute();
+
         // Handle image upload
         $imageData = null;
         if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] == 0) {
@@ -34,7 +46,7 @@ else{
         } else {
             $imageData = null; // Set to null if no image is uploaded
         }
-    
+
         // Updated SQL query to include Image
         $sql = "INSERT INTO tblemployees(EmpId, FirstName, LastName, EmailId, Username, Password, Gender, Dob, Department, Address, City, Country, Phonenumber, Status, Image) 
                 VALUES(:empid, :fname, :lname, :email, :username, :password, :gender, :dob, :department, :address, :city, :country, :mobileno, :status, :image)";
@@ -43,7 +55,7 @@ else{
         $query->bindParam(':fname', $fname, PDO::PARAM_STR);
         $query->bindParam(':lname', $lname, PDO::PARAM_STR);
         $query->bindParam(':email', $email, PDO::PARAM_STR);
-        $query->bindParam(':username', $username, PDO::PARAM_STR); // Bind the new username field
+        $query->bindParam(':username', $username, PDO::PARAM_STR);
         $query->bindParam(':password', $password, PDO::PARAM_STR);
         $query->bindParam(':gender', $gender, PDO::PARAM_STR);
         $query->bindParam(':dob', $dob, PDO::PARAM_STR);
@@ -53,7 +65,7 @@ else{
         $query->bindParam(':country', $country, PDO::PARAM_STR);
         $query->bindParam(':mobileno', $mobileno, PDO::PARAM_STR);
         $query->bindParam(':status', $status, PDO::PARAM_STR);
-        $query->bindParam(':image', $imageData, PDO::PARAM_STR); // Bind the image data
+        $query->bindParam(':image', $imageData, PDO::PARAM_STR);
         $query->execute();
         $lastInsertId = $dbh->lastInsertId();
         if($lastInsertId) {
@@ -62,7 +74,12 @@ else{
             $error = "Something went wrong. Please try again";
         }
     }
+
+
+    
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -157,9 +174,13 @@ else{
             <div class="col s12 m12 l12">
                 <div class="card">
                     <div class="card-content">
+                        <h3>Employee Info</h3>
+
+
+
                         <form id="example-form" method="post" name="addemp">
                             <div>
-                                <h3>Employee Info</h3>
+
                                 <section>
                                     <div class="wizard-content">
                                         <div class="row">
@@ -175,39 +196,6 @@ else{
 
 
 
-                                                    <div class="input-field col s12 nby-employee-image">
-                                                        <span for="profile_picture"
-                                                            style="margin-bottom: 10px; font-size: 15px;">Profile
-                                                            Image</span>
-                                                        <input type="file" name="profile_picture" id="profile_picture"
-                                                            accept="image/*" required onchange="previewImage(event)">
-                                                        <img id="imagePreview" src="#" alt="Image Preview"
-                                                            style="width: 100px; height: 100px; display: none;">
-                                                        <div id="removeButtonContainer" style="display: none;">
-                                                            <button type="button"
-                                                                class="waves-effect waves-light btn red m-b-xs"
-                                                                onclick="removeImage()">Remove</button>
-                                                        </div>
-                                                    </div>
-
-                                                    <script>
-                                                    function previewImage(event) {
-                                                        var output = document.getElementById('imagePreview');
-                                                        output.src = URL.createObjectURL(event.target.files[0]);
-                                                        output.style.display = "block";
-                                                        document.getElementById('removeButtonContainer').style.display =
-                                                            "block"; // Show remove button
-                                                    }
-
-                                                    function removeImage() {
-                                                        var output = document.getElementById('imagePreview');
-                                                        output.src = "#";
-                                                        output.style.display = "none";
-                                                        document.getElementById('profile_picture').value = "";
-                                                        document.getElementById('removeButtonContainer').style.display =
-                                                            "none"; // Hide remove button
-                                                    }
-                                                    </script>
 
 
 
