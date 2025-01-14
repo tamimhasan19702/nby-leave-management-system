@@ -24,28 +24,8 @@ if(strlen($_SESSION['alogin'])==0) {
         $annualLeave = $_POST['annual_leave'];
         $sickLeave = $_POST['sick_leave'];
 
-        $imageData = null;
-        if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] == 0) {
-            $fileTmpPath = $_FILES['profile_picture']['tmp_name'];
-            $imageData = file_get_contents($fileTmpPath);
-            $imageData = base64_encode($imageData); // Encode the image data
-        }
-    
-        // Insert the image into employee_files table
-        $sql = "INSERT INTO tblemployees(Image) VALUES(:image)";
-        $query = $dbh->prepare($sql);
-        $query->bindParam(':image', $imageData, PDO::PARAM_STR);
-        $query->execute();
-
-        // Handle image upload
-        $imageData = null;
-        if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] == 0) {
-            $fileTmpPath = $_FILES['profile_picture']['tmp_name'];
-            $imageData = file_get_contents($fileTmpPath);
-            $imageData = base64_encode($imageData); // Encode the image data to store in the database
-        } else {
-            $imageData = null; // Set to null if no image is uploaded
-        }
+        // Get the profile picture link
+        $imageData = isset($_POST['profilepic']) && !empty($_POST['profilepic']) ? $_POST['profilepic'] : '../assets/images/NBY_IT_SOLUTION_LOGO_SYMBLE-removebg-preview.png'; // Set your default image link here
 
         // Updated SQL query to include Image
         $sql = "INSERT INTO tblemployees(EmpId, FirstName, LastName, EmailId, Username, Password, Gender, Dob, Department, Address, City, Country, Phonenumber, Status, Image) 
@@ -74,10 +54,6 @@ if(strlen($_SESSION['alogin'])==0) {
             $error = "Something went wrong. Please try again";
         }
     }
-
-
-    
-
 ?>
 
 
@@ -196,7 +172,12 @@ if(strlen($_SESSION['alogin'])==0) {
 
 
 
-
+                                                    <div class="input-field col s12">
+                                                        <label for="username">Profile Picture Link</label>
+                                                        <input name="profilepic" id="profilepic" type="text"
+                                                            class="validate">
+                                                        <span id="username-availability" style="font-size:12px;"></span>
+                                                    </div>
 
 
 

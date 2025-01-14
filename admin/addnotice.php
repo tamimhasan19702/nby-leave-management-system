@@ -2,44 +2,39 @@
 session_start();
 error_reporting(0);
 include('includes/config.php');
-if(strlen($_SESSION['alogin'])==0)
-    {   
-header('location:index.php');
-}
-else{
-if(isset($_POST['add']))
-{
-$deptname=$_POST['departmentname'];
-$deptshortname=$_POST['departmentshortname'];
-$deptcode=$_POST['deptcode'];   
-$sql="INSERT INTO tbldepartments(DepartmentName,DepartmentCode,DepartmentShortName) VALUES(:deptname,:deptcode,:deptshortname)";
-$query = $dbh->prepare($sql);
-$query->bindParam(':deptname',$deptname,PDO::PARAM_STR);
-$query->bindParam(':deptcode',$deptcode,PDO::PARAM_STR);
-$query->bindParam(':deptshortname',$deptshortname,PDO::PARAM_STR);
-$query->execute();
-$lastInsertId = $dbh->lastInsertId();
-if($lastInsertId)
-{
-$msg="Department Created Successfully";
-}
-else 
-{
-$error="Something went wrong. Please try again";
-}
 
-}
+if(strlen($_SESSION['alogin'])==0) {   
+    header('location:index.php');
+} else {
+    if(isset($_POST['add'])) {
+        $subject = $_POST['subject'];
+        $title = $_POST['title'];
+        $description = $_POST['description'];
+        $file_path = $_POST['file_path']; // Get the file path from the input
 
-    ?>
+        // Insert notice into the database
+        $sql = "INSERT INTO notices (subject, title, description, file_path) VALUES (:subject, :title, :description, :file_path)";
+        $query = $dbh->prepare($sql);
+        $query->bindParam(':subject', $subject, PDO::PARAM_STR);
+        $query->bindParam(':title', $title, PDO::PARAM_STR);
+        $query->bindParam(':description', $description, PDO::PARAM_STR);
+        $query->bindParam(':file_path', $file_path, PDO::PARAM_STR);
+        $query->execute();
+        
+        $lastInsertId = $dbh->lastInsertId();
+        if($lastInsertId) {
+            $msg = "Notice Created Successfully";
+        } else {
+            $error = "Something went wrong. Please try again";
+        }
+    }
+?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-
-    <!-- Title -->
-    <title>Admin | Add Department</title>
-
+    <title>Admin | Add Notice</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta charset="UTF-8">
     <meta name="description" content="Responsive Admin Dashboard Template" />
@@ -58,7 +53,6 @@ $error="Something went wrong. Please try again";
         margin: 0 0 20px 0;
         background: #fff;
         border-left: 4px solid #dd3d36;
-        -webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1);
         box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1);
     }
 
@@ -67,7 +61,6 @@ $error="Something went wrong. Please try again";
         margin: 0 0 20px 0;
         background: #fff;
         border-left: 4px solid #5cb85c;
-        -webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1);
         box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1);
     }
     </style>
@@ -75,69 +68,54 @@ $error="Something went wrong. Please try again";
 
 <body>
     <?php include('includes/header.php');?>
-
     <?php include('includes/sidebar.php');?>
+
     <main class="mn-inner">
         <div class="row">
             <div class="col s12">
-                <div class="page-title">Add Department</div>
+                <div class="page-title">Add New Notice</div>
             </div>
             <div class="col s12 m12 l6">
                 <div class="card">
                     <div class="card-content">
-
                         <div class="row">
-                            <form class="col s12" name="chngpwd" method="post">
-                                <?php if($error){?><div class="errorWrap">
-                                    <strong>ERROR</strong>:<?php echo htmlentities($error); ?> </div><?php } 
-                else if($msg){?><div class="succWrap"><strong>SUCCESS</strong>:<?php echo htmlentities($msg); ?> </div>
-                                <?php }?>
+                            <form class="col s12" name="addnotice" method="post">
+                                <?php if($error) { ?>
+                                <div class="errorWrap"><strong>ERROR</strong>: <?php echo htmlentities($error); ?></div>
+                                <?php } else if($msg) { ?>
+                                <div class="succWrap"><strong>SUCCESS</strong>: <?php echo htmlentities($msg); ?></div>
+                                <?php } ?>
                                 <div class="row">
                                     <div class="input-field col s12">
-                                        <input id="departmentname" type="text" class="validate" autocomplete="off"
-                                            name="departmentname" required>
-                                        <label for="deptname">Department Name</label>
-                                    </div>
-
-
-                                    <div class="input-field col s12">
-                                        <input id="departmentshortname" type="text" class="validate" autocomplete="off"
-                                            name="departmentshortname" required>
-                                        <label for="deptshortname">Department Short Name</label>
+                                        <input id="subject" type="text" class="validate" name="subject" required>
+                                        <label for="subject">Subject</label>
                                     </div>
                                     <div class="input-field col s12">
-                                        <input id="deptcode" type="text" name="deptcode" class="validate"
-                                            autocomplete="off" required>
-                                        <label for="password">Department Code</label>
+                                        <input id="title" type="text" class="validate" name="title" required>
+                                        <label for="title">Title</label>
                                     </div>
-
-
-
-
+                                    <div class="input-field col s12">
+                                        <textarea id="description" class="materialize-textarea expandable"
+                                            name="description" required></textarea>
+                                        <label for="description">Description</label>
+                                    </div>
+                                    <div class="input-field col s12">
+                                        <input id="file_path" type="text" class="validate" name="file_path" required>
+                                        <label for="file_path">File Path Link</label>
+                                    </div>
                                     <div class="input-field col s12">
                                         <button type="submit" name="add"
                                             class="waves-effect waves-light btn indigo m-b-xs">ADD</button>
-
                                     </div>
-
-
-
-
                                 </div>
-
                             </form>
                         </div>
                     </div>
                 </div>
-
-
-
             </div>
-
         </div>
     </main>
 
-    </div>
     <div class="left-sidebar-hover"></div>
 
     <!-- Javascripts -->
@@ -146,8 +124,6 @@ $error="Something went wrong. Please try again";
     <script src="../assets/plugins/material-preloader/js/materialPreloader.min.js"></script>
     <script src="../assets/plugins/jquery-blockui/jquery.blockui.js"></script>
     <script src="../assets/js/alpha.min.js"></script>
-    <script src="../assets/js/pages/form_elements.js"></script>
-
 </body>
 
 </html>

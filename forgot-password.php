@@ -169,7 +169,7 @@ if (isset($_POST['change'])) {
                     <div class="col s12 m6 l8 offset-l2 offset-m3">
                         <div class="card white darken-1">
 
-                            <?php if($_SESSION['empid']) :?>
+
 
                             <div class="card-content ">
                                 <span class="card-title" style="font-size:20px;">Employee details</span>
@@ -247,7 +247,7 @@ if (isset($_POST['change'])) {
                                 </div>
                             </div>
 
-                            <?php endif; ?>
+
 
 
                         </div>
