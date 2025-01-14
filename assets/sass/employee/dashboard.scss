@@ -98,3 +98,9 @@ td a:hover {
 .waves-effect.waves-red:hover {
   opacity: 0.8; /* Slightly transparent on hover */
 }
+
+.nby-employee-image {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}

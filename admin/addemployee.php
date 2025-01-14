@@ -7,8 +7,7 @@ if(strlen($_SESSION['alogin'])==0)
     header('location:index.php');
 }
 else{
-    if(isset($_POST['add']))
-    {
+    if(isset($_POST['add'])) {
         $empid = $_POST['empcode'];
         $fname = $_POST['firstName'];
         $lname = $_POST['lastName'];   
@@ -25,10 +24,20 @@ else{
         $status = 1;
         $annualLeave = $_POST['annual_leave'];
         $sickLeave = $_POST['sick_leave'];
-
-        // Updated SQL query to include Username
-        $sql = "INSERT INTO tblemployees(EmpId, FirstName, LastName, EmailId, Username, Password, Gender, Dob, Department, Address, City, Country, Phonenumber, Status, AnnualLeave, SickLeave) 
-                VALUES(:empid, :fname, :lname, :email, :username, :password, :gender, :dob, :department, :address, :city, :country, :mobileno, :status, :annualLeave, :sickLeave)";
+    
+        // Handle image upload
+        $imageData = null;
+        if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] == 0) {
+            $fileTmpPath = $_FILES['profile_picture']['tmp_name'];
+            $imageData = file_get_contents($fileTmpPath);
+            $imageData = base64_encode($imageData); // Encode the image data to store in the database
+        } else {
+            $imageData = null; // Set to null if no image is uploaded
+        }
+    
+        // Updated SQL query to include Image
+        $sql = "INSERT INTO tblemployees(EmpId, FirstName, LastName, EmailId, Username, Password, Gender, Dob, Department, Address, City, Country, Phonenumber, Status, Image) 
+                VALUES(:empid, :fname, :lname, :email, :username, :password, :gender, :dob, :department, :address, :city, :country, :mobileno, :status, :image)";
         $query = $dbh->prepare($sql);
         $query->bindParam(':empid', $empid, PDO::PARAM_STR);
         $query->bindParam(':fname', $fname, PDO::PARAM_STR);
@@ -38,22 +47,18 @@ else{
         $query->bindParam(':password', $password, PDO::PARAM_STR);
         $query->bindParam(':gender', $gender, PDO::PARAM_STR);
         $query->bindParam(':dob', $dob, PDO::PARAM_STR);
-        $query->bindParam(':department', $department, PDO::PARAM_STR);
+        $query->bindParam(':department', $department , PDO::PARAM_STR);
         $query->bindParam(':address', $address, PDO::PARAM_STR);
         $query->bindParam(':city', $city, PDO::PARAM_STR);
         $query->bindParam(':country', $country, PDO::PARAM_STR);
         $query->bindParam(':mobileno', $mobileno, PDO::PARAM_STR);
         $query->bindParam(':status', $status, PDO::PARAM_STR);
-        $query->bindParam(':annualLeave', $annualLeave, PDO::PARAM_STR);
-        $query->bindParam(':sickLeave', $sickLeave, PDO::PARAM_STR);
+        $query->bindParam(':image', $imageData, PDO::PARAM_STR); // Bind the image data
         $query->execute();
         $lastInsertId = $dbh->lastInsertId();
-        if($lastInsertId)
-        {
+        if($lastInsertId) {
             $msg = "Employee record added Successfully";
-        }
-        else 
-        {
+        } else {
             $error = "Something went wrong. Please try again";
         }
     }
@@ -168,6 +173,45 @@ else{
                                                     </div>
                                                     <?php }?>
 
+
+
+                                                    <div class="input-field col s12 nby-employee-image">
+                                                        <span for="profile_picture"
+                                                            style="margin-bottom: 10px; font-size: 15px;">Profile
+                                                            Image</span>
+                                                        <input type="file" name="profile_picture" id="profile_picture"
+                                                            accept="image/*" required onchange="previewImage(event)">
+                                                        <img id="imagePreview" src="#" alt="Image Preview"
+                                                            style="width: 100px; height: 100px; display: none;">
+                                                        <div id="removeButtonContainer" style="display: none;">
+                                                            <button type="button"
+                                                                class="waves-effect waves-light btn red m-b-xs"
+                                                                onclick="removeImage()">Remove</button>
+                                                        </div>
+                                                    </div>
+
+                                                    <script>
+                                                    function previewImage(event) {
+                                                        var output = document.getElementById('imagePreview');
+                                                        output.src = URL.createObjectURL(event.target.files[0]);
+                                                        output.style.display = "block";
+                                                        document.getElementById('removeButtonContainer').style.display =
+                                                            "block"; // Show remove button
+                                                    }
+
+                                                    function removeImage() {
+                                                        var output = document.getElementById('imagePreview');
+                                                        output.src = "#";
+                                                        output.style.display = "none";
+                                                        document.getElementById('profile_picture').value = "";
+                                                        document.getElementById('removeButtonContainer').style.display =
+                                                            "none"; // Hide remove button
+                                                    }
+                                                    </script>
+
+
+
+
                                                     <div class="input-field col s12">
                                                         <label for="empcode">Employee Code(Must be unique)</label>
                                                         <input name="empcode" id="empcode"
@@ -206,13 +250,57 @@ else{
                                                         <label for="password">Password</label>
                                                         <input id="password" name="password" type="password"
                                                             autocomplete="off" required>
+                                                        <span class="eye-icon" onclick="togglePassword()"><i
+                                                                class="material-icons">visibility</i></span>
                                                     </div>
+
+                                                    <style>
+                                                    .eye-icon {
+                                                        position: absolute;
+                                                        right: 10px;
+                                                        top: 10px;
+                                                        cursor: pointer;
+                                                    }
+                                                    </style>
+
+                                                    <script>
+                                                    function togglePassword() {
+                                                        var x = document.getElementById("password");
+                                                        if (x.type === "password") {
+                                                            x.type = "text";
+                                                        } else {
+                                                            x.type = "password";
+                                                        }
+                                                    }
+                                                    </script>
 
                                                     <div class="input-field col s12">
                                                         <label for="confirm">Confirm password</label>
                                                         <input id="confirm" name="confirmpassword" type="password"
                                                             autocomplete="off" required>
+                                                        <span class="eye-icon" onclick="toggleConfirmPassword()"><i
+                                                                class="material-icons">visibility</i></span>
                                                     </div>
+
+                                                    <style>
+                                                    .eye-icon {
+                                                        position: absolute;
+                                                        right: 10px;
+                                                        top: 10px;
+                                                        cursor: pointer;
+                                                    }
+                                                    </style>
+
+                                                    <script>
+                                                    function toggleConfirmPassword() {
+                                                        var x = document.getElementById("confirm");
+                                                        if (x.type === "password") {
+                                                            x.type = "text";
+                                                        } else {
+                                                            x.type = "password";
+                                                        }
+                                                    }
+                                                    </script>
                                                 </div>
                                             </div>
 

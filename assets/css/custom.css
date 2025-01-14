@@ -161,6 +161,12 @@ td a:hover {
   opacity: 0.8; /* Slightly transparent on hover */
 }
 
+.nby-employee-image {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
 .nby-sidebar-menu {
   background-color: #ffffff;
   border-radius: 8px;
@@ -197,6 +203,10 @@ td a:hover {
 .nby-img {
   width: 100px;
   height: 100px;
+}
+
+.cyan.darken-1 {
+  background-color: #000000 !important;
 }
 
 /*# sourceMappingURL=custom.css.map */

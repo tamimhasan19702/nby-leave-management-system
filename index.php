@@ -194,7 +194,28 @@ if (isset($_POST['signin'])) {
                                             <input id="password" type="password" class="validate" name="password"
                                                 autocomplete="off" required>
                                             <label for="password">Password</label>
+                                            <span class="eye-icon" onclick="togglePassword()"><i
+                                                    class="material-icons">visibility</i></span>
                                         </div>
+                                        <style>
+                                        .eye-icon {
+                                            position: absolute;
+                                            right: 10px;
+                                            top: 10px;
+                                            cursor: pointer;
+                                        }
+                                        </style>
+
+                                        <script>
+                                        function togglePassword() {
+                                            var x = document.getElementById("password");
+                                            if (x.type === "password") {
+                                                x.type = "text";
+                                            } else {
+                                                x.type = "password";
+                                            }
+                                        }
+                                        </script>
                                         <div class="col s12 right-align m-t-sm">
                                             <input type="submit" name="signin" value="Sign in"
                                                 class="waves-effect waves-light btn teal">
