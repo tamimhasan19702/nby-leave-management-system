@@ -121,8 +121,8 @@ CREATE TABLE `tblemployees` (
 --
 
 INSERT INTO `tblemployees` (`id`, `EmpId`, `FirstName`, `LastName`, `EmailId`, `Password`, `Gender`, `Dob`, `Department`, `Address`, `City`, `Country`, `Phonenumber`, `Username`, `Image`, `Status`, `RegDate`, `AnnualLeave`, `SickLeave`) VALUES
-(6, '30', 'Tareq', 'monower', 'tamimhasancu@gmail.com', '0307eb0498c744fb1d336c546d5b33bb', 'Male', '1 January, 2000', 'Department of Web Development', '488 boro khan bari bokaul bari road', 'chandpur, Bangladesh', 'Bangladesh', '01714270830', 'Tareq123', 'NBY_IT_SOLUTION_LOGO_SYMBLE-removebg-preview.png', 1, '2025-01-12 09:39:14', 20, 5),
-(11, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', '/9j/4AAQSkZJRgABAQAAAQABAAD/4gIoSUNDX1BST0ZJTEUAAQEAAAIYAAAAAAQwAABtbnRyUkdCIFhZWiAAAAAAAAAAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAAHRyWFlaAAABZAA', NULL, '2025-01-14 11:21:02', NULL, NULL);
+(6, '30', 'Tareq', 'monower', 'tamimhasancu@gmail.com', '0307eb0498c744fb1d336c546d5b33bb', 'Male', '1 January, 2000', 'Department of Web Development', '488 boro khan bari bokaul bari road', 'chandpur, Bangladesh', 'Bangladesh', '01714270830', 'Tareq123', 'NBY_IT_SOLUTION_LOGO_SYMBLE-removebg-preview.png', 1, '2025-01-12 09:39:14', 20, 5)
+;
 
 -- --------------------------------------------------------
 

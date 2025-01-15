@@ -50,6 +50,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
+// Handle profile image link update
+if (isset($_POST['updateImageLink'])) {
+    $imageLink = $_POST['imageLink'];
+
+    // Prepare the SQL statement to update the image link
+    $updateImageSql = "UPDATE tblemployees SET Image = :imageLink WHERE id = :eid";
+    $updateImageQuery = $dbh->prepare($updateImageSql);
+    $updateImageQuery->bindParam(':imageLink', $imageLink);
+    $updateImageQuery->bindParam(':eid', $eid, PDO::PARAM_INT);
+    
+    if ($updateImageQuery->execute()) {
+        $successMessage = "Profile image link updated successfully!";
+    } else {
+        echo "<div class='errorWrap'>Error updating image link. Please try again.</div>";
+    }
+}
+
+// Handle image removal
+if (isset($_POST['removeImage'])) {
+    $removeImageSql = "UPDATE tblemployees SET Image = NULL WHERE id = :eid";
+    $removeImageQuery = $dbh->prepare($removeImageSql);
+    $removeImageQuery->bindParam(':eid', $eid, PDO::PARAM_INT);
+    $removeImageQuery->execute();
+}
+
 // Prepare the SQL statement to fetch employee details
 $sql = "SELECT EmpId, FirstName, LastName, EmailId, Gender, Dob, Department, Address, City, Country, Phonenumber, Username, Image, AnnualLeave, SickLeave 
         FROM tblemployees 
@@ -73,10 +98,10 @@ if ($result) {
     $department = $result->Department;
     $address = $result->Address;
     $city = $result->City;
-    $country = $result->Country;
+    $country = $result ->Country;
     $phoneNumber = $result->Phonenumber;
     $username = $result->Username;
-    $image = $result->Image;
+    $image = $result->Image ? $result->Image : 'default.png'; // Default image if none
     $annualLeave = $result->AnnualLeave;
     $sickLeave = $result->SickLeave;
 } else {
@@ -121,6 +146,13 @@ if ($result) {
     .modal-success {
         display: none;
     }
+
+    #imagePreview {
+        display: none;
+        max-width: 150px;
+        max-height: 150px;
+        margin-top: 10px;
+    }
     </style>
 </head>
 
@@ -132,9 +164,44 @@ if ($result) {
         <div class="row">
             <div class="col s12">
                 <h1 class="nby-title">Profile</h1>
-                <img class="nby-img" src="assets/images/<?php echo $image; ?>"
-                    alt="<?php echo $firstName . ' ' . $lastName; ?>">
+                <img class="nby-img" id="defaultImage"
+                    src="assets/images/NBY_IT_SOLUTION_LOGO_SYMBLE-removebg-preview.png" alt="Default Image"
+                    style="display: <?php echo $image ? 'none' : 'block'; ?>;">
+                <img class="nby-img" id="imagePreview" src="<?php echo htmlentities($image); ?>"
+                    alt="Profile Image Preview"
+                    style="display: <?php echo $image ? 'block' : 'none'; ?>; max-width: 150px; max-height: 150px;">
+
+                <form method="post" action="">
+                    <input type="hidden" name="eid" value="<?php echo htmlentities($eid); ?>">
+                    <div class="nby-input-field">
+                        <label for="imageLink">Update Profile Image Link</label>
+                        <input type="text" name="imageLink" id="imageLink" value="<?php echo htmlentities($image); ?>"
+                            class="short-input">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" name="updateImageLink" class="waves-effect waves-light btn">Update Image
+                            Link</button>
+                        <button type="submit" name="removeImage" class="waves-effect waves-light btn red">Remove
+                            Image</button>
+                    </div>
+                </form>
             </div>
+
+            <script>
+            $(document).ready(function() {
+                // Function to update the image preview based on the input link
+                $('#imageLink').on('input', function() {
+                    var imageUrl = $(this).val();
+                    if (imageUrl) {
+                        $('#imagePreview').attr('src', imageUrl).show();
+                        $('#defaultImage').hide();
+                    } else {
+                        $('#imagePreview').hide();
+                        $('#defaultImage').show();
+                    }
+                }).trigger('input'); // Trigger input event to set initial state
+            });
+            </script>
         </div>
 
         <div class="row profile-info">
@@ -143,7 +210,7 @@ if ($result) {
                 <p><strong>Employee ID:</strong> <?php echo htmlentities($empId); ?></p>
                 <p><strong>First Name:</strong> <?php echo htmlentities($firstName); ?></p>
                 <p><strong>Last Name:</strong> <?php echo htmlentities($lastName); ?></p>
-                <p><strong>Email ID:</strong> <?php echo htmlentities($emailId); ?></p>
+                <p><strong>Email ID:</strong> <?php echo htmlentities ($emailId); ?></p>
                 <p><strong>Gender:</strong> <?php echo htmlentities($gender); ?></p>
                 <p><strong>Date of Birth:</strong> <?php echo htmlentities($dob); ?></p>
             </div>
@@ -216,6 +283,8 @@ if ($result) {
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="waves-effect waves-light btn">Update</button>
+                    <button type="submit" name="removeImage" class="waves-effect waves-light btn red">Remove
+                        Image</button>
                     <a href="#!" class="modal-close waves-effect waves-red btn-flat">Cancel</a>
                 </div>
             </form>
@@ -234,12 +303,25 @@ if ($result) {
         $('.modal').modal();
 
         // Show success modal if there is a success message
+
         <?php if (!empty($successMessage)): ?>
         $('#successModal').modal('open'); // Open the success modal
         setTimeout(function() {
             $('#successModal').modal('close'); // Close after 3 seconds
         }, 3000); // Close after 3 seconds
         <?php endif; ?>
+
+        // Preview the image when the link is added
+        $('#imageLink').on('input', function() {
+            var imageUrl = $(this).val();
+            if (imageUrl) {
+                $('#imagePreview').attr('src', imageUrl).show();
+                $('#defaultImage').hide();
+            } else {
+                $('#imagePreview').hide();
+                $('#defaultImage').show();
+            }
+        }).trigger('input'); // Trigger input event to set initial state
     });
     </script>
 
