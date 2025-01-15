@@ -110,21 +110,21 @@ if(strlen($_SESSION['alogin'])==0) {
                                         </div>
                                         <div class="input-field col s12">
                                             <input id="title" type="text" class="validate" name="title"
-                                                value="<?php echo htmlentities($result->title); ?>" required>
+                                                value="<?php echo htmlentities($result->title); ?>">
                                             <label for="title">Notice Title</label>
                                         </div>
                                         <div class="input-field col s12">
-                                            <textarea id="description" class="materialize-textarea" name="description"
-                                                required><?php echo htmlentities($result->description); ?></textarea>
+                                            <textarea id="description" class="materialize-textarea"
+                                                name="description"><?php echo htmlentities($result->description); ?></textarea>
                                             <label for="description">Notice Description</label>
                                         </div>
                                         <div class="input-field col s12">
                                             <input id="file_path" type="text" class="validate" name="file_path"
-                                                value="<?php echo htmlentities($result->file_path); ?>" required>
+                                                value="<?php echo htmlentities($result->file_path); ?>">
                                             <label for="file_path">File Path</label>
                                         </div>
                                         <div class="input-field col s12">
-                                            <select name="department_id" id="department" required>
+                                            <select name="department_id" id="department">
                                                 <option value="0" selected>All Departments</option>
                                                 <?php
                                             // Fetch departments from the database

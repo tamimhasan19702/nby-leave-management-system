@@ -26,11 +26,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $city = $_POST['city'];
     $country = $_POST['country'];
     $phoneNumber = $_POST['phoneNumber'];
+    $profileImage = $_POST['profileImage']; // Get the new profile image link
 
     // Prepare the SQL statement to update employee details
     $updateSql = "UPDATE tblemployees SET FirstName = :firstName, LastName = :lastName, EmailId = :emailId, 
                   Department = :department, Address = :address, City = :city, Country = :country, 
-                  Phonenumber = :phoneNumber WHERE id = :eid";
+                  Phonenumber = :phoneNumber, Image = :profileImage WHERE id = :eid";
 
     $updateQuery = $dbh->prepare($updateSql);
     $updateQuery->bindParam(':firstName', $firstName);
@@ -41,6 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $updateQuery->bindParam(':city', $city);
     $updateQuery->bindParam(':country', $country);
     $updateQuery->bindParam(':phoneNumber', $phoneNumber);
+    $updateQuery->bindParam(':profileImage', $profileImage); // Bind the profile image link
     $updateQuery->bindParam(':eid', $eid, PDO::PARAM_INT);
     
     if ($updateQuery->execute()) {
@@ -91,21 +93,17 @@ if ($result) {
     <title>NBYIT | My Profile</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta charset="UTF-8">
-    <meta name="description" content="Responsive Admin Dashboard Template" />
-    <meta name="keywords" content="admin,dashboard" />
-    <meta name="author" content="Steelcoders" />
     <link type="text/css" rel="stylesheet" href="assets/plugins/materialize/css/materialize.min.css" />
-    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="assets/plugins/material-preloader/css/materialPreloader.min.css" rel="stylesheet">
     <link href="assets/css/alpha.min.css" rel="stylesheet" type="text/css" />
-    <link href="assets/css/custom.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/custom .css" rel="stylesheet" type="text/css" />
     <style>
     .errorWrap {
         padding: 10px;
         margin: 0 0 20px 0;
         background: #fff;
         border-left: 4px solid #dd3d36;
-        -webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1);
         box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1);
     }
 
@@ -114,7 +112,6 @@ if ($result) {
         margin: 0 0 20px 0;
         background: #fff;
         border-left: 4px solid #5cb85c;
-        -webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1);
         box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1);
     }
 
@@ -195,7 +192,7 @@ if ($result) {
                 </div>
                 <div class="nby-input-field">
                     <label for="lastName">Last Name</label>
-                    <input type="text" name="lastName" value="<?php echo htmlentities($lastName); ?>" required
+                    <input type=" text" name="lastName" value="<?php echo htmlentities($lastName); ?>" required
                         class="short-input">
                 </div>
                 <div class="nby-input-field">

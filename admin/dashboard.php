@@ -67,10 +67,10 @@ else{
     <main class="mn-inner">
         <div class="">
             <div class="row no-m-t no-m-b">
+
+                <h1 class="nby-title">Welcome, <?php echo $adminUserName; ?></h1>
+
                 <a href="manageemployee.php" target="blank">
-
-
-                    <h1 class="nby-title">Welcome, <?php echo $adminUserName; ?></h1>
 
                     <div class="col s12 m12 l4">
                         <div class="card stats-card">
@@ -117,20 +117,21 @@ $dptcount=$query->rowCount();
                     </div>
                 </a>
 
-                <a href="manageleavetype.php" target="blank">
+
+                <a href="managenotice.php" target="blank">
                     <div class="col s12 m12 l4">
                         <div class="card stats-card">
                             <div class="card-content">
-                                <span class="card-title">Listed leave Type</span>
+                                <span class="card-title">Listed Notices</span>
                                 <?php
-$sql = "SELECT id from  tblleavetype";
+$sql = "SELECT id from  notices";
 $query = $dbh -> prepare($sql);
 $query->execute();
 $results=$query->fetchAll(PDO::FETCH_OBJ);
-$leavtypcount=$query->rowCount();
+$noticount=$query->rowCount();
 ?>
                                 <span class="stats-counter"><span
-                                        class="counter"><?php echo htmlentities($leavtypcount);?></span></span>
+                                        class="counter"><?php echo htmlentities($noticount);?></span></span>
 
                             </div>
                             <div class="progress stats-card-progress">
@@ -139,6 +140,7 @@ $leavtypcount=$query->rowCount();
                         </div>
                     </div>
                 </a>
+
 
 
                 <a href="leaves.php" target="blank">

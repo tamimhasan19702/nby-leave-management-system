@@ -46,7 +46,17 @@ else{
         <div class="">
             <div class="row no-m-t no-m-b">
 
+                <?php
+                $eid = $_SESSION['eid'];
+                $sql = "SELECT FirstName from tblemployees where id=:eid";
+                $query = $dbh->prepare($sql);
+                $query->bindParam(':eid', $eid, PDO::PARAM_STR);
+                $query->execute();
+                $result = $query->fetch(PDO::FETCH_OBJ);
+                $firstName = $result->FirstName;
+                ?>
 
+                <h1 class="nby-title">Welcome, <?php echo $firstName; ?></h1>
 
 
                 <a href="leavehistory.php" target="blank">
@@ -219,6 +229,9 @@ $approvedleaves=$query->rowCount();
 
 
 
+
+
+
                 <a href="leavehistory.php" target="blank">
                     <div class="col s12 m12 l4">
                         <div class="card stats-card">
@@ -274,6 +287,44 @@ $approvedleaves=$query->rowCount();
 
 
             </div>
+
+            <?php 
+            
+            $sql = "SELECT subject, title, description FROM notices WHERE status = '1'";
+$query = $dbh->prepare($sql);
+$query->execute();
+$notices = $query->fetchAll(PDO::FETCH_OBJ);
+
+            ?>
+
+
+
+            <div class="row no-m-t no-m-b">
+                <div class="col s12 m12 l12">
+                    <div class="card invoices-card">
+                        <div class="card-content">
+                            <span class="card-title">Notice Alert</span>
+                            <div class="notice-banner">
+                                Important Notices
+                            </div>
+                            <?php if (count($notices) > 0): ?>
+                            <ul class="collection">
+                                <?php foreach ($notices as $notice): ?>
+                                <li class="collection-item">
+                                    <h5><?php echo htmlentities($notice->title); ?></h5>
+                                    <p><strong>Subject:</strong> <?php echo htmlentities($notice->subject); ?></p>
+                                    <p><?php echo htmlentities($notice->description); ?></p>
+                                </li>
+                                <?php endforeach; ?>
+                            </ul>
+                            <?php else: ?>
+                            <p>No active notices at the moment.</p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
 
 
