@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 13, 2025 at 09:18 AM
+-- Generation Time: Jan 15, 2025 at 05:23 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -29,6 +29,9 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `admin` (
   `id` int(11) NOT NULL,
+  `adid` varchar(50) NOT NULL,
+  `FirstName` varchar(150) NOT NULL,
+  `LastName` varchar(150) NOT NULL,
   `UserName` varchar(100) NOT NULL,
   `Password` varchar(100) NOT NULL,
   `EmailId` varchar(120) NOT NULL,
@@ -40,8 +43,25 @@ CREATE TABLE `admin` (
 -- Dumping data for table `admin`
 --
 
-INSERT INTO `admin` (`id`, `UserName`, `Password`, `EmailId`, `Image`, `updationDate`) VALUES
-(3, 'Tareq', '0307eb0498c744fb1d336c546d5b33bb', 'tareq@nbyit.com', 'NBY_IT_SOLUTION_LOGO_SYMBLE-removebg-preview.png', '2025-01-12 08:41:23');
+INSERT INTO `admin` (`id`,`adid`, `FirstName`, `LastName` ,`UserName`, `Password`, `EmailId`, `Image`, `updationDate`) VALUES
+(3, 'ad30', 'Tareq', 'Monower' , 'Tareq', '0307eb0498c744fb1d336c546d5b33bb', 'tareq@nbyit.com', 'NBY_IT_SOLUTION_LOGO_SYMBLE-removebg-preview.png', '2025-01-12 08:41:23');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notices`
+--
+
+CREATE TABLE `notices` (
+  `notice_id` int(11) NOT NULL,
+  `subject` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `file_path` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `status` enum('active','inactive') DEFAULT 'active'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -93,7 +113,7 @@ CREATE TABLE `tblemployees` (
   `Status` int(1) DEFAULT NULL,
   `RegDate` timestamp NULL DEFAULT current_timestamp(),
   `AnnualLeave` int(11) DEFAULT NULL,
-  `SickLeave` int(11) DEFAULT NULL,
+  `SickLeave` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
@@ -101,14 +121,15 @@ CREATE TABLE `tblemployees` (
 --
 
 INSERT INTO `tblemployees` (`id`, `EmpId`, `FirstName`, `LastName`, `EmailId`, `Password`, `Gender`, `Dob`, `Department`, `Address`, `City`, `Country`, `Phonenumber`, `Username`, `Image`, `Status`, `RegDate`, `AnnualLeave`, `SickLeave`) VALUES
-(6, '3600', 'Tareq', 'monower', 'tamimhasancu@gmail.com', '0307eb0498c744fb1d336c546d5b33bb', 'Male', '1 January, 2000', 'Department of Web Development', '488 boro khan bari bokaul bari road', 'chandpur, Bangladesh', 'Bangladesh', '01714270830', 'Tareq123', 'NBY_IT_SOLUTION_LOGO_SYMBLE-removebg-preview.png', 1, '2025-01-12 09:39:14', 22, 7),
-(7, '19', 'Al Muktadir', 'Aquibe', 'aquibe@nbyit.com', '0d7c35767559f9f94fb41db42d2ecfa6', 'Male', '29 December, 2001', 'Department of Marketing', 'Dhaka', 'Dhaka', 'Bangladesh', '1670966929', 'aquibe123', 'NBY_IT_SOLUTION_LOGO_SYMBLE-removebg-preview.png', 1, '2025-01-12 09:53:42', 22, 7);
+(6, '30', 'Tareq', 'monower', 'tamimhasancu@gmail.com', '0307eb0498c744fb1d336c546d5b33bb', 'Male', '1 January, 2000', 'Department of Web Development', '488 boro khan bari bokaul bari road', 'chandpur, Bangladesh', 'Bangladesh', '01714270830', 'Tareq123', 'NBY_IT_SOLUTION_LOGO_SYMBLE-removebg-preview.png', 1, '2025-01-12 09:39:14', 20, 5),
+(11, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', '/9j/4AAQSkZJRgABAQAAAQABAAD/4gIoSUNDX1BST0ZJTEUAAQEAAAIYAAAAAAQwAABtbnRyUkdCIFhZWiAAAAAAAAAAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAAHRyWFlaAAABZAA', NULL, '2025-01-14 11:21:02', NULL, NULL);
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `tblleaves`
 --
+
 CREATE TABLE `tblleaves` (
   `id` int(11) NOT NULL,
   `LeaveType` varchar(110) DEFAULT NULL,
@@ -131,13 +152,11 @@ CREATE TABLE `tblleaves` (
 -- Dumping data for table `tblleaves`
 --
 
--- Dumping data for table tblleaves
-
-INSERT INTO tblleaves (id, LeaveType, ToDate, FromDate, Description, PostingDate, AdminRemark, AdminRemarkDate, Status, IsRead, empid, Username, EmailId, Phonenumber, Duration) VALUES
-(11, 'Casual Leave', '2023-09-17', '2023-09-10', 'Need leave to visit my family.', '2023-08-31 15:06:21', 'Approved by admin.', '2023-08-31 20:39:40', 1, 1, 1, 'Tareq123', 'tareq@example.com', '1714270830', '7 days'),
-(12, 'Casual Leave', '2023-09-15', '2023-09-09', 'Requesting casual leave for personal reasons.', '2023-09-01 11:42:40', 'Leave approved by admin.', '2023-09-01 17:13:20', 1, 1, 5, 'Tareq123', 'tareq@example.com', '1714270830', '6 days'),
-(13, 'Sick Leave', '2025-03-03', '2025-01-01', 'Feeling unwell and need to rest.', '2025-01-13 06:05:53', 'Approved by admin.', '2025-01-13 11:36:27', 1, 1, 6, 'Tareq123', 'tareq@example.com', '1714270830', '2 days');
-
+INSERT INTO `tblleaves` (`id`, `LeaveType`, `ToDate`, `FromDate`, `Description`, `PostingDate`, `AdminRemark`, `AdminRemarkDate`, `Status`, `IsRead`, `empid`, `Username`, `EmailId`, `Phonenumber`, `Duration`) VALUES
+(13, 'Sick Leave', '2025-03-03', '2025-01-01', 'Feeling unwell and need to rest.', '2025-01-13 06:05:53', 'Approved by admin.', '2025-01-13 11:36:27', 1, 1, 6, 'Tareq123', 'tamimhasancu@gmail.com', '1714270830', '2 days'),
+(16, 'Annual Leave', '2025-01-16', '2025-01-14', 'i am sick', '2025-01-13 11:02:04', 'approved', '2025-01-14 9:45:06 ', 1, 1, 6, 'Tareq123', 'tamimhasancu@gmail.com', '01714270830', '2 days'),
+(17, 'Annual Leave', '2025-01-18', '2025-01-15', 'i need leave', '2025-01-14 04:55:10', 'not approved', '2025-01-14 11:13:48 ', 2, 1, 6, 'Tareq123', 'tamimhasancu@gmail.com', '01714270830', '3 days'),
+(18, 'Annual Leave', '2025-01-20', '2025-01-18', 'i need leave', '2025-01-14 05:18:39', 'Rejected', '2025-01-14 11:34:58 ', 2, 1, 6, 'Tareq123', 'tamimhasancu@gmail.com', '01714270830', '2 days');
 
 -- --------------------------------------------------------
 
@@ -157,8 +176,8 @@ CREATE TABLE `tblleavetype` (
 --
 
 INSERT INTO `tblleavetype` (`id`, `LeaveType`, `Description`, `CreationDate`) VALUES
-(1, 'Annual Leaves', 'Annual Leaves', '2023-08-31 14:52:22'),
-(3, 'Sick Leaves', 'Sick Leaves', '2023-08-31 14:53:15');
+(1, 'Annual Leave', 'Annual Leave', '2023-08-31 14:52:22'),
+(3, 'Sick Leave', 'Sick Leave', '2023-08-31 14:53:15');
 
 --
 -- Indexes for dumped tables
@@ -169,6 +188,12 @@ INSERT INTO `tblleavetype` (`id`, `LeaveType`, `Description`, `CreationDate`) VA
 --
 ALTER TABLE `admin`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `notices`
+--
+ALTER TABLE `notices`
+  ADD PRIMARY KEY (`notice_id`);
 
 --
 -- Indexes for table `tbldepartments`
@@ -206,6 +231,12 @@ ALTER TABLE `admin`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `notices`
+--
+ALTER TABLE `notices`
+  MODIFY `notice_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `tbldepartments`
 --
 ALTER TABLE `tbldepartments`
@@ -215,13 +246,13 @@ ALTER TABLE `tbldepartments`
 -- AUTO_INCREMENT for table `tblemployees`
 --
 ALTER TABLE `tblemployees`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `tblleaves`
 --
 ALTER TABLE `tblleaves`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `tblleavetype`

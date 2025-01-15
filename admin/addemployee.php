@@ -173,11 +173,47 @@ if(strlen($_SESSION['alogin'])==0) {
 
 
                                                     <div class="input-field col s12">
-                                                        <label for="username">Profile Picture Link</label>
+                                                        <div id="image-preview"></div>
+                                                        <label for="profilepic">Profile Picture Link</label>
                                                         <input name="profilepic" id="profilepic" type="text"
-                                                            class="validate">
-                                                        <span id="username-availability" style="font-size:12px;"></span>
+                                                            class="validate" onchange="checkImageLink(this.value)">
+                                                        <span id="profilepic-availability"
+                                                            style="font-size:12px;"></span>
+                                                        <button type="button" onclick="previewImage()"
+                                                            class="waves-effect waves-light btn indigo m-b-xs">Preview
+                                                            Image</button>
+                                                        <button type="button" onclick="removeImage()"
+                                                            class="waves-effect waves-light btn red m-b-xs">Remove
+                                                            Image</button>
                                                     </div>
+
+                                                    <script>
+                                                    function checkImageLink(link) {
+                                                        var img = new Image();
+                                                        img.onload = function() {
+                                                            $("#profilepic-availability").html("");
+                                                        };
+                                                        img.onerror = function() {
+                                                            $("#profilepic-availability").html(
+                                                                "<span style='color:red'>Warning: This image link is not accessible</span>"
+                                                            );
+                                                        };
+                                                        img.src = link;
+                                                    }
+
+                                                    function previewImage() {
+                                                        var link = document.getElementById('profilepic').value;
+                                                        var imgHtml = '<img src="' + link +
+                                                            '" alt="Image Preview" style="width: 100px; height: auto;">';
+                                                        document.getElementById('image-preview').innerHTML = imgHtml;
+                                                    }
+
+                                                    function removeImage() {
+                                                        document.getElementById('profilepic').value = '';
+                                                        document.getElementById('image-preview').innerHTML = '';
+                                                        $("#profilepic-availability").html("");
+                                                    }
+                                                    </script>
 
 
 

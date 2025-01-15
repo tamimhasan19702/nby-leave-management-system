@@ -51,15 +51,16 @@ if(isset($_POST['signin']))
 
     <div class="mn-content valign-wrapper nbyit-admin">
         <main class="mn-inner container">
+            <div class="row"></div>
             <div class="nbyit-logo">
                 <img src="../assets/images/Logo-of-NBY-IT.webp" alt="nbyit">
                 <a href="../index.php" style="color:#000;">
-                    <h2 class="nby-backlink">↩ Back to Main Menu</h2>
+                    <h2 class="nby-backlink admin">↩ Back to Main Menu</h2>
                 </a>
             </div>
-            <h4 class="nby-title">NBYIT Employee Leave Management System </a>
+            <h4 class="nby-title admin">NBYIT Employee Leave Management System </a>
             </h4>
-            <h2 class="nby-subtitle">Admin Login</h2>
+            <h2 class="nby-subtitle admin">Admin Login</h2>
             <div class="valign">
                 <div class="column nby-signin">
                     <div class="col s12 m6 l4 offset-l4 offset-m3">
