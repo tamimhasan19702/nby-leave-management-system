@@ -33,7 +33,7 @@ if(strlen($_SESSION['alogin'])==0) {
     <div class="side-nav-wrapper">
         <div class="sidebar-profile">
             <div class="sidebar-profile-image">
-                <img src="../assets/images/<?php echo $adminImage; ?>" class="circle" alt="">
+                <img src="<?php echo $adminImage; ?>" class="circle" alt="">
             </div>
             <div class="sidebar-profile-info">
                 <p><?php echo htmlentities($adminUserName); ?></p>

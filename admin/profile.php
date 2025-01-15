@@ -121,8 +121,8 @@ if(strlen($_SESSION['alogin'])==0) {
             <div class="col s12 m6">
                 <h5>Profile Picture</h5>
                 <p>
-                    <img id="profileImage" src="../assets/images/<?php echo htmlentities($image); ?>"
-                        alt="Profile Image" style="width: 200px; height: 200px;" />
+                    <img id="profileImage" src="<?php echo htmlentities($image); ?>" alt="Profile Image"
+                        style="width: 200px; height: auto;" />
                 </p>
                 <form method="post" action="">
                     <div class="nby-input-field">
@@ -156,7 +156,7 @@ if(strlen($_SESSION['alogin'])==0) {
     $(document).ready(function() {
         $('#imageLink').on('input', function() {
             var imageLink = $(this).val();
-            $('#profileImage').attr('src', imageLink ? imageLink : '../assets/images/default.png');
+            $('#profileImage').attr('src', imageLink);
         });
     });
     </script>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 15, 2025 at 05:23 AM
+-- Generation Time: Jan 15, 2025 at 10:43 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -35,7 +35,7 @@ CREATE TABLE `admin` (
   `UserName` varchar(100) NOT NULL,
   `Password` varchar(100) NOT NULL,
   `EmailId` varchar(120) NOT NULL,
-  `Image` varchar(255) NOT NULL DEFAULT 'NBY_IT_SOLUTION_LOGO_SYMBLE-removebg-preview.png',
+  `Image` varchar(255) NOT NULL DEFAULT 'https://nbyit.com/wp-content/uploads/2019/05/cropped-n-logo-1.png',
   `updationDate` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
@@ -43,8 +43,8 @@ CREATE TABLE `admin` (
 -- Dumping data for table `admin`
 --
 
-INSERT INTO `admin` (`id`,`adid`, `FirstName`, `LastName` ,`UserName`, `Password`, `EmailId`, `Image`, `updationDate`) VALUES
-(3, 'ad30', 'Tareq', 'Monower' , 'Tareq', '0307eb0498c744fb1d336c546d5b33bb', 'tareq@nbyit.com', 'NBY_IT_SOLUTION_LOGO_SYMBLE-removebg-preview.png', '2025-01-12 08:41:23');
+INSERT INTO `admin` (`id`, `adid`, `FirstName`, `LastName`, `UserName`, `Password`, `EmailId`, `Image`, `updationDate`) VALUES
+(3, 'ad30', 'Tareq', 'Monower', 'Tareq', '0307eb0498c744fb1d336c546d5b33bb', 'tareq@nbyit.com', 'https://lh3.googleusercontent.com/a/ACg8ocKu44OqYEyiIt44NXVb62V8XHT-sD0j3mIM65sFqHTjQMYSNEoS=s288-c-no', '2025-01-15 08:49:50');
 
 -- --------------------------------------------------------
 
@@ -53,15 +53,24 @@ INSERT INTO `admin` (`id`,`adid`, `FirstName`, `LastName` ,`UserName`, `Password
 --
 
 CREATE TABLE `notices` (
-  `notice_id` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `subject` varchar(255) NOT NULL,
   `title` varchar(255) NOT NULL,
   `description` text NOT NULL,
   `file_path` varchar(255) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `status` enum('active','inactive') DEFAULT 'active'
+  `status` enum('0','1') NOT NULL DEFAULT '0',
+  `department_id` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `notices`
+--
+
+INSERT INTO `notices` (`id`, `subject`, `title`, `description`, `file_path`, `created_at`, `updated_at`, `status`, `department_id`) VALUES
+(1, 'Upcoming Workshop', 'Workshop on Team Collaboration', 'We are excited to announce a workshop on team collaboration strategies. All employees are encouraged to attend. Date: March 15, 2024. Time: 10:00 AM - 12:00 PM. Venue: Conference Room A.', NULL, '2025-01-14 19:13:57', '2025-01-15 09:42:00', '0', 1),
+(6, '', 'this is check message', '', '', '2025-01-15 09:42:53', '2025-01-15 09:42:53', '0', 0);
 
 -- --------------------------------------------------------
 
@@ -109,7 +118,7 @@ CREATE TABLE `tblemployees` (
   `Country` varchar(150) DEFAULT NULL,
   `Phonenumber` char(11) DEFAULT NULL,
   `Username` varchar(100) NOT NULL,
-  `Image` varchar(255) NOT NULL DEFAULT 'NBY_IT_SOLUTION_LOGO_SYMBLE-removebg-preview.png',
+  `Image` varchar(255) NOT NULL DEFAULT 'https://nbyit.com/wp-content/uploads/2019/05/cropped-n-logo-1.png',
   `Status` int(1) DEFAULT NULL,
   `RegDate` timestamp NULL DEFAULT current_timestamp(),
   `AnnualLeave` int(11) DEFAULT NULL,
@@ -121,8 +130,7 @@ CREATE TABLE `tblemployees` (
 --
 
 INSERT INTO `tblemployees` (`id`, `EmpId`, `FirstName`, `LastName`, `EmailId`, `Password`, `Gender`, `Dob`, `Department`, `Address`, `City`, `Country`, `Phonenumber`, `Username`, `Image`, `Status`, `RegDate`, `AnnualLeave`, `SickLeave`) VALUES
-(6, '30', 'Tareq', 'monower', 'tamimhasancu@gmail.com', '0307eb0498c744fb1d336c546d5b33bb', 'Male', '1 January, 2000', 'Department of Web Development', '488 boro khan bari bokaul bari road', 'chandpur, Bangladesh', 'Bangladesh', '01714270830', 'Tareq123', 'NBY_IT_SOLUTION_LOGO_SYMBLE-removebg-preview.png', 1, '2025-01-12 09:39:14', 20, 5)
-;
+(6, '30', 'Tareq', 'monower', 'tamimhasancu@gmail.com', '0307eb0498c744fb1d336c546d5b33bb', 'Male', '1 January, 2000', 'Department of Web Development', '488 boro khan bari bokaul bari road', 'chandpur, Bangladesh', 'Bangladesh', '01714270830', 'Tareq123', 'https://nbyit.com/wp-content/uploads/2019/05/cropped-n-logo-1.png	', 1, '2025-01-12 09:39:14', 20, 5);
 
 -- --------------------------------------------------------
 
@@ -193,7 +201,7 @@ ALTER TABLE `admin`
 -- Indexes for table `notices`
 --
 ALTER TABLE `notices`
-  ADD PRIMARY KEY (`notice_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `tbldepartments`
@@ -234,7 +242,7 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `notices`
 --
 ALTER TABLE `notices`
-  MODIFY `notice_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `tbldepartments`

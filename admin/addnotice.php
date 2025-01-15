@@ -6,30 +6,50 @@ include('includes/config.php');
 if(strlen($_SESSION['alogin'])==0) {   
     header('location:index.php');
 } else {
+    // Initialize variables to hold form data
+    $subject = '';
+    $title = '';
+    $description = '';
+    $file_path = '';
+    $department_id = '';
+
     if(isset($_POST['add'])) {
         $subject = $_POST['subject'];
         $title = $_POST['title'];
         $description = $_POST['description'];
-        $file_path = $_POST['file_path']; // Get the file path from the input
+        $file_path = $_POST['file_path'];
+        $department_id = $_POST['department_id'];
 
-        // Insert notice into the database
-        $sql = "INSERT INTO notices (subject, title, description, file_path) VALUES (:subject, :title, :description, :file_path)";
-        $query = $dbh->prepare($sql);
-        $query->bindParam(':subject', $subject, PDO::PARAM_STR);
-        $query->bindParam(':title', $title, PDO::PARAM_STR);
-        $query->bindParam(':description', $description, PDO::PARAM_STR);
-        $query->bindParam(':file_path', $file_path, PDO::PARAM_STR);
-        $query->execute();
-        
-        $lastInsertId = $dbh->lastInsertId();
-        if($lastInsertId) {
-            $msg = "Notice Created Successfully";
+        // Check if department_id is set and is a valid integer
+        if (!isset($department_id) || !is_numeric($department_id)) {
+            $error = "Invalid department selected.";
         } else {
-            $error = "Something went wrong. Please try again";
+            // Insert notice into the database
+            $sql = "INSERT INTO notices (subject, title, description, file_path, department_id) VALUES (:subject, :title, :description, :file_path, :department_id)";
+            $query = $dbh->prepare($sql);
+            $query->bindParam(':subject', $subject, PDO::PARAM_STR);
+            $query->bindParam(':title', $title, PDO::PARAM_STR);
+            $query->bindParam(':description', $description, PDO::PARAM_STR);
+            $query->bindParam(':file_path', $file_path, PDO::PARAM_STR);
+            $query->bindParam(':department_id', $department_id, PDO::PARAM_INT);
+            
+            if ($query->execute()) {
+                $lastInsertId = $dbh->lastInsertId();
+                if($lastInsertId) {
+                    $msg = "Notice Created Successfully";
+                    // Clear the input fields
+                    $subject = '';
+                    $title = '';
+                    $description = '';
+                    $file_path = '';
+                    $department_id = '0'; // Reset to default value for department
+                }
+            } else {
+                $error = "Something went wrong. Please try again";
+            }
         }
     }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -73,7 +93,7 @@ if(strlen($_SESSION['alogin'])==0) {
     <main class="mn-inner">
         <div class="row">
             <div class="col s12">
-                <div class="page-title">Add New Notice</div>
+                <div class="page-title">Add New Notice </div>
             </div>
             <div class="col s12 m12 l6">
                 <div class="card">
@@ -81,28 +101,56 @@ if(strlen($_SESSION['alogin'])==0) {
                         <div class="row">
                             <form class="col s12" name="addnotice" method="post">
                                 <?php if($error) { ?>
-                                <div class="errorWrap"><strong>ERROR</strong>: <?php echo htmlentities($error); ?></div>
+                                <div class="errorWrap">
+                                    <strong>ERROR</strong>: <?php echo htmlentities($error); ?>
+                                </div>
                                 <?php } else if($msg) { ?>
-                                <div class="succWrap"><strong>SUCCESS</strong>: <?php echo htmlentities($msg); ?></div>
+                                <div class="succWrap"><strong>SUCCESS</strong>: <?php echo htmlentities($msg); ?>
+                                </div>
                                 <?php } ?>
                                 <div class="row">
                                     <div class="input-field col s12">
-                                        <input id="subject" type="text" class="validate" name="subject" required>
-                                        <label for="subject">Subject</label>
-                                    </div>
-                                    <div class="input-field col s12">
-                                        <input id="title" type="text" class="validate" name="title" required>
+                                        <input id="title" type="text" class="validate" name="title"
+                                            value="<?php echo htmlentities($title); ?>" required>
                                         <label for="title">Title</label>
                                     </div>
                                     <div class="input-field col s12">
+                                        <input id="subject" type="text" class="validate" name="subject"
+                                            value="<?php echo htmlentities($subject); ?>">
+                                        <label for="subject">Subject</label>
+                                    </div>
+                                    <div class="input-field col s12">
                                         <textarea id="description" class="materialize-textarea expandable"
-                                            name="description" required></textarea>
+                                            name="description"><?php echo htmlentities($description); ?></textarea>
                                         <label for="description">Description</label>
                                     </div>
                                     <div class="input-field col s12">
-                                        <input id="file_path" type="text" class="validate" name="file_path" required>
+                                        <input id="file_path" type="text" class="validate" name="file_path"
+                                            value="<?php echo htmlentities($file_path); ?>">
                                         <label for="file_path">File Path Link</label>
                                     </div>
+
+                                    <div class="input-field col s12">
+                                        <select name="department_id" id="department" required>
+                                            <option value="0" selected>All Departments</option>
+
+                                            <?php
+                                            // Fetch departments from the database
+                                            $sql = "SELECT id, DepartmentName FROM tbldepartments";
+                                            $stmt = $dbh->prepare($sql);
+                                            $stmt->execute();
+                                            $departments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                            
+                                            foreach ($departments as $department) {
+                                                // Ensure the selected department ID is correctly set
+                                                $selected = ($department_id == $department['id']) ? 'selected' : '';
+                                                echo '<option value="' . htmlentities($department['id']) . '" ' . $selected . '>' . htmlentities($department['DepartmentName']) . '</option>';
+                                            }
+                                            ?>
+                                        </select>
+                                        <label for="department">Department</label>
+                                    </div>
+
                                     <div class="input-field col s12">
                                         <button type="submit" name="add"
                                             class="waves-effect waves-light btn indigo m-b-xs">ADD</button>
@@ -127,4 +175,5 @@ if(strlen($_SESSION['alogin'])==0) {
 </body>
 
 </html>
+
 <?php } ?>
