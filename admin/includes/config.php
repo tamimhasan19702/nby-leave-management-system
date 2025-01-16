@@ -3,7 +3,7 @@
 define('DB_HOST','localhost');
 define('DB_USER','root');
 define('DB_PASS','');
-define('DB_NAME','elmsdb');
+define('DB_NAME','nbyspbnz_elmsdb');
 // Establish database connection.
 try
 {

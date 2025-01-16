@@ -129,7 +129,8 @@ if ($result) {
         <div class="row">
             <div class="col s12">
                 <h1 class="nby-title">Profile</h1>
-                <img class="nby-img" src="<?php echo $image; ?>" alt="<?php echo $firstName . ' ' . $lastName; ?>">
+                <img style="width: 200px; height: auto;" class="nby-img" src="<?php echo $image; ?>"
+                    alt="<?php echo $firstName . ' ' . $lastName; ?>">
             </div>
         </div>
 
