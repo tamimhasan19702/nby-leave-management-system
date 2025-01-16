@@ -167,6 +167,35 @@ td a:hover {
   gap: 15px;
 }
 
+.nby-banner {
+  background-color: #f44336;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 15px 40px;
+  border-radius: 20px;
+}
+
+.nby-banner p {
+  animation: scroll-right 10s linear infinite;
+  color: white !important;
+  font-size: 1.5rem;
+}
+
+@keyframes scroll-right {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+.collection-item {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
 .nby-sidebar-menu {
   background-color: #ffffff;
   border-radius: 8px;

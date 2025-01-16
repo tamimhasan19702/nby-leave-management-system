@@ -290,7 +290,7 @@ $approvedleaves=$query->rowCount();
 
             <?php 
             
-            $sql = "SELECT subject, title, description FROM notices WHERE status = '1'";
+            $sql = "SELECT subject, title, description, file_path FROM notices WHERE status = '1'";
 $query = $dbh->prepare($sql);
 $query->execute();
 $notices = $query->fetchAll(PDO::FETCH_OBJ);
@@ -303,17 +303,42 @@ $notices = $query->fetchAll(PDO::FETCH_OBJ);
                 <div class="col s12 m12 l12">
                     <div class="card invoices-card">
                         <div class="card-content">
-                            <span class="card-title">Notice Alert</span>
-                            <div class="notice-banner">
-                                Important Notices
-                            </div>
+                            <span class="card-title ">Notice Alert</span>
+
                             <?php if (count($notices) > 0): ?>
                             <ul class="collection">
                                 <?php foreach ($notices as $notice): ?>
+
+
+
+                                <div class="notice-banner nby-banner">
+                                    <p>Important Notice</p>
+                                    <p>Important Notice</p>
+                                    <p>Important Notice</p>
+                                    <p>Important Notice</p>
+
+
+                                </div>
+
                                 <li class="collection-item">
-                                    <h5><?php echo htmlentities($notice->title); ?></h5>
-                                    <p><strong>Subject:</strong> <?php echo htmlentities($notice->subject); ?></p>
+                                    <?php if (!empty($notice->title)):?>
+                                    <h5 class="nby-title"><?php echo htmlentities($notice->title); ?></h5>
+                                    <?php endif; ?>
+
+                                    <?php if (!empty($notice->subject)):?>
+                                    <p class="nby-subtitle"><strong>Subject:</strong>
+                                        <?php echo htmlentities($notice->subject); ?></p>
+                                    <?php endif;?>
+
+                                    <?php if (!empty($notice->description)):?>
                                     <p><?php echo htmlentities($notice->description); ?></p>
+                                    <?php endif;?>
+
+                                    <?php if (!empty($notice->file_path)): ?>
+                                    <a href="<?php echo htmlentities($notice->file_path); ?>"
+                                        target="_blank"><?php echo htmlentities($notice->file_path); ?></a>
+
+                                    <?php endif; ?>
                                 </li>
                                 <?php endforeach; ?>
                             </ul>
@@ -324,6 +349,7 @@ $notices = $query->fetchAll(PDO::FETCH_OBJ);
                     </div>
                 </div>
             </div>
+
 
 
 

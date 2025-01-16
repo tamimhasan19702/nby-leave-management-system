@@ -123,7 +123,8 @@ if(strlen($_SESSION['alogin'])==0) {
                                                 value="<?php echo htmlentities($result->file_path); ?>">
                                             <label for="file_path">File Path</label>
                                         </div>
-                                        <div class="input-field col s12">
+
+                                        <!-- <div class="input-field col s12">
                                             <select name="department_id" id="department">
                                                 <option value="0" selected>All Departments</option>
                                                 <?php
@@ -141,7 +142,8 @@ if(strlen($_SESSION['alogin'])==0) {
                                             ?>
                                             </select>
                                             <label for="department">Department</label>
-                                        </div>
+                                        </div> -->
+
                                         <div class="input-field col s12">
                                             <select name="status" required>
                                                 <option value="1"

@@ -190,9 +190,10 @@ if ($result) {
                     <input type="text" name="firstName" value="<?php echo htmlentities($firstName); ?>" required
                         class="short-input">
                 </div>
+
                 <div class="nby-input-field">
                     <label for="lastName">Last Name</label>
-                    <input type=" text" name="lastName" value="<?php echo htmlentities($lastName); ?>" required
+                    <input type="text" name="lastName" value="<?php echo htmlentities($lastName); ?>" required
                         class="short-input">
                 </div>
                 <div class="nby-input-field">

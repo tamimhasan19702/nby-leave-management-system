@@ -84,7 +84,6 @@ if(strlen($_SESSION['alogin'])==0) {
                                     <th>Notice</th>
                                     <th>File link</th>
                                     <th>Created at</th>
-
                                     <th>Active Status</th>
                                     <th>Mode</th>
                                 </tr>

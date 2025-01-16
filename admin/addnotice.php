@@ -130,7 +130,7 @@ if(strlen($_SESSION['alogin'])==0) {
                                         <label for="file_path">File Path Link</label>
                                     </div>
 
-                                    <div class="input-field col s12">
+                                    <!-- <div class="input-field col s12">
                                         <select name="department_id" id="department" required>
                                             <option value="0" selected>All Departments</option>
 
@@ -149,7 +149,7 @@ if(strlen($_SESSION['alogin'])==0) {
                                             ?>
                                         </select>
                                         <label for="department">Department</label>
-                                    </div>
+                                    </div> -->
 
                                     <div class="input-field col s12">
                                         <button type="submit" name="add"

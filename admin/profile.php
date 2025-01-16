@@ -111,13 +111,80 @@ if(strlen($_SESSION['alogin'])==0) {
         </div>
 
         <div class="row profile-info">
+
             <div class="col s12 m6">
                 <h5>Personal Information</h5>
                 <p><strong>Admin ID:</strong> <?php echo htmlentities($adid); ?></p>
                 <p><strong>Name:</strong> <?php echo htmlentities($firstName) .  ' ' . htmlentities($lastName); ?></p>
                 <p><strong>Email ID:</strong> <?php echo htmlentities($emailId); ?></p>
                 <p><strong>Last Updated:</strong> <?php echo htmlentities($updationDate); ?></p>
+                <p>
+                    <a class="waves-effect waves-light btn modal-trigger" href="#editProfileModal">Edit</a>
+                </p>
             </div>
+
+            <!-- Edit Profile Modal -->
+
+            <?php 
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['editProfile'])) {
+    $firstName = $_POST['firstName'];
+    $lastName = $_POST['lastName'];
+    $emailId = $_POST['emailId'];
+
+    // Validate the input data
+    if (empty($firstName) || empty($lastName) || empty($emailId)) {
+        $errorMessage = "All fields are required.";
+    } else if (!filter_var($emailId, FILTER_VALIDATE_EMAIL)) {
+        $errorMessage = "Invalid email ID.";
+    } else {
+        // Update the admin information in the database
+        $updateProfileSql = "UPDATE admin SET FirstName = :firstName, LastName = :lastName, EmailId = :emailId WHERE UserName = :username";
+        $updateProfileQuery = $dbh->prepare($updateProfileSql);
+        $updateProfileQuery->bindParam(':firstName', $firstName, PDO::PARAM_STR);
+        $updateProfileQuery->bindParam(':lastName', $lastName, PDO::PARAM_STR);
+        $updateProfileQuery->bindParam(':emailId', $emailId, PDO::PARAM_STR);
+        $updateProfileQuery->bindParam(':username', $adminUsername, PDO::PARAM_STR);
+
+        if ($updateProfileQuery->execute()) {
+            // Redirect to the same page to refresh
+            header("Location: " . $_SERVER['PHP_SELF']);
+            exit();
+        } else {
+            $errorMessage = "Failed to update profile.";
+        }
+    }
+}
+
+            ?>
+
+            <div id="editProfileModal" class="modal">
+                <div class="modal-content">
+                    <h4>Edit Profile</h4>
+                    <form method="post" action="">
+                        <div class="nby-input-field">
+                            <label for="firstName">First Name</label>
+                            <input type="text" name="firstName" value="<?php echo htmlentities($firstName); ?>"
+                                required>
+                        </div>
+                        <div class="nby-input-field">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" name="lastName" value="<?php echo htmlentities($lastName); ?>" required>
+                        </div>
+                        <div class="nby-input-field">
+                            <label for="emailId">Email ID</label>
+                            <input type="email" name="emailId" value="<?php echo htmlentities($emailId); ?>" required>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="submit" name="editProfile"
+                                class="waves-effect waves-light btn">Update</button>
+                            <a href="#!" class="modal-close waves-effect waves-red btn-flat">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
             <div class="col s12 m6">
                 <h5>Profile Picture</h5>
                 <p>
@@ -137,13 +204,13 @@ if(strlen($_SESSION['alogin'])==0) {
                         Image</button>
                 </form>
             </div>
-        </div>
 
-        <?php if (isset($successMessage)): ?>
-        <div class="succWrap"><?php echo htmlentities($successMessage); ?></div>
-        <?php elseif (isset($errorMessage)): ?>
-        <div class="errorWrap"><?php echo htmlentities($errorMessage); ?></div>
-        <?php endif; ?>
+
+            <?php if (isset($successMessage)): ?>
+            <div class="succWrap"><?php echo htmlentities($successMessage); ?></div>
+            <?php elseif (isset($errorMessage)): ?>
+            <div class="errorWrap"><?php echo htmlentities($errorMessage); ?></div>
+            <?php endif; ?>
     </main>
 
     <script src="../assets/plugins/jquery/jquery-2.2.0.min.js"></script>
