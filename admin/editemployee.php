@@ -83,14 +83,14 @@ else {
     <main class="mn-inner">
         <div class="row">
             <div class="col s12">
-                <div class="page-title">Update employee</div>
+                <div class="page-title nby-title">Update employee</div>
             </div>
             <div class="col s12 m12 l12">
                 <div class="card">
                     <div class="card-content">
                         <form id="example-form" method="post" name="updatemp">
                             <div>
-                                <h3>Update Employee Info</h3>
+
                                 <?php if($error) { ?>
                                 <div class="errorWrap"><strong>ERROR</strong>:<?php echo htmlentities($error); ?> </div>
                                 <?php } else if($msg) { ?>
@@ -161,7 +161,8 @@ else {
                                             <div class="col m6">
                                                 <div class="row">
                                                     <div class="input-field col m6 s12">
-                                                        <select name="gender" autocomplete="off">
+                                                        <select name="gender" class="browser-default"
+                                                            autocomplete="off">
                                                             <option
                                                                 value="<?php echo htmlentities($result->Gender); ?>">
                                                                 <?php echo htmlentities($result->Gender); ?></option>
@@ -173,12 +174,13 @@ else {
 
                                                     <div class="input-field col m6 s12">
                                                         <label for="birthdate">Date of Birth</label>
-                                                        <input id="birthdate" name="dob" class="datepicker"
+                                                        <input id="birthdate" name="dob" type="date"
                                                             value="<?php echo htmlentities($result->Dob); ?>">
                                                     </div>
 
                                                     <div class="input-field col m6 s12">
-                                                        <select name="department" autocomplete="off">
+                                                        <select name="department" class="browser-default"
+                                                            autocomplete="off">
                                                             <option
                                                                 value="<?php echo htmlentities($result->Department); ?>">
                                                                 <?php echo htmlentities($result->Department); ?>

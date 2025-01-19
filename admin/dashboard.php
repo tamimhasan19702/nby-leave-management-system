@@ -257,7 +257,7 @@ foreach($results as $result)
 
                                     <tr>
                                         <td> <b><?php echo htmlentities($cnt);?></b></td>
-                                        <td><a href="editemployee.php?empid=<?php echo htmlentities($result->id);?>"
+                                        <td><a href="viewprofile.php?empid=<?php echo htmlentities($result->id);?>"
                                                 target="_blank"><?php echo htmlentities($result->FirstName." ".$result->LastName);?>(<?php echo htmlentities($result->EmpId);?>)</a>
                                         </td>
                                         <td><?php echo htmlentities($result->LeaveType);?></td>

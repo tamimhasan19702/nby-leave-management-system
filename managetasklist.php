@@ -101,7 +101,25 @@ $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     echo "<td>" . $srNo++ . "</td>";
                                     echo "<td>" . htmlentities($task['TaskName']) . "</td>";
  echo "<td>" . htmlentities($task['TaskDescription']) . "</td>";
-                                    echo "<td>" . htmlentities($task['Status']) . "</td>";
+ echo "<td>";
+ switch ($task['Status']) {
+     case 0:
+         echo "Starting";
+         break;
+     case 1:
+         echo "In Progress";
+         break;
+     case 2:
+         echo "Pending";
+         break;
+     case 3:
+         echo "Completed";
+         break;
+     default:
+         echo "Unknown Status";
+         break;
+ }
+ echo "</td>";
                                     echo "<td>";
                                     // Determine progress based on status
                                     switch ($task['Status']) {

@@ -135,7 +135,17 @@ foreach($results as $result)
                                 <tr>
                                     <td><?php echo htmlentities($cnt);?></td>
                                     <td><?php echo htmlentities($result->EmpId);?></td>
-                                    <td><?php echo htmlentities($result->FirstName);?>&nbsp;<?php echo htmlentities($result->LastName);?>
+                                    <td>
+                                        <div class="nby-profile">
+                                            <a href="viewprofile.php?empid=<?php echo htmlentities($result->id);?>">
+                                                <?php echo htmlentities($result->FirstName);?>&nbsp;<?php echo htmlentities($result->LastName);?>
+                                            </a>
+                                            <a class="btn-floating waves-effect waves-light blue"
+                                                href="viewprofile.php?empid=<?php echo htmlentities($result->id);?>">
+                                                <i class="material-icons">person</i>
+                                            </a>
+                                        </div>
+
                                     </td>
                                     <td><?php echo htmlentities($result->Department);?></td>
                                     <td>

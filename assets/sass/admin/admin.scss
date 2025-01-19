@@ -57,3 +57,10 @@
     font-size: 1.25rem;
   }
 }
+
+.nby-view-profile {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}

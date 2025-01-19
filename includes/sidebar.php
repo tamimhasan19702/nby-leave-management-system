@@ -22,9 +22,12 @@
 
 
 
+                <div class="sidebar-profile-info">
+                    <p><?php echo htmlentities($firstName . " " . $lastName); ?></p>
+                    <span><?php echo htmlentities($emailId); ?></span>
+                </div>
 
-                <p><?php echo htmlentities($firstName . " " . $lastName); ?></p>
-                <span><?php echo htmlentities($emailId); ?></span>
+
                 <!-- Updated to display EmailId -->
                 <?php 
                 } 
