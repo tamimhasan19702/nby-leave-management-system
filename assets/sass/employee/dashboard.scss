@@ -133,3 +133,9 @@ td a:hover {
   flex-direction: column;
   gap: 20px;
 }
+
+.nby-task-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

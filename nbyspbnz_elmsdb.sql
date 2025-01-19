@@ -77,7 +77,19 @@ INSERT INTO `notices` (`id`, `subject`, `title`, `description`, `file_path`, `cr
 -- Table structure for table `tasklist`
 --
 
-v
+CREATE TABLE `tasklist` (
+  `id` int(11) NOT NULL,
+  `EmpId` int(11) NOT NULL,
+  `TaskName` varchar(255) NOT NULL,
+  `TaskDescription` varchar(255) NOT NULL,
+  `Status` enum('0','1','2','3') NOT NULL DEFAULT '0',
+  `Progress` int(3) DEFAULT 0,
+  `Notes` text DEFAULT NULL,
+  `StartDate` date NOT NULL,
+  `EndDate` date NOT NULL,
+  `CreatedAt` timestamp NULL DEFAULT current_timestamp(),
+  `UpdatedAt` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `tasklist`

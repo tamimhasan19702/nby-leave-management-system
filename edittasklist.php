@@ -10,29 +10,42 @@ if (!isset($_SESSION['eid'])) {
     exit();
 }
 
-// Get the employee ID from the session
-$eid = $_SESSION['eid'];
+// Get the employee ID and task ID from the URL
+$empId = isset($_GET['empId']) ? intval($_GET['empId']) : 0;
+$taskId = isset($_GET['taskId']) ? intval($_GET['taskId']) : 0;
 
 // Initialize a variable to hold the success message
 $successMessage = "";
 
-// Handle form submission for adding a new task
-if (isset($_POST['addTask'])) {
+// Fetch the specific task details
+$sql = "SELECT * FROM tasklist WHERE EmpId = :empId AND id = :taskId";
+$stmt = $dbh->prepare($sql);
+$stmt->bindParam(':empId', $empId, PDO::PARAM_INT);
+$stmt->bindParam(':taskId', $taskId, PDO::PARAM_INT);
+$stmt->execute();
+$task = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// Check if the task exists
+if (!$task) {
+    echo "Task not found.";
+    exit();
+}
+
+// Handle form submission for updating the task
+if (isset($_POST['updateTask'])) {
     $taskName = $_POST['taskName'];
     $taskDescription = $_POST['taskDescription'];
     $startDate = $_POST['startDate'];
     $endDate = $_POST['endDate'];
     $notes = $_POST['notes'];
     $status = $_POST['status']; // Get status from form
-    $empId = $eid; // Employee ID from session
-    $progress = 0; // Default progress
+    $progress = $task['Progress']; // Keep the existing progress
 
-    // Prepare SQL statement to insert new task
-    $sql = "INSERT INTO tasklist (EmpId, TaskName, TaskDescription, Status, Progress, Notes, StartDate, EndDate) VALUES (:empId, :taskName, :taskDescription, :status, :progress, :notes, :startDate, :endDate)";
+    // Prepare SQL statement to update the task
+    $sql = "UPDATE tasklist SET TaskName = :taskName, TaskDescription = :taskDescription, Status = :status, Progress = :progress, Notes = :notes, StartDate = :startDate, EndDate = :endDate WHERE EmpId = :empId AND id = :taskId";
     $stmt = $dbh->prepare($sql);
     
     // Bind parameters
-    $stmt->bindValue(':empId', $empId, PDO::PARAM_INT);
     $stmt->bindValue(':taskName', $taskName, PDO::PARAM_STR);
     $stmt->bindValue(':taskDescription', $taskDescription, PDO::PARAM_STR);
     $stmt->bindValue(':status', $status, PDO::PARAM_STR);
@@ -40,12 +53,15 @@ if (isset($_POST['addTask'])) {
     $stmt->bindValue(':notes', $notes, PDO::PARAM_STR);
     $stmt->bindValue(':startDate', $startDate, PDO::PARAM_STR);
     $stmt->bindValue(':endDate', $endDate, PDO::PARAM_STR);
+    $stmt->bindValue(':empId', $empId, PDO::PARAM_INT);
+    $stmt->bindValue(':taskId', $taskId, PDO::PARAM_INT);
 
     if ($stmt->execute()) {
+        $successMessage = "Task updated successfully!";
         header('location:managetasklist.php'); // Redirect to task list page
         exit();
     } else {
-        $successMessage = "Error adding task: " . $stmt->errorInfo()[2]; // Get error message
+        $successMessage = "Error updating task: " . $stmt->errorInfo()[2]; // Get error message
     }
 }
 ?>
@@ -54,7 +70,7 @@ if (isset($_POST['addTask'])) {
 <html lang="en">
 
 <head>
-    <title>NBYIT | My Profile</title>
+    <title>NBYIT | Edit Task</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta charset="UTF-8">
     <meta name="description" content="Responsive Admin Dashboard Template" />
@@ -99,46 +115,49 @@ if (isset($_POST['addTask'])) {
     <main class="mn-inner nby-inner">
         <div class="row">
             <div class="col s12">
-                <h1 class="nby-title">Tasklist</h1>
+                <h1 class="nby-title">Edit Task</h1>
             </div>
         </div>
 
-        <!-- New Task Form -->
+        <!-- Edit Task Form -->
         <div class="row">
             <form method="POST" action="">
                 <div class="input-field col s12">
-                    <input type="text" name="taskName" required>
+                    <input type="text" name="taskName" value="<?php echo htmlentities($task['TaskName']); ?>" required>
                     <label for="taskName">Task Name</label>
                 </div>
                 <div class="input-field col s12">
-                    <input type="text" name="taskDescription">
+                    <input type="text" name="taskDescription"
+                        value="<?php echo htmlentities($task['TaskDescription']); ?>">
                     <label for="taskDescription">Task Description</label>
                 </div>
                 <div class="input-field col s12">
                     <span>Start Date</span>
-                    <input type="date" name="startDate" required>
+                    <input type="date" name="startDate" value="<?php echo htmlentities($task['StartDate']); ?>"
+                        required>
                 </div>
 
                 <div class="input-field col s12">
                     <span>Status</span>
                     <select name="status" required>
-                        <option value="0">Starting</option>
-                        <option value="1">In Progress</option>
-                        <option value="2">Pending</option>
-                        <option value="3">Completed</option>
+                        <option value="0" <?php echo ($task['Status'] == 0) ? 'selected' : ''; ?>>Starting</option>
+                        <option value="1" <?php echo ($task['Status'] == 1) ? 'selected' : ''; ?>>In Progress</option>
+                        <option value="2" <?php echo ($task['Status'] == 2) ? 'selected' : ''; ?>>Pending</option>
+                        <option value="3" <?php echo ($task['Status'] == 3) ? 'selected' : ''; ?>>Completed</option>
                     </select>
                 </div>
 
                 <div class="input-field col s12">
                     <span>End Date</span>
-                    <input type="date" name="endDate">
+                    <input type="date" name="endDate" value="<?php echo htmlentities($task['EndDate']); ?>">
                 </div>
                 <div class="input-field col s12">
-                    <textarea name="notes" class="materialize-textarea"></textarea>
+                    <textarea name="notes"
+                        class="materialize-textarea"><?php echo htmlentities($task['Notes']); ?></textarea>
                     <label for="notes">Notes (optional)</label>
                 </div>
                 <div class="input-field col s12">
-                    <button type="submit" name="addTask" class="btn">Add Task</button>
+                    <button type="submit" name="updateTask" class="btn">Update Task</button>
                 </div>
             </form>
         </div>

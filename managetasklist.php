@@ -1,19 +1,30 @@
 <?php
 session_start();
-error_reporting(0);
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 include('includes/config.php');
 
 // Check if the user is logged in
-if(strlen($_SESSION['emplogin'])==0) {   
-    header('location:index.php');
-} else {
+if (strlen($_SESSION['emplogin']) == 0) {   
+    header('location:index.php'); // Redirect to login page if not logged in
+    exit();
+}
+
+// Get the employee ID from the session
+$eid = $_SESSION['eid'];
+
+// Fetch all tasks for the logged-in employee
+$sql = "SELECT * FROM tasklist WHERE EmpId = :empId";
+$stmt = $dbh->prepare($sql);
+$stmt->bindParam(':empId', $eid, PDO::PARAM_INT);
+$stmt->execute();
+$tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <!-- Title -->
     <title>Employee | Task List</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta charset="UTF-8">
@@ -57,15 +68,17 @@ if(strlen($_SESSION['emplogin'])==0) {
 
     <main class="mn-inner">
         <div class="row">
+            <div class="col s12 nby-task-title">
+                <h1 class="nby-title">Manage Task List</h1>
+                <a href="addtasklist.php" class="btn">Add New Task</a> <!-- Button to add task -->
+            </div>
+        </div>
 
-            <?php if($msg) { ?>
-            <div class="succWrap"><strong>SUCCESS</strong> : <?php echo htmlentities($msg); ?></div>
-            <?php } ?>
-
+        <div class="row">
             <div class="col s12 m12 l12">
                 <div class="card">
                     <div class="card-content">
-                        <span class="card-title">Manage Task List</span>
+                        <span class="card-title">Task List</span>
                         <table id="taskTable" class="display responsive-table">
                             <thead>
                                 <tr>
@@ -77,19 +90,55 @@ if(strlen($_SESSION['emplogin'])==0) {
                                     <th>Notes</th>
                                     <th>Start Date</th>
                                     <th>End Date</th>
+                                    <th>Action</th> <!-- New column for actions -->
                                 </tr>
                             </thead>
                             <tbody>
-
+                                <?php
+                                $srNo = 1; // Initialize serial number
+                                foreach ($tasks as $task) {
+                                    echo "<tr>";
+                                    echo "<td>" . $srNo++ . "</td>";
+                                    echo "<td>" . htmlentities($task['TaskName']) . "</td>";
+ echo "<td>" . htmlentities($task['TaskDescription']) . "</td>";
+                                    echo "<td>" . htmlentities($task['Status']) . "</td>";
+                                    echo "<td>";
+                                    // Determine progress based on status
+                                    switch ($task['Status']) {
+                                        case 0:
+                                            echo "Starting (25%)";
+                                            echo '<div class="progress"><div class="determinate" style="width: 25%"></div></div>';
+                                            break;
+                                        case 1:
+                                            echo "In Progress (50%)";
+                                            echo '<div class="progress"><div class="determinate" style="width: 50%"></div></div>';
+                                            break;
+                                        case 2:
+                                            echo "Pending (50%)";
+                                            echo '<div class="progress"><div class="determinate" style="width: 50%"></div></div>';
+                                            break;
+                                        case 3:
+                                            echo "Completed (100%)";
+                                            echo '<div class="progress"><div class="determinate" style="width: 100%"></div></div>';
+                                            break;
+                                        default:
+                                            echo "Unknown Status";
+                                            break;
+                                    }
+                                    echo "</td>";
+                                    echo "<td>" . htmlentities($task['Notes']) . "</td>";
+                                    echo "<td>" . htmlentities($task['StartDate']) . "</td>";
+                                    echo "<td>" . htmlentities($task['EndDate']) . "</td>";
+                                    echo "<td><a href='edittasklist.php?empId=" . $eid . "&taskId=" . $task['id'] . "' class='btn'>Edit</a></td>"; // Edit button
+                                    echo "</tr>";
+                                }
+                                ?>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Task List Table -->
-
     </main>
 
     <div class="left-sidebar-hover"></div>
@@ -106,4 +155,3 @@ if(strlen($_SESSION['emplogin'])==0) {
 </body>
 
 </html>
-<?php } ?>
