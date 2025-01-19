@@ -214,6 +214,11 @@ td a:hover {
   justify-content: space-between !important;
 }
 
+.nby-complaint {
+  display: flex;
+  flex-direction: column;
+}
+
 .nby-sidebar-menu {
   background-color: #ffffff;
   border-radius: 8px;

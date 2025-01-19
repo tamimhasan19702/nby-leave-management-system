@@ -7,6 +7,10 @@ if(strlen($_SESSION['emplogin'])==0)
 header('location:index.php');
 }
 else{
+
+    $globalannualLeave = 22;
+    $globalsickLeave = 7;
+
 ?>
 
 <!DOCTYPE html>
@@ -256,8 +260,8 @@ $approvedleaves=$query->rowCount();
                                 $sickLeave = $result['SickLeave'];
 
                                 // Calculate enjoyed leaves
-                                $EnjoyedAnnualLeave = 22 - $remainingAnnualLeave;
-                                $EnjoyedSickLeave = 7 - $remainingSickLeave;
+                                $EnjoyedAnnualLeave = $globalannualLeave - $remainingAnnualLeave;
+                                $EnjoyedSickLeave = $globalsickLeave - $remainingSickLeave;
                             } else {
                                 // Handle case where no employee is found
                                 echo "No employee found.";

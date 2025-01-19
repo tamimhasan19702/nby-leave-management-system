@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 19, 2025 at 07:16 AM
+-- Generation Time: Jan 19, 2025 at 11:00 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -45,6 +45,20 @@ CREATE TABLE `admin` (
 
 INSERT INTO `admin` (`id`, `adid`, `FirstName`, `LastName`, `UserName`, `Password`, `EmailId`, `Image`, `updationDate`) VALUES
 (3, 'ad30', 'Tareq', 'Monower', 'Tareq', '0307eb0498c744fb1d336c546d5b33bb', 'tareq21@nbyit.com', 'https://nbyit.com/wp-content/uploads/2019/05/cropped-n-logo-1.png', '2025-01-16 09:07:36');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `complaints`
+--
+
+CREATE TABLE `complaints` (
+  `id` int(11) NOT NULL,
+  `empId` int(11) NOT NULL,
+  `complaint_title` varchar(255) NOT NULL,
+  `complaint` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -96,7 +110,8 @@ CREATE TABLE `tasklist` (
 --
 
 INSERT INTO `tasklist` (`id`, `EmpId`, `TaskName`, `TaskDescription`, `Status`, `Progress`, `Notes`, `StartDate`, `EndDate`, `CreatedAt`, `UpdatedAt`) VALUES
-(24, 30, 'Demo Task', 'This is a demo task for testing purposes.', '0', 0, NULL, '2025-01-15', '2025-01-20', '2025-01-14 18:00:00', '2025-01-14 18:00:00');
+(24, 30, 'Demo Task', 'This is a demo task for testing purposes.', '3', 0, NULL, '2025-01-15', '2025-01-20', '2025-01-14 18:00:00', '2025-01-19 06:54:33'),
+(25, 6, 'website development', 'Website development work', '2', 0, '', '2025-01-19', '2025-01-23', '2025-01-19 06:39:05', '2025-01-19 07:04:32');
 
 -- --------------------------------------------------------
 
@@ -157,7 +172,7 @@ CREATE TABLE `tblemployees` (
 
 INSERT INTO `tblemployees` (`id`, `EmpId`, `FirstName`, `LastName`, `EmailId`, `Password`, `Gender`, `Dob`, `Department`, `Address`, `City`, `Country`, `Phonenumber`, `Username`, `Image`, `Status`, `RegDate`, `AnnualLeave`, `SickLeave`) VALUES
 (6, '30', 'Tareq', 'monower', 'tamimhasancu@gmail.com', '0307eb0498c744fb1d336c546d5b33bb', 'Male', '1 January, 2000', 'Department of Web Development', '488 boro khan bari bokaul bari road', 'chandpur, Bangladesh', 'Bangladesh', '01714270830', 'Tareq123', 'https://nbyit.com/wp-content/uploads/2019/05/cropped-n-logo-1.png', 1, '2025-01-12 09:39:14', 20, 2),
-(12, '19', 'AL MUKTADIR', 'AQUIBE', 'amaquibe@nbyit.com', '9964310d569df626a09449a2c9c328b4', 'Male', '29 December, 2001', 'Department of Marketing', 'MALIBAGH', 'DHAKA', 'Bangladesh', '1670966929', 'AQUIBE', 'https://nbyit.com/wp-content/uploads/2019/05/cropped-n-logo-1.png', 1, '2025-01-16 04:59:40', 22, 7);
+(12, '19', 'AL MUKTADIR', 'AQUIBE', 'amaquibe@nbyit.com', '9964310d569df626a09449a2c9c328b4', 'Male', '29 December, 2001', 'Department of Marketing', 'MALIBAGH', 'DHAKA', 'Bangladesh', '1670966929', 'AQUIBE', 'https://nbyit.com/wp-content/uploads/2019/05/cropped-n-logo-1.png', 1, '2025-01-16 04:59:40', 21, 7);
 
 -- --------------------------------------------------------
 
@@ -227,6 +242,13 @@ ALTER TABLE `admin`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `complaints`
+--
+ALTER TABLE `complaints`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `empId` (`empId`);
+
+--
 -- Indexes for table `notices`
 --
 ALTER TABLE `notices`
@@ -274,6 +296,12 @@ ALTER TABLE `admin`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `complaints`
+--
+ALTER TABLE `complaints`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `notices`
 --
 ALTER TABLE `notices`
@@ -283,7 +311,7 @@ ALTER TABLE `notices`
 -- AUTO_INCREMENT for table `tasklist`
 --
 ALTER TABLE `tasklist`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `tbldepartments`
@@ -308,6 +336,16 @@ ALTER TABLE `tblleaves`
 --
 ALTER TABLE `tblleavetype`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `complaints`
+--
+ALTER TABLE `complaints`
+  ADD CONSTRAINT `complaints_ibfk_1` FOREIGN KEY (`empId`) REFERENCES `tblemployees` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

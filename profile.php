@@ -97,7 +97,7 @@ if ($result) {
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="assets/plugins/material-preloader/css/materialPreloader.min.css" rel="stylesheet">
     <link href="assets/css/alpha.min.css" rel="stylesheet" type="text/css" />
-    <link href="assets/css/custom .css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/custom.css" rel="stylesheet" type="text/css" />
     <style>
     .errorWrap {
         padding: 10px;

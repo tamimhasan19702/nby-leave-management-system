@@ -140,9 +140,9 @@ foreach($results as $result)
                                             <a href="viewprofile.php?empid=<?php echo htmlentities($result->id);?>">
                                                 <?php echo htmlentities($result->FirstName);?>&nbsp;<?php echo htmlentities($result->LastName);?>
                                             </a>
-                                            <a class="btn-floating waves-effect waves-light blue"
+                                            <a class="waves-effect waves-green btn-flat m-b-xs"
                                                 href="viewprofile.php?empid=<?php echo htmlentities($result->id);?>">
-                                                <i class="material-icons">person</i>
+                                                View Profile
                                             </a>
                                         </div>
 
