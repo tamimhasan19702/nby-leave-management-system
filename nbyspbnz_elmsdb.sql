@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 16, 2025 at 08:45 AM
+-- Generation Time: Jan 19, 2025 at 07:16 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -44,7 +44,7 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`id`, `adid`, `FirstName`, `LastName`, `UserName`, `Password`, `EmailId`, `Image`, `updationDate`) VALUES
-(3, 'ad30', 'Tareq', 'Monower', 'Tareq', '0307eb0498c744fb1d336c546d5b33bb', 'tareq21@nbyit.com', 'https://lh3.googleusercontent.com/a/ACg8ocKu44OqYEyiIt44NXVb62V8XHT-sD0j3mIM65sFqHTjQMYSNEoS=s288-c-no', '2025-01-16 04:04:35');
+(3, 'ad30', 'Tareq', 'Monower', 'Tareq', '0307eb0498c744fb1d336c546d5b33bb', 'tareq21@nbyit.com', 'https://nbyit.com/wp-content/uploads/2019/05/cropped-n-logo-1.png', '2025-01-16 09:07:36');
 
 -- --------------------------------------------------------
 
@@ -69,7 +69,7 @@ CREATE TABLE `notices` (
 --
 
 INSERT INTO `notices` (`id`, `subject`, `title`, `description`, `file_path`, `created_at`, `updated_at`, `status`, `department_id`) VALUES
-(1, 'Upcoming Workshop', 'Workshop on Team Collaboration', 'We are excited to announce a workshop on team collaboration strategies. All employees are encouraged to attend. Date: March 15, 2024. Time: 10:00 AM - 12:00 PM. Venue: Conference Room A.', 'https://chatgpt.com/c/67873e75-857c-8013-9297-feea5aeb710c', '2025-01-14 19:13:57', '2025-01-16 03:34:56', '1', 0);
+(1, 'Upcoming Workshop', 'Workshop on Team Collaboration', 'We are excited to announce a workshop on team collaboration strategies. All employees are encouraged to attend. Date: March 15, 2024. Time: 10:00 AM - 12:00 PM. Venue: Conference Room A.', 'https://chatgpt.com/c/67873e75-857c-8013-9297-feea5aeb710c', '2025-01-14 19:13:57', '2025-01-16 09:59:57', '0', 0);
 
 -- --------------------------------------------------------
 
@@ -77,16 +77,14 @@ INSERT INTO `notices` (`id`, `subject`, `title`, `description`, `file_path`, `cr
 -- Table structure for table `tasklist`
 --
 
-CREATE TABLE `tasklist` (
-  `Id` int(11) NOT NULL,
-  `EmpId` int(11) NOT NULL,
-  `TaskDescription` varchar(255) NOT NULL,
-  `Status` enum('Pending','In Progress','Completed') DEFAULT 'Pending',
-  `Progress` int(3) DEFAULT 0,
-  `Notes` text DEFAULT NULL,
-  `CreatedAt` timestamp NULL DEFAULT current_timestamp(),
-  `UpdatedAt` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+v
+
+--
+-- Dumping data for table `tasklist`
+--
+
+INSERT INTO `tasklist` (`id`, `EmpId`, `TaskName`, `TaskDescription`, `Status`, `Progress`, `Notes`, `StartDate`, `EndDate`, `CreatedAt`, `UpdatedAt`) VALUES
+(24, 30, 'Demo Task', 'This is a demo task for testing purposes.', '0', 0, NULL, '2025-01-15', '2025-01-20', '2025-01-14 18:00:00', '2025-01-14 18:00:00');
 
 -- --------------------------------------------------------
 
@@ -147,7 +145,7 @@ CREATE TABLE `tblemployees` (
 
 INSERT INTO `tblemployees` (`id`, `EmpId`, `FirstName`, `LastName`, `EmailId`, `Password`, `Gender`, `Dob`, `Department`, `Address`, `City`, `Country`, `Phonenumber`, `Username`, `Image`, `Status`, `RegDate`, `AnnualLeave`, `SickLeave`) VALUES
 (6, '30', 'Tareq', 'monower', 'tamimhasancu@gmail.com', '0307eb0498c744fb1d336c546d5b33bb', 'Male', '1 January, 2000', 'Department of Web Development', '488 boro khan bari bokaul bari road', 'chandpur, Bangladesh', 'Bangladesh', '01714270830', 'Tareq123', 'https://nbyit.com/wp-content/uploads/2019/05/cropped-n-logo-1.png', 1, '2025-01-12 09:39:14', 20, 2),
-(12, '19', 'AL MUKTADIR', 'AQUIBE', 'amaquibe@nbyit.com', '9964310d569df626a09449a2c9c328b4', 'Male', '29 December, 2001', 'Department of Marketing', 'MALIBAGH', 'DHAKA', 'Bangladesh', '1670966929', 'tareq', '../assets/images/NBY_IT_SOLUTION_LOGO_SYMBLE-removebg-preview.png', 1, '2025-01-16 04:59:40', NULL, NULL);
+(12, '19', 'AL MUKTADIR', 'AQUIBE', 'amaquibe@nbyit.com', '9964310d569df626a09449a2c9c328b4', 'Male', '29 December, 2001', 'Department of Marketing', 'MALIBAGH', 'DHAKA', 'Bangladesh', '1670966929', 'AQUIBE', 'https://nbyit.com/wp-content/uploads/2019/05/cropped-n-logo-1.png', 1, '2025-01-16 04:59:40', 22, 7);
 
 -- --------------------------------------------------------
 
@@ -182,7 +180,8 @@ INSERT INTO `tblleaves` (`id`, `LeaveType`, `ToDate`, `FromDate`, `Description`,
 (16, 'Annual Leave', '2025-01-16', '2025-01-14', 'i am sick', '2025-01-13 11:02:04', 'approved', '2025-01-14 9:45:06 ', 1, 1, 6, 'Tareq123', 'tamimhasancu@gmail.com', '01714270830', '2 days'),
 (17, 'Annual Leave', '2025-01-18', '2025-01-15', 'i need leave', '2025-01-14 04:55:10', 'not approved', '2025-01-14 11:13:48 ', 2, 1, 6, 'Tareq123', 'tamimhasancu@gmail.com', '01714270830', '3 days'),
 (18, 'Annual Leave', '2025-01-20', '2025-01-18', 'i need leave', '2025-01-14 05:18:39', 'Rejected', '2025-01-14 11:34:58 ', 2, 1, 6, 'Tareq123', 'tamimhasancu@gmail.com', '01714270830', '2 days'),
-(19, 'Sick Leave', '2025-01-18', '2025-01-15', 'i need leave', '2025-01-15 11:54:28', '', '2025-01-16 8:49:19 ', 1, 1, 6, 'Tareq123', 'tamimhasancu@gmail.com', '01714270830', '3 days');
+(19, 'Sick Leave', '2025-01-18', '2025-01-15', 'i need leave', '2025-01-15 11:54:28', '', '2025-01-16 8:49:19 ', 1, 1, 6, 'Tareq123', 'tamimhasancu@gmail.com', '01714270830', '3 days'),
+(20, 'Annual Leave', '2025-01-21', '2025-01-20', 'exam leave', '2025-01-19 04:51:48', '', '2025-01-19 11:25:05', 1, 1, 12, 'AQUIBE', 'amaquibe@nbyit.com', '1670966929', '1 days');
 
 -- --------------------------------------------------------
 
@@ -225,8 +224,7 @@ ALTER TABLE `notices`
 -- Indexes for table `tasklist`
 --
 ALTER TABLE `tasklist`
-  ADD PRIMARY KEY (`Id`),
-  ADD KEY `EmpId` (`EmpId`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `tbldepartments`
@@ -273,7 +271,7 @@ ALTER TABLE `notices`
 -- AUTO_INCREMENT for table `tasklist`
 --
 ALTER TABLE `tasklist`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `tbldepartments`
@@ -291,23 +289,13 @@ ALTER TABLE `tblemployees`
 -- AUTO_INCREMENT for table `tblleaves`
 --
 ALTER TABLE `tblleaves`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `tblleavetype`
 --
 ALTER TABLE `tblleavetype`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `tasklist`
---
-ALTER TABLE `tasklist`
-  ADD CONSTRAINT `tasklist_ibfk_1` FOREIGN KEY (`EmpId`) REFERENCES `tblemployees` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

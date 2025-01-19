@@ -20,23 +20,44 @@ $query->bindParam(':did',$did,PDO::PARAM_STR);
 $query->execute();
 
 // code for action taken on leave
-if(isset($_POST['update']))
-{ 
-$did=intval($_GET['leaveid']);
-$description=$_POST['description'];
-$status=$_POST['status'];   
-date_default_timezone_set('Asia/Kolkata');
-$admremarkdate=date('Y-m-d G:i:s ', strtotime("now"));
-$sql="update tblleaves set AdminRemark=:description,Status=:status,AdminRemarkDate=:admremarkdate where id=:did";
-$query = $dbh->prepare($sql);
-$query->bindParam(':description',$description,PDO::PARAM_STR);
-$query->bindParam(':status',$status,PDO::PARAM_STR);
-$query->bindParam(':admremarkdate',$admremarkdate,PDO::PARAM_STR);
-$query->bindParam(':did',$did,PDO::PARAM_STR);
-$query->execute();
-$msg="Leave updated Successfully";
-}
+if (isset($_POST['update'])) {
+    // Get form inputs
+    $did = intval($_POST['leaveid']); // Get Leave ID from the form
+    $description = trim($_POST['description']); // Sanitize input
+    $status = intval($_POST['status']); // Ensure it's an integer
 
+    // Check if leave ID is valid
+    if ($did > 0) {
+        // Set timezone and current date-time
+        date_default_timezone_set('Asia/Kolkata');
+        $admremarkdate = date('Y-m-d G:i:s', strtotime("now"));
+
+        // Update Query
+        $sql = "UPDATE tblleaves 
+                SET AdminRemark = :description, 
+                    Status = :status, 
+                    AdminRemarkDate = :admremarkdate 
+                WHERE id = :did";
+        $query = $dbh->prepare($sql);
+
+        // Bind parameters
+        $query->bindParam(':description', $description, PDO::PARAM_STR);
+        $query->bindParam(':status', $status, PDO::PARAM_INT);
+        $query->bindParam(':admremarkdate', $admremarkdate, PDO::PARAM_STR);
+        $query->bindParam(':did', $did, PDO::PARAM_INT);
+
+        // Execute the query
+        if ($query->execute()) {
+            $msg = "Leave updated successfully.";
+        } else {
+            $msg = "Failed to update leave. Please try again.";
+        }
+    } else {
+        $msg = "Invalid Leave ID.";
+    }
+
+   
+}
 
 
  ?>
@@ -196,32 +217,47 @@ echo htmlentities($result->AdminRemarkDate);
 
                                 <tr>
                                     <td colspan="5">
+                                        <!-- Modal Trigger -->
                                         <a class="modal-trigger waves-effect waves-light btn"
                                             href="#modal1">Take&nbsp;Action</a>
-                                        <form name="adminaction" method="post">
+
+                                        <!-- Modal Form -->
+                                        <form name="adminaction" method="post" action="">
+                                            <!-- Modal Structure -->
                                             <div id="modal1" class="modal modal-fixed-footer" style="height: 60%">
                                                 <div class="modal-content" style="width:90%">
-                                                    <h4>Leave take action</h4>
-                                                    <select class="browser-default" name="status" required="">
+                                                    <h4>Leave Take Action</h4>
+
+                                                    <!-- Hidden Input to Pass Leave ID -->
+                                                    <input type="hidden" name="leaveid"
+                                                        value="<?php echo isset($_GET['leaveid']) ? $_GET['leaveid'] : ''; ?>">
+
+                                                    <!-- Status Dropdown -->
+                                                    <select class="browser-default" name="status" required>
                                                         <option value="">Choose your option</option>
                                                         <option value="1" style="color:green">Approved</option>
                                                         <option value="2" style="color:red">Rejected</option>
-                                                    </select></p>
-                                                    <p><textarea id="textarea1" name="description"
-                                                            class="materialize-textarea" name="description"
-                                                            placeholder="Description" length="500"
-                                                            maxlength="500"></textarea></p>
+                                                    </select>
+
+                                                    <!-- Description Textarea -->
+                                                    <p>
+                                                        <textarea id="textarea1" name="description"
+                                                            class="materialize-textarea" placeholder="Description"
+                                                            maxlength="500"></textarea>
+                                                    </p>
                                                 </div>
+
+                                                <!-- Submit Button -->
                                                 <div class="modal-footer" style="width:90%">
                                                     <input type="submit"
                                                         class="waves-effect waves-light btn blue m-b-xs" name="update"
                                                         value="Submit">
                                                 </div>
-
                                             </div>
-
+                                        </form>
                                     </td>
                                 </tr>
+
                                 <?php } ?>
                                 </form>
                                 </tr>
