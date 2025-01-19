@@ -108,7 +108,8 @@ if(strlen($_SESSION['alogin'])==0) {
                                     <td>
                                         <a
                                             href="managenotice.php?status=<?php echo htmlentities($result->status);?>&id=<?php echo htmlentities($result->id);?>">
-                                            <button class="btn <?php echo $result->status == '1' ? 'green' : 'red'; ?>">
+                                            <button class="btn"
+                                                style="background-color: <?php echo $result->status == '1' ? 'green' : 'red'; ?> !important;">
                                                 <?php echo htmlentities($result->status == '1' ? 'Active' : 'Inactive'); ?>
                                             </button>
                                         </a>

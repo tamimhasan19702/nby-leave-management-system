@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 19, 2025 at 11:00 AM
+-- Generation Time: Jan 19, 2025 at 12:27 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -60,6 +60,13 @@ CREATE TABLE `complaints` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+--
+-- Dumping data for table `complaints`
+--
+
+INSERT INTO `complaints` (`id`, `empId`, `complaint_title`, `complaint`, `created_at`) VALUES
+(11, 6, 'test complaint form', 'test complaint form test complaint form test complaint form', '2025-01-19 11:13:53');
+
 -- --------------------------------------------------------
 
 --
@@ -83,7 +90,7 @@ CREATE TABLE `notices` (
 --
 
 INSERT INTO `notices` (`id`, `subject`, `title`, `description`, `file_path`, `created_at`, `updated_at`, `status`, `department_id`) VALUES
-(1, 'Upcoming Workshop', 'Workshop on Team Collaboration', 'We are excited to announce a workshop on team collaboration strategies. All employees are encouraged to attend. Date: March 15, 2024. Time: 10:00 AM - 12:00 PM. Venue: Conference Room A.', 'https://chatgpt.com/c/67873e75-857c-8013-9297-feea5aeb710c', '2025-01-14 19:13:57', '2025-01-16 09:59:57', '0', 0);
+(1, 'Upcoming Workshop', 'Workshop on Team Collaboration', 'We are excited to announce a workshop on team collaboration strategies. All employees are encouraged to attend. Date: March 15, 2024. Time: 10:00 AM - 12:00 PM. Venue: Conference Room A.', 'https://chatgpt.com/c/67873e75-857c-8013-9297-feea5aeb710c', '2025-01-14 19:13:57', '2025-01-19 11:26:14', '1', 0);
 
 -- --------------------------------------------------------
 
@@ -299,7 +306,7 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `complaints`
 --
 ALTER TABLE `complaints`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `notices`
