@@ -79,6 +79,7 @@ $msg="Department record deleted";
                         <span class="card-title">Departments Info</span>
                         <?php if($msg){?><div class="succWrap"><strong>SUCCESS</strong> :
                             <?php echo htmlentities($msg); ?> </div><?php }?>
+
                         <table id="example" class="display responsive-table ">
                             <thead>
                                 <tr>
