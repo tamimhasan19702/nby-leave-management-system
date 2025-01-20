@@ -150,3 +150,115 @@ td a:hover {
   display: flex;
   flex-direction: column;
 }
+
+.nby-emp-head {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#loginTime {
+  margin: 20px;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.timeEntry {
+  margin: 10px 0; /* Add gap between login and logout time */
+}
+
+.btn {
+  background-color: #007bff; /* Bootstrap primary color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+}
+
+strong {
+  display: block; /* Make the date bold and on a new line */
+  margin-bottom: 15px; /* Add some space below the date */
+}
+
+#loginTime {
+  margin: 20px;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.log-time-entry {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.log .login-date {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.timeEntry {
+  margin: 10px 0; /* Add gap between login and logout time */
+}
+
+.log-btn {
+  padding: 10px 15px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.log-btn-primary {
+  background-color: #007bff; /* Primary button color */
+}
+
+.log-btn-primary:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+}
+
+.log-btn-info {
+  background-color: #17a2b8; /* Info button color */
+}
+
+.log-btn-info:hover {
+  background-color: #138496; /* Darker shade on hover */
+}
+
+.log-btn-warning {
+  background-color: #ffc107; /* Warning button color */
+  color: black; /* Change text color for contrast */
+}
+
+.log-btn-warning:hover {
+  background-color: #e0a800; /* Darker shade on hover */
+}
+
+.log-btn-danger {
+  background-color: #dc3545; /* Danger button color */
+}
+
+.log-btn-danger:hover {
+  background-color: #c82333; /* Darker shade on hover */
+}
+
+strong {
+  display: block; /* Make the date bold and on a new line */
+  margin-bottom: 15px; /* Add some space below the date */
+}

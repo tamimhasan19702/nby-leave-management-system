@@ -165,7 +165,52 @@ if (strlen($_SESSION['alogin']) == 0) {
             </div>
 
             <div class="row">
-                <div class="col s12 m12 l12">
+                <div class="col s12 m12 l12 ">
+
+                    <div class="card">
+                        <div class="card-content">
+                            <span class="card-title">Employee Logs</span>
+                            <table id="logTable" class="display responsive-table">
+                                <thead>
+                                    <tr>
+                                        <th>Sr No</th>
+                                        <th>Employee ID</th>
+                                        <th>Log Date</th>
+                                        <th>Login Time</th>
+                                        <th>Logout Time</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+
+$query = "SELECT tblemployeelogs.id, tblemployeelogs.LogDate, tblemployeelogs.LoginTime, tblemployeelogs.LogoutTime, tblemployees.FirstName, tblemployees.LastName
+FROM tblemployeelogs
+INNER JOIN tblemployees ON tblemployeelogs.EmpId = tblemployees.id
+WHERE tblemployeelogs.EmpId = :eid"; // Filter by employee ID
+$stmt = $dbh->prepare($query);
+$stmt->bindParam(':eid', $eid, PDO::PARAM_INT); // Bind the employee ID
+$stmt->execute();
+$logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                $srNo = 1; // Initialize serial number
+                foreach ($logs as $log) {
+                    echo "<tr>";
+                    echo "<td>" . $srNo++ . "</td>";
+                    echo "<td>" . htmlentities($log['FirstName'] . ' ' . $log['LastName']) . "</td>";
+                    echo "<td>" . htmlentities($log['LogDate']) . "</td>";
+                    echo "<td>" . htmlentities($log['LoginTime']) . "</td>";
+                    echo "<td>" . (empty($log['LogoutTime']) ? 'Not Logged Out' : htmlentities($log['LogoutTime'])) . "</td>";
+                    
+                    echo "</tr>";
+                }
+                ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
                     <div class="card">
                         <div class="card-content">
                             <span class="card-title">Task List</span>
@@ -245,6 +290,7 @@ if (strlen($_SESSION['alogin']) == 0) {
                             </table>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>

@@ -2,16 +2,62 @@
 session_start();
 error_reporting(0);
 include('includes/config.php');
-if(strlen($_SESSION['emplogin'])==0)
-    {   
-header('location:index.php');
-}
-else{
 
+if (strlen($_SESSION['emplogin']) == 0) {   
+    header('location:index.php');
+} else {
     $globalannualLeave = 22;
     $globalsickLeave = 7;
 
+    // Get employee ID
+    $eid = $_SESSION['eid'];
+$today = date('Y-m-d');
+
+// Check if the employee has already logged in today
+$query = "SELECT * FROM tblemployeelogs WHERE EmpId = :eid AND LogDate = :today";
+$stmt = $dbh->prepare($query);
+$stmt->bindParam(':eid', $eid, PDO::PARAM_INT);
+$stmt->bindParam(':today', $today, PDO::PARAM_STR);
+$stmt->execute();
+$logEntry = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// Handle login and logout actions
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_POST['action'])) {
+        if ($_POST['action'] == 'login') {
+            $loginTime = new DateTimeZone('Asia/Dhaka');
+            $loginTime = (new DateTime('now', $loginTime))->format('h:i:s A'); // Get current time for login in 12-hour format
+
+            // Insert or update the login time
+            $query = "INSERT INTO tblemployeelogs (EmpId, LogDate, LoginTime) VALUES (:eid, :today, :loginTime) ON DUPLICATE KEY UPDATE LoginTime = :loginTime";
+            $stmt = $dbh->prepare($query);
+            $stmt->bindParam(':eid', $eid, PDO::PARAM_INT);
+            $stmt->bindParam(':today', $today, PDO::PARAM_STR);
+            $stmt->bindParam(':loginTime', $loginTime, PDO::PARAM_STR);
+            $stmt->execute();
+
+            // Redirect to the same page to show updated information
+            header("Location: " . $_SERVER['PHP_SELF']);
+            exit;
+        } elseif ($_POST['action'] == 'logout') {
+            $logoutTime = (new DateTime('now', new DateTimeZone('Asia/Dhaka')))->format('h:i:s A'); // Get current time for logout in UTC+6 BST
+
+            // Update the logout time
+            $query = "UPDATE tblemployeelogs SET LogoutTime = :logoutTime WHERE EmpId = :eid AND LogDate = :today";
+            $stmt = $dbh->prepare($query);
+            $stmt->bindParam(':logoutTime', $logoutTime, PDO::PARAM_STR);
+            $stmt->bindParam(':eid', $eid, PDO::PARAM_INT);
+            $stmt->bindParam(':today', $today, PDO::PARAM_STR);
+            $stmt->execute();
+
+            // Redirect to the same page to show updated information
+            header("Location: " . $_SERVER['PHP_SELF']);
+            exit;
+        }
+    }
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -51,8 +97,7 @@ else{
             <div class="row no-m-t no-m-b">
 
                 <?php
-                $eid = $_SESSION['eid'];
-                $sql = "SELECT FirstName from tblemployees where id=:eid";
+                $sql = "SELECT FirstName FROM tblemployees WHERE id = :eid";
                 $query = $dbh->prepare($sql);
                 $query->bindParam(':eid', $eid, PDO::PARAM_STR);
                 $query->execute();
@@ -60,7 +105,44 @@ else{
                 $firstName = $result->FirstName;
                 ?>
 
-                <h1 class="nby-title">Welcome, <?php echo $firstName; ?></h1>
+                <div class="nby-emp-head">
+                    <h1 class="nby-title">Welcome, <?php echo htmlspecialchars($firstName); ?></h1>
+
+                    <div id="loginTime">
+                        <div>
+                            <p class="login-date"><strong>Today's Date: <?php echo date('Y-m-d'); ?></strong></p>
+                        </div>
+                        <div class="log-time-entry">
+                            <?php
+    if (!$logEntry) {
+        // No log entry for today, show login button
+        echo '<form method="POST" action="">';
+        echo '<input type="hidden" name="action" value="login">';
+        echo '<button id="loginBtn" class="log-btn log-btn-primary" type="submit">Login</button>';
+        echo '</form>';
+    } else {
+        // Log entry exists, show login time
+        echo '<div class="timeEntry">';
+        echo '<button id="loginTimeBtn" class="log-btn log-btn-info">Login Time: ' . htmlspecialchars($logEntry['LoginTime']) . '</button>';
+        echo '</div>';
+        
+        if (!empty($logEntry['LogoutTime'])) {
+            // If logout time exists, show it
+            echo '<div class="timeEntry">';
+            echo '<button id="logoutTimeBtn" class="log-btn log-btn-warning">Logout Time: ' . htmlspecialchars($logEntry['LogoutTime']) . '</button>';
+            echo '</div>';
+        } else {
+            // If logout time does not exist, show logout button
+            echo '<form method="POST" action="">';
+            echo '<input type="hidden" name="action" value="logout">';
+            echo '<button id="logoutBtn" class="log-btn log-btn-danger" type="submit">Logout</button>';
+            echo '</form>';
+        }
+    }
+    ?>
+                        </div>
+                    </div>
+                </div>
 
 
                 <a href="leavehistory.php" target="blank">

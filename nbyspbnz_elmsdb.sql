@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 19, 2025 at 12:27 PM
+-- Generation Time: Jan 20, 2025 at 07:07 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -44,7 +44,9 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`id`, `adid`, `FirstName`, `LastName`, `UserName`, `Password`, `EmailId`, `Image`, `updationDate`) VALUES
-(3, 'ad30', 'Tareq', 'Monower', 'Tareq', '0307eb0498c744fb1d336c546d5b33bb', 'tareq21@nbyit.com', 'https://nbyit.com/wp-content/uploads/2019/05/cropped-n-logo-1.png', '2025-01-16 09:07:36');
+(3, 'ad30', 'Tareq', 'Monower', 'Tareq', '0307eb0498c744fb1d336c546d5b33bb', 'tareq21@nbyit.com', 'https://nbyit.com/wp-content/uploads/2019/05/cropped-n-logo-1.png', '2025-01-16 09:07:36'),
+(4, 'ad01', 'Md. Babul', 'Hossain', 'Babul123', 'e1d0cc48bbd022ba68ce8d3d457e9afb', 'bablu.pm@gmail.com', 'https://nbyit.com/wp-content/uploads/2019/05/cropped-n-logo-1.png', '2025-01-20 05:07:39'),
+(5, 'nby06', 'Abdul', 'Kaium', 'Abdul123', 'e1d0cc48bbd022ba68ce8d3d457e9afb', 'akaium85@gmail.com', 'https://nbyit.com/wp-content/uploads/2019/05/cropped-n-logo-1.png', '2025-01-20 05:12:57');
 
 -- --------------------------------------------------------
 
@@ -59,13 +61,6 @@ CREATE TABLE `complaints` (
   `complaint` text NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
---
--- Dumping data for table `complaints`
---
-
-INSERT INTO `complaints` (`id`, `empId`, `complaint_title`, `complaint`, `created_at`) VALUES
-(11, 6, 'test complaint form', 'test complaint form test complaint form test complaint form', '2025-01-19 11:13:53');
 
 -- --------------------------------------------------------
 
@@ -144,6 +139,21 @@ INSERT INTO `tbldepartments` (`id`, `DepartmentName`, `DepartmentShortName`, `De
 (7, 'Department of 3D', '3D', '3D01', '2025-01-12 09:47:30'),
 (8, 'Department of Marketing', 'Marketing', 'MR01', '2025-01-12 09:48:57'),
 (9, 'Department of Web Development', 'Web dev', 'WD01', '2025-01-12 09:50:29');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tblemployeelogs`
+--
+
+CREATE TABLE `tblemployeelogs` (
+  `id` int(11) NOT NULL,
+  `EmpId` int(11) NOT NULL,
+  `LogDate` date NOT NULL DEFAULT curdate(),
+  `LoginTime` time NOT NULL DEFAULT '12:00:00',
+  `LogoutTime` time DEFAULT NULL,
+  `Timezone` varchar(50) NOT NULL DEFAULT 'UTC+6 BST'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
 
@@ -274,6 +284,13 @@ ALTER TABLE `tbldepartments`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `tblemployeelogs`
+--
+ALTER TABLE `tblemployeelogs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `EmpId` (`EmpId`);
+
+--
 -- Indexes for table `tblemployees`
 --
 ALTER TABLE `tblemployees`
@@ -300,7 +317,7 @@ ALTER TABLE `tblleavetype`
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `complaints`
@@ -325,6 +342,12 @@ ALTER TABLE `tasklist`
 --
 ALTER TABLE `tbldepartments`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `tblemployeelogs`
+--
+ALTER TABLE `tblemployeelogs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tblemployees`
@@ -353,6 +376,12 @@ ALTER TABLE `tblleavetype`
 --
 ALTER TABLE `complaints`
   ADD CONSTRAINT `complaints_ibfk_1` FOREIGN KEY (`empId`) REFERENCES `tblemployees` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `tblemployeelogs`
+--
+ALTER TABLE `tblemployeelogs`
+  ADD CONSTRAINT `tblemployeelogs_ibfk_1` FOREIGN KEY (`EmpId`) REFERENCES `tblemployees` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

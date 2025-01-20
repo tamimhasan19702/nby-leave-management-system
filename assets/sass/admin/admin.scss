@@ -64,3 +64,34 @@
   justify-content: space-between;
   align-items: center;
 }
+
+.pagination {
+  margin-top: 20px;
+  text-align: center; /* Center the pagination links */
+}
+
+.pagination-link {
+  display: inline-block;
+  padding: 10px 15px;
+  margin: 0 5px;
+  background-color: #007bff; /* Primary color */
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.pagination-link:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+}
+
+.pagination-link.active {
+  background-color: #0056b3; /* Active page color */
+  font-weight: bold; /* Make active page bold */
+}
+
+.pagination-link.disabled {
+  background-color: #ccc; /* Disabled link color */
+  color: #666; /* Disabled text color */
+  pointer-events: none; /* Disable click */
+}
