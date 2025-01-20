@@ -312,7 +312,8 @@ if(strlen($_SESSION['alogin'])==0) {
                                             <div class="col m6">
                                                 <div class="row">
                                                     <div class="input-field col m6 s12">
-                                                        <select name="gender" autocomplete="off">
+                                                        <select name="gender" autocomplete="off"
+                                                            class="browser-default">
                                                             <option value="">Gender...</option>
                                                             <option value="Male">Male</option>
                                                             <option value="Female">Female</option>
@@ -327,7 +328,8 @@ if(strlen($_SESSION['alogin'])==0) {
                                                     </div>
 
                                                     <div class="input-field col m6 s12">
-                                                        <select name="department" autocomplete="off">
+                                                        <select name="department" autocomplete="off"
+                                                            class="browser-default">
                                                             <option value="">Department...</option>
                                                             <?php 
                                                             $sql = "SELECT DepartmentName from tbldepartments";

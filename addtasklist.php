@@ -121,7 +121,7 @@ if (isset($_POST['addTask'])) {
 
                 <div class="input-field col s12">
                     <span>Status</span>
-                    <select name="status" required>
+                    <select name="status" required class="browser-default">
                         <option value="0">Starting</option>
                         <option value="1">In Progress</option>
                         <option value="2">Pending</option>

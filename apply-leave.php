@@ -131,7 +131,7 @@ if (strlen($_SESSION['emplogin']) == 0) {
                                                 </div>
 
                                                 <div class="input-field col s12">
-                                                    <select name="leavetype" autocomplete="off">
+                                                    <select name="leavetype" autocomplete="off" class="browser-default">
                                                         <option value="">Select leave type...</option>
                                                         <?php 
                                                             $sql = "SELECT LeaveType from tblleavetype";

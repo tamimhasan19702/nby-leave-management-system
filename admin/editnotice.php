@@ -38,7 +38,9 @@ if(strlen($_SESSION['alogin'])==0) {
         $query->bindParam(':nid', $nid, PDO::PARAM_STR);
         $query->execute();
         $msg = "Notice updated Successfully";
+        header('location:managenotice.php');
     }
+    
 ?>
 
 <!DOCTYPE html>
@@ -145,7 +147,8 @@ if(strlen($_SESSION['alogin'])==0) {
                                         </div> -->
 
                                         <div class="input-field col s12">
-                                            <select name="status" required>
+                                            <span>Status</span>
+                                            <select name="status" required class="browser-default">
                                                 <option value="1"
                                                     <?php echo $result->status == '1' ? 'selected' : ''; ?>>
                                                     Active</option>
@@ -153,7 +156,7 @@ if(strlen($_SESSION['alogin'])==0) {
                                                     <?php echo $result->status == '0' ? 'selected' : ''; ?>>
                                                     Inactive</option>
                                             </select>
-                                            <label>Status</label>
+
                                         </div>
                                     </div>
                                     <?php 

@@ -139,7 +139,7 @@ if (isset($_POST['updateTask'])) {
 
                 <div class="input-field col s12">
                     <span>Status</span>
-                    <select name="status" required>
+                    <select name="status" required class="browser-default">
                         <option value="0" <?php echo ($task['Status'] == 0) ? 'selected' : ''; ?>>Starting</option>
                         <option value="1" <?php echo ($task['Status'] == 1) ? 'selected' : ''; ?>>In Progress</option>
                         <option value="2" <?php echo ($task['Status'] == 2) ? 'selected' : ''; ?>>Pending</option>
