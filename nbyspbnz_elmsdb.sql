@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 20, 2025 at 07:07 AM
+-- Generation Time: Jan 20, 2025 at 09:24 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -150,10 +150,17 @@ CREATE TABLE `tblemployeelogs` (
   `id` int(11) NOT NULL,
   `EmpId` int(11) NOT NULL,
   `LogDate` date NOT NULL DEFAULT curdate(),
-  `LoginTime` time NOT NULL DEFAULT '12:00:00',
+  `LoginTime` time DEFAULT NULL,
   `LogoutTime` time DEFAULT NULL,
   `Timezone` varchar(50) NOT NULL DEFAULT 'UTC+6 BST'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `tblemployeelogs`
+--
+
+INSERT INTO `tblemployeelogs` (`id`, `EmpId`, `LogDate`, `LoginTime`, `LogoutTime`, `Timezone`) VALUES
+(5, 6, '2025-01-20', '01:08:35', '01:48:29', 'UTC+6 BST');
 
 -- --------------------------------------------------------
 
@@ -288,7 +295,7 @@ ALTER TABLE `tbldepartments`
 --
 ALTER TABLE `tblemployeelogs`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `EmpId` (`EmpId`);
+  ADD UNIQUE KEY `unique_log` (`EmpId`,`LogDate`);
 
 --
 -- Indexes for table `tblemployees`
@@ -347,7 +354,7 @@ ALTER TABLE `tbldepartments`
 -- AUTO_INCREMENT for table `tblemployeelogs`
 --
 ALTER TABLE `tblemployeelogs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `tblemployees`

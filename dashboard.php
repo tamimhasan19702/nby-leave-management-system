@@ -342,8 +342,8 @@ $approvedleaves=$query->rowCount();
                                 $sickLeave = $result['SickLeave'];
 
                                 // Calculate enjoyed leaves
-                                $EnjoyedAnnualLeave = $globalannualLeave - $remainingAnnualLeave;
-                                $EnjoyedSickLeave = $globalsickLeave - $remainingSickLeave;
+                                $EnjoyedAnnualLeave = max(0, $globalannualLeave - $remainingAnnualLeave);
+                                $EnjoyedSickLeave = max(0, $globalsickLeave - $remainingSickLeave);
                             } else {
                                 // Handle case where no employee is found
                                 echo "No employee found.";

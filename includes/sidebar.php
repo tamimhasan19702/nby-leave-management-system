@@ -40,8 +40,6 @@
                         class="material-icons">settings_input_svideo</i>Dashboard</a></li>
             <li class="no-padding"><a class="waves-effect waves-grey" href="profile.php"><i
                         class="material-icons">account_box</i>My Profile</a></li>
-            <li class="no-padding"><a class="waves-effect waves-grey" href="emp-changepassword.php"><i
-                        class="material-icons">settings_input_svideo</i>Change Password</a></li>
 
             <li class="no-padding">
                 <a class="collapsible-header waves-effect waves-grey"><i class="material-icons">apps</i>Leaves<i
