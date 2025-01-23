@@ -151,9 +151,10 @@ foreach($results as $result)
                                     <td>
                                         <?php $stats = $result->Status;
         if($stats) { ?>
-                                        <a class="waves-effect waves-green btn-flat m-b-xs">Active</a>
+                                        <a class="waves-effect btn-flat m-b-xs"
+                                            style="background-color: green!important; color: white;">Active</a>
                                         <?php } else { ?>
-                                        <a class="waves-effect waves-red btn-flat m-b-xs">Inactive</a>
+                                        <a class="waves-effect btn-flat m-b-xs " style=" color: white;">Inactive</a>
                                         <?php } ?>
                                     </td>
                                     <td><?php echo htmlentities($result->RegDate);?></td>

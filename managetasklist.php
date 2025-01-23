@@ -132,8 +132,8 @@ $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             echo '<div class="progress"><div class="determinate" style="width: 50%"></div></div>';
                                             break;
                                         case 2:
-                                            echo "Pending (50%)";
-                                            echo '<div class="progress"><div class="determinate" style="width: 50%"></div></div>';
+                                            echo "Pending (0%)";
+                                            echo '<div class="progress"><div class="determinate" style="width: 0%"></div></div>';
                                             break;
                                         case 3:
                                             echo "Completed (100%)";

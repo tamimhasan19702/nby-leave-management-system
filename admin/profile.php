@@ -114,13 +114,29 @@ if(strlen($_SESSION['alogin'])==0) {
 
             <div class="col s12 m6">
                 <h5>Personal Information</h5>
-                <p><strong>Admin ID:</strong> <?php echo htmlentities($adid); ?></p>
-                <p><strong>Name:</strong> <?php echo htmlentities($firstName) .  ' ' . htmlentities($lastName); ?></p>
-                <p><strong>Email ID:</strong> <?php echo htmlentities($emailId); ?></p>
-                <p><strong>Last Updated:</strong> <?php echo htmlentities($updationDate); ?></p>
-                <p>
-                    <a class="waves-effect waves-light btn modal-trigger" href="#editProfileModal">Edit</a>
-                </p>
+                <table>
+                    <tr>
+                        <td><strong>Admin ID:</strong></td>
+                        <td><?php echo htmlentities($adid); ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Name:</strong></td>
+                        <td><?php echo htmlentities($firstName) . ' ' . htmlentities($lastName); ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Email ID:</strong></td>
+                        <td><?php echo htmlentities($emailId); ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Last Updated:</strong></td>
+                        <td><?php echo htmlentities($updationDate); ?></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <a class="waves-effect waves-light btn modal-trigger" href="#editProfileModal">Edit</a>
+                        </td>
+                    </tr>
+                </table>
             </div>
 
             <!-- Edit Profile Modal -->

@@ -323,8 +323,7 @@ if(strlen($_SESSION['alogin'])==0) {
 
                                                     <div class="input-field col m6 s12">
                                                         <label for="birthdate">Birthdate</label>
-                                                        <input id="birthdate" name="dob" type="date" class="datepicker"
-                                                            autocomplete="off">
+                                                        <input id="birthdate" name="dob" type="text" autocomplete="off">
                                                     </div>
 
                                                     <div class="input-field col m6 s12">

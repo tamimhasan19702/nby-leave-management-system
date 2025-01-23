@@ -174,7 +174,7 @@ else {
 
                                                     <div class="input-field col m6 s12">
                                                         <label for="birthdate">Date of Birth</label>
-                                                        <input id="birthdate" name="dob" type="date"
+                                                        <input id="birthdate" name="dob" type="text"
                                                             value="<?php echo htmlentities($result->Dob); ?>">
                                                     </div>
 

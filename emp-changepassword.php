@@ -2,41 +2,46 @@
 session_start();
 error_reporting(0);
 include('includes/config.php');
+
 if(strlen($_SESSION['emplogin'])==0) {   
     header('location:index.php');
 } else {
-    // Code for change password 
-    if(isset($_POST['change'])) {
-        $password = md5($_POST['password']);
-        $newpassword = md5($_POST['newpassword']);
-        $confirmpassword = md5($_POST['confirmpassword']);
-        $username = $_SESSION['emplogin'];
+    if (isset($_POST['change'])) {
+        $currentPassword = md5($_POST['password']);
+        $newPassword = md5($_POST['newpassword']);
+        $confirmPassword = md5($_POST['confirmpassword']);
+        $employeeId = $_SESSION['eid'];
 
-        // Check if new password and confirm password match
-        if ($newpassword !== $confirmpassword) {
-            $error = "New password and confirm password do not match.";
-        } else {
-            // Check if the current password is correct
-            $sql = "SELECT Password FROM tblemployees WHERE EmailId=:username and Password=:password";
-            $query = $dbh->prepare($sql);
-            $query->bindParam(':username', $username, PDO::PARAM_STR);
-            $query->bindParam(':password', $password, PDO::PARAM_STR);
-            $query->execute();
+        // Fetch the current password from the database
+        $sql = "SELECT Password FROM tblemployees WHERE id=:eid";
+        $query = $dbh->prepare($sql);
+        $query->bindParam(':eid', $employeeId, PDO::PARAM_STR);
+        $query->execute();
+        $result = $query->fetch(PDO::FETCH_ASSOC);
 
-            if($query->rowCount() > 0) {
+        // Check if the current password matches
+        if ($result && $result['Password'] === $currentPassword) {
+            // Check if new password and confirm password match
+            if ($newPassword === $confirmPassword) {
                 // Update the password
-                $con = "UPDATE tblemployees SET Password=:newpassword WHERE EmailId=:username";
-                $chngpwd1 = $dbh->prepare($con);
-                $chngpwd1->bindParam(':username', $username, PDO::PARAM_STR);
-                $chngpwd1->bindParam(':newpassword', $newpassword, PDO::PARAM_STR);
-                $chngpwd1->execute();
+                $sql = "UPDATE tblemployees SET Password=:newpassword WHERE id=:eid";
+                $query = $dbh->prepare($sql);
+                $query->bindParam(':newpassword', $newPassword, PDO::PARAM_STR);
+                $query->bindParam(':eid', $employeeId, PDO::PARAM_STR);
+                $query->execute();
 
-                // Set success message
-                $msg = "Your Password successfully changed";
+                // Clear the session
+                session_unset();
+                session_destroy();
+
+                // Redirect to index.php
+                header('location:index.php');
+                exit; // Always call exit after header redirection
             } else {
-                // Set error message for wrong current password
-                $error = "Your current password is wrong";    
+                $error = "New password and confirm password do not match";
             }
+        } else {
+            $error = "Current password is incorrect";
         }
     }
 ?>
@@ -56,32 +61,6 @@ if(strlen($_SESSION['emplogin'])==0) {
     <link href="assets/plugins/material-preloader/css/materialPreloader.min.css" rel="stylesheet">
     <link href="assets/css/alpha.min.css" rel="stylesheet" type="text/css" />
     <link href="assets/css/custom.css" rel="stylesheet" type="text/css" />
-    <style>
-    .errorWrap {
-        padding: 10px;
-        margin: 0 0 20px 0;
-        background: #fff;
-        border-left: 4px solid #dd3d36;
-        box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1);
-    }
-
-    .succWrap {
-        padding: 10px;
-        margin: 0 0 20px 0;
-        background: #fff;
-        border-left: 4px solid #5cb85c;
-        box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1);
-    }
-
-    .field-icon {
-        float: right;
-        margin-top: -25px;
-        margin-right: 8px;
-        position: relative;
-        z-index: 2;
-        cursor: pointer;
-    }
-    </style>
 </head>
 
 <body>
@@ -137,6 +116,7 @@ if(strlen($_SESSION['emplogin'])==0) {
                                 </div>
                             </form>
 
+                            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                             <script>
                             $(document).ready(function() {
                                 $(".toggle-password").click(function() {
@@ -150,7 +130,6 @@ if(strlen($_SESSION['emplogin'])==0) {
                                 });
                             });
                             </script>
-
                         </div>
                     </div>
                 </div>

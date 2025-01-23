@@ -52,6 +52,21 @@ if (strlen($_SESSION['emplogin']) == 0) {
             }
         }
     }
+
+
+    $empid = $_SESSION['eid']; // Get employee ID from session
+    $sql = "SELECT Username, EmailId, Phonenumber FROM tblemployees WHERE id = :empid";
+    $query = $dbh->prepare($sql);
+    $query->bindParam(':empid', $empid, PDO::PARAM_INT);
+    $query->execute();
+    $employeeData = $query->fetch(PDO::FETCH_ASSOC);
+
+    // Extract values
+    $username = $employeeData['Username'] ?? '';
+    $emailId = $employeeData['EmailId'] ?? '';
+    $phonenumber = $employeeData['Phonenumber'] ?? '';
+
+    
 ?>
 
 <!DOCTYPE html>
@@ -116,17 +131,20 @@ if (strlen($_SESSION['emplogin']) == 0) {
                                                 <?php } ?>
 
                                                 <div class="input-field col s12">
-                                                    <input id="username" name="username" type="text" required>
+                                                    <input id="username" name="username" type="text"
+                                                        value="<?php echo htmlentities($username); ?>" required>
                                                     <label for="username">Username</label>
                                                 </div>
 
                                                 <div class="input-field col s12">
-                                                    <input id="emailid" name="emailid" type="email" required>
+                                                    <input id="emailid" name="emailid" type="email"
+                                                        value="<?php echo htmlentities($emailId); ?>" required>
                                                     <label for="emailid">Email ID</label>
                                                 </div>
 
                                                 <div class="input-field col s12">
-                                                    <input id="phonenumber" name="phonenumber" type="text" required>
+                                                    <input id="phonenumber" name="phonenumber" type="text"
+                                                        value="<?php echo htmlentities($phonenumber); ?>" required>
                                                     <label for="phonenumber">Phone Number</label>
                                                 </div>
 

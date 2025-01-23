@@ -21,6 +21,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $firstName = $_POST['firstName'];
     $lastName = $_POST['lastName'];
     $emailId = $_POST['emailId'];
+    $username = $_POST['username']; 
+    $dob = $_POST['dob']; 
     $department = $_POST['department'];
     $address = $_POST['address'];
     $city = $_POST['city'];
@@ -30,13 +32,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Prepare the SQL statement to update employee details
     $updateSql = "UPDATE tblemployees SET FirstName = :firstName, LastName = :lastName, EmailId = :emailId, 
-                  Department = :department, Address = :address, City = :city, Country = :country, 
-                  Phonenumber = :phoneNumber, Image = :profileImage WHERE id = :eid";
+                  Username = :username, Dob = :dob, Department = :department, Address = :address, 
+                  City = :city, Country = :country, Phonenumber = :phoneNumber, Image = :profileImage 
+                  WHERE id = :eid";
 
     $updateQuery = $dbh->prepare($updateSql);
     $updateQuery->bindParam(':firstName', $firstName);
     $updateQuery->bindParam(':lastName', $lastName);
     $updateQuery->bindParam(':emailId', $emailId);
+    $updateQuery->bindParam(':username', $username); // Bind the username
+    $updateQuery->bindParam(':dob', $dob); // Bind the date of birth
     $updateQuery->bindParam(':department', $department);
     $updateQuery->bindParam(':address', $address);
     $updateQuery->bindParam(':city', $city);
@@ -53,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 // Prepare the SQL statement to fetch employee details
-$sql = "SELECT EmpId, FirstName, LastName, EmailId, Gender, Dob, Department, Address, City, Country, Phonenumber, Username, Image, AnnualLeave, SickLeave 
+$sql = "SELECT EmpId, FirstName, LastName, EmailId, Gender, Dob, Department, Address, City, Country, Phonenumber, Username, Image 
         FROM tblemployees 
         WHERE id = :eid";
 
@@ -79,12 +84,11 @@ if ($result) {
     $phoneNumber = $result->Phonenumber;
     $username = $result->Username;
     $image = $result->Image;
-    $annualLeave = $result->AnnualLeave;
-    $sickLeave = $result->SickLeave;
 } else {
     echo "No employee found with the given ID.";
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -135,149 +139,177 @@ if ($result) {
         </div>
 
         <div class="row profile-info">
-            <div class="col s12 m6">
-                <h5>Personal Information</h5>
-                <p><strong>Employee ID:</strong> <?php echo htmlentities($empId); ?></p>
-                <p><strong>First Name:</strong> <?php echo htmlentities($firstName); ?></p>
-                <p><strong>Last Name:</strong> <?php echo htmlentities($lastName); ?></p>
-                <p><strong>Email ID:</strong> <?php echo htmlentities($emailId); ?></p>
-                <p><strong>Gender:</strong> <?php echo htmlentities($gender); ?></p>
-                <p><strong>Date of Birth:</strong> <?php echo htmlentities($dob); ?></p>
-            </div>
-            <div class="col s12 m6">
-                <h5>Contact Information</h5>
-                <p><strong>Department:</strong> <?php echo htmlentities($department); ?></p>
-                <p><strong>Address:</strong> <?php echo htmlentities($address); ?></p>
-                <p><strong>City:</strong> <?php echo htmlentities($city); ?></p>
-                <p><strong>Country:</strong> <?php echo htmlentities($country); ?></p>
-                <p><strong>Phone Number:</strong> <?php echo htmlentities($phoneNumber); ?></p>
-                <p><strong>Username:</strong> <?php echo htmlentities($username); ?></p>
+            <div class="col s12">
+                <h5>Profile Information</h5>
+                <table class="profile-table">
+                    <tr>
+                        <td><strong>Employee ID:</strong></td>
+                        <td><?php echo htmlentities($empId); ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>First Name:</strong></td>
+                        <td><?php echo htmlentities($firstName); ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Last Name:</strong></td>
+                        <td><?php echo htmlentities($lastName); ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Email ID:</strong></td>
+                        <td><?php echo htmlentities($emailId); ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Gender:</strong></td>
+                        <td><?php echo htmlentities($gender); ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Date of Birth:</strong></td>
+                        <td><?php echo htmlentities($dob); ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Department:</strong></td>
+                        <td><?php echo htmlentities($department); ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Address:</strong></td>
+                        <td><?php echo htmlentities($address); ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>City:</strong></td>
+                        <td><?php echo htmlentities($city); ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Country:</strong></td>
+                        <td><?php echo htmlentities($country); ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Phone Number:</strong></td>
+                        <td><?php echo htmlentities($phoneNumber); ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Username:</strong></td>
+                        <td><?php echo htmlentities($username); ?></td>
+                    </tr>
+                </table>
             </div>
         </div>
         <button class="waves-effect waves-light btn modal-trigger" data-target="editModal">Edit Profile</button>
 
-        <!-- Success Modal -->
-        <div id="successModal" class="modal modal-success">
+
+        <!-- Edit Profile Modal -->
+        <div id="editModal" class="modal">
             <div class="modal-content">
-                <h4>Success</h4>
-                <p><?php echo $successMessage; ?></p>
+                <h4 class="nby-modal-title">Edit Profile</h4>
+                <form method="post" action="">
+                    <input type="hidden" name="eid" value="<?php echo htmlentities($eid); ?>">
+                    <div class="nby-input-field">
+                        <label for="profileImage">Profile Picture Link</label>
+                        <input type="url" name="profileImage" id="profileImage"
+                            value="<?php echo htmlentities($image); ?>" required class="short-input"
+                            oninput="previewImage()">
+                    </div>
+                    <div class="nby-input-field">
+                        <label for="firstName">First Name</label>
+                        <input type="text" name="firstName" value="<?php echo htmlentities($firstName); ?>" required
+                            class="short-input">
+                    </div>
+                    <div class="nby-input-field">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" name="lastName" value="<?php echo htmlentities($lastName); ?>" required
+                            class="short-input">
+                    </div>
+                    <div class="nby-input-field">
+                        <label for="emailId">Email ID</label>
+                        <input type="email" name="emailId" value="<?php echo htmlentities($emailId); ?>" required
+                            class="short-input">
+                    </div>
+                    <div class="nby-input-field">
+                        <label for="username">Username</label>
+                        <input type="text" name="username" value="<?php echo htmlentities($username); ?>" required
+                            class="short-input">
+                    </div>
+                    <div class="nby-input-field">
+                        <label for="dob">Date of Birth</label>
+                        <input type="text" name="dob" value="<?php echo htmlentities($dob); ?>" required
+                            class="short-input">
+                    </div>
+                    <div class="nby-input-field">
+                        <label for="department">Department</label>
+                        <input type="text" name="department" value="<?php echo htmlentities($department); ?>" required
+                            class="short-input">
+                    </div>
+                    <div class="nby-input-field">
+                        <label for="address">Address</label>
+                        <input type="text" name="address" value="<?php echo htmlentities($address); ?>" required
+                            class="short-input">
+                    </div>
+                    <div class="nby-input-field">
+                        <label for="city">City</label>
+                        <input type="text" name="city" value="<?php echo htmlentities($city); ?>" required
+                            class="short-input">
+                    </div>
+                    <div class="nby-input-field">
+                        <label for="country">Country</label>
+                        <input type="text" name="country" value="<?php echo htmlentities($country); ?>" required
+                            class="short-input">
+                    </div>
+                    <div class="nby-input-field">
+                        <label for="phoneNumber">Phone Number</label>
+                        <input type="text" name="phoneNumber" value="<?php echo htmlentities($phoneNumber); ?>" required
+                            class="short-input">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="waves-effect waves-light btn">Update</button>
+                        <a href="#!" class="modal-close waves-effect waves-red btn-flat">Cancel</a>
+                    </div>
+                </form>
             </div>
         </div>
-    </main>
 
-    <!-- Edit Profile Modal -->
-    <div id="editModal" class="modal">
-        <div class="modal-content">
-            <h4 class="nby-modal-title">Edit Profile</h4>
-            <form method="post" action="">
-                <input type="hidden" name="eid" value="<?php echo htmlentities($eid); ?>">
 
-                <div class="nby-input-field">
-                    <div id="imagePreviewContainer">
-                        <img id="imagePreview" src="<?php echo htmlentities($image); ?>" alt="Profile Image Preview"
-                            style="max-width: 200px; height: auto; margin-bottom: 20px;">
-                        <div id="imageError" style="color: red; display: none;">Invalid image URL. Please enter a valid
-                            URL.</div>
-                    </div>
+        <script>
+        function previewImage() {
+            const imageUrl = document.getElementById('profileImage').value;
+            const imagePreview = document.getElementById('imagePreview');
+            const imageError = document.getElementById('imageError');
 
-                    <label for="profileImage">Profile Picture Link</label>
-                    <input type="url" name="profileImage" id="profileImage" value="<?php echo htmlentities($image); ?>"
-                        required class="short-input" oninput="previewImage()">
+            // Reset error message
+            imageError.style.display = 'none';
 
-                </div>
+            // Create a new Image object to check if the URL is valid
+            const img = new Image();
+            img.onload = function() {
+                // If the image loads successfully, set the preview
+                imagePreview.src = imageUrl;
+            };
+            img.onerror = function() {
+                // If the image fails to load, show an error message
+                imageError.style.display = 'block';
+                imagePreview.src = ''; // Clear the preview
+            };
+            img.src = imageUrl; // Set the source to trigger loading
+        }
+        </script>
+        <!-- Javascripts -->
+        <script src="assets/plugins/jquery/jquery-2.2.0.min.js"></script>
+        <script src="assets/plugins/materialize/js/materialize.min.js"></script>
+        <script src="assets/plugins/material-preloader/js/materialPreloader.min.js"></script>
+        <script src="assets/plugins/jquery-blockui/jquery.blockui.js"></script>
+        <script src="assets/js/alpha.min.js"></script>
 
-                <div class="nby-input-field">
-                    <label for="firstName">First Name</label>
-                    <input type="text" name="firstName" value="<?php echo htmlentities($firstName); ?>" required
-                        class="short-input">
-                </div>
+        <script>
+        $(document).ready(function() {
+            $('.modal').modal();
 
-                <div class="nby-input-field">
-                    <label for="lastName">Last Name</label>
-                    <input type="text" name="lastName" value="<?php echo htmlentities($lastName); ?>" required
-                        class="short-input">
-                </div>
-                <div class="nby-input-field">
-                    <label for="emailId">Email ID</label>
-                    <input type="email" name="emailId" value="<?php echo htmlentities($emailId); ?>" required
-                        class="short-input">
-                </div>
-                <div class="nby-input-field">
-                    <label for="department">Department</label>
-                    <input type="text" name="department" value="<?php echo htmlentities($department); ?>" required
-                        class="short-input">
-                </div>
-                <div class="nby-input-field">
-                    <label for="address">Address</label>
-                    <input type="text" name="address" value="<?php echo htmlentities($address); ?>" required
-                        class="short-input">
-                </div>
-                <div class="nby-input-field">
-                    <label for="city">City</label>
-                    <input type="text" name="city" value="<?php echo htmlentities($city); ?>" required
-                        class="short-input">
-                </div>
-                <div class="nby-input-field">
-                    <label for="country">Country</label>
-                    <input type="text" name="country" value="<?php echo htmlentities($country); ?>" required
-                        class="short-input">
-                </div>
-                <div class="nby-input-field">
-                    <label for="phoneNumber">Phone Number</label>
-                    <input type="text" name="phoneNumber" value="<?php echo htmlentities($phoneNumber); ?>" required
-                        class="short-input">
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="waves-effect waves-light btn">Update</button>
-                    <a href="#!" class="modal-close waves-effect waves-red btn-flat">Cancel</a>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <script>
-    function previewImage() {
-        const imageUrl = document.getElementById('profileImage').value;
-        const imagePreview = document.getElementById('imagePreview');
-        const imageError = document.getElementById('imageError');
-
-        // Reset error message
-        imageError.style.display = 'none';
-
-        // Create a new Image object to check if the URL is valid
-        const img = new Image();
-        img.onload = function() {
-            // If the image loads successfully, set the preview
-            imagePreview.src = imageUrl;
-        };
-        img.onerror = function() {
-            // If the image fails to load, show an error message
-            imageError.style.display = 'block';
-            imagePreview.src = ''; // Clear the preview
-        };
-        img.src = imageUrl; // Set the source to trigger loading
-    }
-    </script>
-    <!-- Javascripts -->
-    <script src="assets/plugins/jquery/jquery-2.2.0.min.js"></script>
-    <script src="assets/plugins/materialize/js/materialize.min.js"></script>
-    <script src="assets/plugins/material-preloader/js/materialPreloader.min.js"></script>
-    <script src="assets/plugins/jquery-blockui/jquery.blockui.js"></script>
-    <script src="assets/js/alpha.min.js"></script>
-
-    <script>
-    $(document).ready(function() {
-        $('.modal').modal();
-
-        // Show success modal if there is a success message
-        <?php if (!empty($successMessage)): ?>
-        $('#successModal').modal('open'); // Open the success modal
-        setTimeout(function() {
-            $('#successModal').modal('close'); // Close after 3 seconds
-        }, 3000); // Close after 3 seconds
-        <?php endif; ?>
-    });
-    </script>
+            // Show success modal if there is a success message
+            <?php if (!empty($successMessage)): ?>
+            $('#successModal').modal('open'); // Open the success modal
+            setTimeout(function() {
+                $('#successModal').modal('close'); // Close after 3 seconds
+            }, 3000); // Close after 3 seconds
+            <?php endif; ?>
+        });
+        </script>
 
 </body>
 
