@@ -9,7 +9,10 @@ header('location:index.php');
 else{
 
     // Fetch the details of the logged-in admin
-    $adminUsername = $_SESSION['alogin']; // Assuming this is the username stored in session
+    // Assuming this is the username stored in session
+    
+    var_dump($adminUsername);
+    
     $sql = "SELECT id, UserName, EmailId, Image FROM admin WHERE UserName = :username"; // Adjust the query to match your database schema
     $query = $dbh->prepare($sql);
     $query->bindParam(':username', $adminUsername, PDO::PARAM_STR);

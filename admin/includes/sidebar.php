@@ -8,7 +8,9 @@ if(strlen($_SESSION['alogin'])==0) {
     header('location:index.php');
 } else {
     // Fetch the details of the logged-in admin
-    $adminUsername = $_SESSION['alogin']; // Assuming this is the username stored in session
+    $adminUsername = $_SESSION['alogin']; 
+    
+    // Assuming this is the username stored in session
     $sql = "SELECT id, UserName, EmailId, Image FROM admin WHERE UserName = :username"; // Adjust the query to match your database schema
     $query = $dbh->prepare($sql);
     $query->bindParam(':username', $adminUsername, PDO::PARAM_STR);
@@ -35,6 +37,8 @@ if(strlen($_SESSION['alogin'])==0) {
             <div class="sidebar-profile-image">
                 <img src="<?php echo $adminImage; ?>" class="circle" alt="">
             </div>
+
+
             <div class="sidebar-profile-info">
                 <p><?php echo htmlentities($adminUserName); ?></p>
                 <p><?php echo htmlentities($adminEmail); ?></p>

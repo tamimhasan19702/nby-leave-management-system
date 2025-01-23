@@ -18,7 +18,7 @@ if(strlen($_SESSION['alogin'])==0) {
     // Check if the result is found
     if ($result) {
         $id = $result['id'];
-        $username = $result['User Name'];
+        $username = $result['UserName'];
         $emailId = $result['EmailId'];
         $image = $result['Image'];
         $firstName = $result['FirstName'];
@@ -63,6 +63,42 @@ if(strlen($_SESSION['alogin'])==0) {
             $errorMessage = "Failed to remove image.";
         }
     }
+
+    // Handle profile update
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['editProfile'])) {
+        $firstName = $_POST['firstName'];
+        $lastName = $_POST['lastName'];
+        $emailId = $_POST['emailId'];
+        $newUsername = $_POST['username']; // Get the new username
+
+        // Validate the input data
+        if (empty($firstName) || empty($lastName) || empty($emailId) || empty($newUsername)) {
+            $errorMessage = "All fields are required.";
+        } else if (!filter_var($emailId, FILTER_VALIDATE_EMAIL)) {
+            $errorMessage = "Invalid email ID.";
+        } else {
+            // Update the admin information in the database
+            $updateProfileSql = "UPDATE admin SET FirstName = :firstName, LastName = :lastName, EmailId = :emailId, UserName = :username WHERE UserName = :oldUsername";
+            $updateProfileQuery = $dbh->prepare($updateProfileSql);
+            $updateProfileQuery->bindParam(':firstName', $firstName, PDO::PARAM_STR);
+            $updateProfileQuery->bindParam(':lastName', $lastName, PDO::PARAM_STR);
+            $updateProfileQuery->bindParam(':emailId', $emailId, PDO::PARAM_STR);
+            $updateProfileQuery->bindParam(':username', $newUsername, PDO::PARAM_STR);
+            $updateProfileQuery->bindParam(':oldUsername', $adminUsername, PDO::PARAM_STR);
+
+            if ($updateProfileQuery->execute()) {
+                // Update session variable if username changed
+                if ($adminUsername !== $newUsername) {
+                    $_SESSION['alogin'] = $newUsername;
+                }
+                // Redirect to the same page to refresh
+                header("Location: " . $_SERVER['PHP_SELF']);
+                exit();
+            } else {
+                $errorMessage = "Failed to update profile.";
+            }
+        }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -89,7 +125,7 @@ if(strlen($_SESSION['alogin'])==0) {
         box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1);
     }
 
-    .succ Wrap {
+    .succWrap {
         padding: 10px;
         margin: 0 0 20px 0;
         background: #fff;
@@ -124,6 +160,10 @@ if(strlen($_SESSION['alogin'])==0) {
                         <td><?php echo htmlentities($firstName) . ' ' . htmlentities($lastName); ?></td>
                     </tr>
                     <tr>
+                        <td><strong>Username:</strong></td>
+                        <td><?php echo htmlentities($username); ?></td>
+                    </tr>
+                    <tr>
                         <td><strong>Email ID:</strong></td>
                         <td><?php echo htmlentities($emailId); ?></td>
                     </tr>
@@ -139,41 +179,6 @@ if(strlen($_SESSION['alogin'])==0) {
                 </table>
             </div>
 
-            <!-- Edit Profile Modal -->
-
-            <?php 
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['editProfile'])) {
-    $firstName = $_POST['firstName'];
-    $lastName = $_POST['lastName'];
-    $emailId = $_POST['emailId'];
-
-    // Validate the input data
-    if (empty($firstName) || empty($lastName) || empty($emailId)) {
-        $errorMessage = "All fields are required.";
-    } else if (!filter_var($emailId, FILTER_VALIDATE_EMAIL)) {
-        $errorMessage = "Invalid email ID.";
-    } else {
-        // Update the admin information in the database
-        $updateProfileSql = "UPDATE admin SET FirstName = :firstName, LastName = :lastName, EmailId = :emailId WHERE UserName = :username";
-        $updateProfileQuery = $dbh->prepare($updateProfileSql);
-        $updateProfileQuery->bindParam(':firstName', $firstName, PDO::PARAM_STR);
-        $updateProfileQuery->bindParam(':lastName', $lastName, PDO::PARAM_STR);
-        $updateProfileQuery->bindParam(':emailId', $emailId, PDO::PARAM_STR);
-        $updateProfileQuery->bindParam(':username', $adminUsername, PDO::PARAM_STR);
-
-        if ($updateProfileQuery->execute()) {
-            // Redirect to the same page to refresh
-            header("Location: " . $_SERVER['PHP_SELF']);
-            exit();
-        } else {
-            $errorMessage = "Failed to update profile.";
-        }
-    }
-}
-
-            ?>
-
             <div id="editProfileModal" class="modal">
                 <div class="modal-content">
                     <h4>Edit Profile</h4>
@@ -188,10 +193,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['editProfile'])) {
                             <input type="text" name="lastName" value="<?php echo htmlentities($lastName); ?>" required>
                         </div>
                         <div class="nby-input-field">
+                            <label for="username">New Username</label>
+                            <input type="text" name="username" value="<?php echo htmlentities($username ); ?>" required>
+                        </div>
+                        <div class="nby-input-field">
                             <label for="emailId">Email ID</label>
                             <input type="email" name="emailId" value="<?php echo htmlentities($emailId); ?>" required>
                         </div>
-
                         <div class="modal-footer">
                             <button type="submit" name="editProfile"
                                 class="waves-effect waves-light btn">Update</button>
@@ -221,12 +229,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['editProfile'])) {
                 </form>
             </div>
 
-
             <?php if (isset($successMessage)): ?>
             <div class="succWrap"><?php echo htmlentities($successMessage); ?></div>
             <?php elseif (isset($errorMessage)): ?>
             <div class="errorWrap"><?php echo htmlentities($errorMessage); ?></div>
             <?php endif; ?>
+        </div>
     </main>
 
     <script src="../assets/plugins/jquery/jquery-2.2.0.min.js"></script>

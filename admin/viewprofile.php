@@ -94,7 +94,7 @@ if (strlen($_SESSION['alogin']) == 0) {
         <div class="row">
             <div class="col s12 nby-view-profile">
                 <h1 class="nby-title">View Employee Profile</h1>
-                <a href="editemployee.php?empid=<?php echo htmlentities($employeeId); ?>" class="btn">Edit Employee</a>
+                <a href="editemployee.php?empid=<?php echo htmlentities($eid); ?>" class="btn">Edit Employee</a>
             </div>
 
             <div class="col s12 m12 l12">
