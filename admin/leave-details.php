@@ -112,124 +112,190 @@ if (isset($_POST['update'])) {
     <?php include('includes/header.php');?>
 
     <?php include('includes/sidebar.php');?>
+
+
+    <?php 
+    $lid = intval($_GET['leaveid']);
+    $sql = "SELECT tblleaves.id as lid,
+                   tblemployees.FirstName,
+                   tblemployees.LastName,
+                   tblemployees.EmpId,
+                   tblemployees.id,
+                   tblemployees.Gender,
+                   tblemployees.Phonenumber,
+                   tblemployees.EmailId,
+                   tblemployees.AnnualLeave,
+                   tblemployees.SickLeave,
+                   tblleaves.LeaveType,
+                   tblleaves.ToDate,
+                   tblleaves.FromDate,
+                   tblleaves.Description,
+                   tblleaves.PostingDate,
+                   tblleaves.Status,
+                   tblleaves.AdminRemark,
+                   tblleaves.AdminRemarkDate,
+                   tblleaves.Duration 
+            FROM tblleaves 
+            JOIN tblemployees ON tblleaves.empid = tblemployees.id 
+            WHERE tblleaves.id = :lid";
+    $query = $dbh->prepare($sql);
+    $query->bindParam(':lid', $lid, PDO::PARAM_STR);
+    $query->execute();
+    $results = $query->fetchAll(PDO::FETCH_OBJ);
+    $cnt = 1;
+    if ($query->rowCount() > 0) {
+        foreach ($results as $result) {         
+    ?>
+
+
     <main class="mn-inner">
         <div class="row">
-            <div class="col s12">
-                <div class="page-title" style="font-size:24px;">Leave Details</div>
+
+            <div class="col s12 nby-view-profile">
+                <h1 class="nby-title">Leave Details</h1>
+                <a href="viewprofile.php?empid=<?php echo htmlentities($result->id); ?>" class="btn">View Profile</a>
             </div>
 
             <div class="col s12 m12 l12">
                 <div class="card">
                     <div class="card-content">
-                        <span class="card-title">Leave Details</span>
+
                         <?php if($msg){?><div class="succWrap"><strong>SUCCESS</strong> :
                             <?php echo htmlentities($msg); ?> </div><?php }?>
                         <table id="example" class="display responsive-table ">
 
 
                             <tbody>
-                                <?php 
-$lid=intval($_GET['leaveid']);
-$sql = "SELECT tblleaves.id as lid,tblemployees.FirstName,tblemployees.LastName,tblemployees.EmpId,tblemployees.id,tblemployees.Gender,tblemployees.Phonenumber,tblemployees.EmailId,tblleaves.LeaveType,tblleaves.ToDate,tblleaves.FromDate,tblleaves.Description,tblleaves.PostingDate,tblleaves.Status,tblleaves.AdminRemark,tblleaves.AdminRemarkDate, tblleaves.Duration from tblleaves join tblemployees on tblleaves.empid=tblemployees.id where tblleaves.id=:lid";
-$query = $dbh -> prepare($sql);
-$query->bindParam(':lid',$lid,PDO::PARAM_STR);
-$query->execute();
-$results=$query->fetchAll(PDO::FETCH_OBJ);
-$cnt=1;
-if($query->rowCount() > 0)
-{
-foreach($results as $result)
-{         
-      ?>
 
                                 <tr>
-                                    <td style="font-size:16px;"> <b>Employe Name :</b></td>
-                                    <td><a href="editemployee.php?empid=<?php echo htmlentities($result->id);?>"
+                                    <td style="font-size:16px;"><b>Employe Name :</b></td>
+                                    <td><a href="viewprofile.php?empid=<?php echo htmlentities($result->id); ?>"
                                             target="_blank">
-                                            <?php echo htmlentities($result->FirstName." ".$result->LastName);?></a>
+                                            <?php echo htmlentities($result->FirstName . " " . $result->LastName); ?></a>
                                     </td>
                                     <td style="font-size:16px;"><b>Emp Id :</b></td>
-                                    <td><?php echo htmlentities($result->EmpId);?></td>
+                                    <td><?php echo htmlentities($result->EmpId); ?></td>
                                     <td style="font-size:16px;"><b>Gender :</b></td>
-                                    <td><?php echo htmlentities($result->Gender);?></td>
+                                    <td><?php echo htmlentities($result->Gender); ?></td>
                                 </tr>
 
                                 <tr>
                                     <td style="font-size:16px;"><b>Emp Email id :</b></td>
-                                    <td><?php echo htmlentities($result->EmailId);?></td>
+                                    <td><?php echo htmlentities($result->EmailId); ?></td>
                                     <td style="font-size:16px;"><b>Emp Contact No. :</b></td>
-                                    <td><?php echo htmlentities($result->Phonenumber);?></td>
+                                    <td><?php echo htmlentities($result->Phonenumber); ?></td>
                                     <td style="font-size:16px;"><b>Duration :</b></td>
-                                    <td><?php echo htmlentities($result->Duration . ' days');?></td>
+                                    <td><?php echo htmlentities($result->Duration); ?></td>
                                 </tr>
 
                                 <tr>
                                     <td style="font-size:16px;"><b>Leave Type :</b></td>
-                                    <td><?php echo htmlentities($result->LeaveType);?></td>
+                                    <td><?php echo htmlentities($result->LeaveType); ?></td>
                                     <td style="font-size:16px;"><b>Leave Date :</b></td>
                                     <td>
                                         <span style="font-weight:600">From - </span> <?php 
-            $fromDate = htmlentities($result->FromDate);
-            echo $fromDate; 
-        ?> (<?php echo date('l', strtotime($fromDate)); ?>)<span style="font-weight:600"> - To - </span>
+                $fromDate = htmlentities($result->FromDate);
+                echo $fromDate; 
+            ?> (<?php echo date('l', strtotime($fromDate)); ?>)<span style="font-weight:600"> - To - </span>
                                         <?php  
-            $toDate = htmlentities($result->ToDate);
-            echo $toDate; 
-        ?> (<?php echo date('l', strtotime($toDate)); ?>)
+                $toDate = htmlentities($result->ToDate);
+                echo $toDate; 
+            ?> (<?php echo date('l', strtotime($toDate)); ?>)
                                     </td>
                                     <td style="font-size:16px;"><b>Posting Date</b></td>
-                                    <td><?php echo htmlentities($result->PostingDate);?></td>
+                                    <td><?php echo htmlentities($result->PostingDate); ?></ td>
+                                </tr>
+
+
+                                <tr>
+                                    <td style="font-size:16px;"><b>Annual Leave Left:</b></td>
+                                    <td><?php echo htmlentities($result->AnnualLeave); ?></td>
+                                    <td style="font-size:16px;"><b>Sick Leave Left:</b></td>
+                                    <td><?php echo htmlentities($result->SickLeave); ?></td>
+                                </tr>
+
+
+                                <tr>
+                                    <td style="font-size:16px;"><b>Employe Leave Description:</b></td>
+                                    <td colspan="5"><?php echo htmlentities($result->Description); ?></td>
+                                </tr>
+
+
+
+                                <tr>
+                                    <td style="font-size:16px;"><b>Leave Status:</b></td>
+                                    <td colspan="5"><?php 
+            $stats = $result->Status;
+            if ($stats == 1) {
+                echo '<span style="color: green">Approved</span>';
+            } elseif ($stats == 2) {
+                echo '<span style="color: red">Rejected</span>';
+            } else {
+                echo '<span style="color: blue">Waiting for approval</span>';
+            }
+            ?></td>
                                 </tr>
 
                                 <tr>
-                                    <td style="font-size:16px;"><b>Employe Leave Description : </b></td>
-                                    <td colspan="5"><?php echo htmlentities($result->Description);?></td>
-
+                                    <td style="font-size:16px;"><b>Admin Remark:</b></td>
+                                    <td colspan="5"><?php
+            if ($result->AdminRemark == "") {
+                echo "No Admin Remark added";  
+            } else {
+                echo htmlentities($result->AdminRemark);
+            }
+            ?></td>
                                 </tr>
 
+
                                 <tr>
-                                    <td style="font-size:16px;"><b>leave Status :</b></td>
-                                    <td colspan="5"><?php $stats=$result->Status;
-if($stats==1){
-?>
-                                        <span style="color: green">Approved</span>
-                                        <?php } if($stats==2)  { ?>
-                                        <span style="color: red">Rejected</span>
-                                        <?php } if($stats==0)  { ?>
-                                        <span style="color: blue">waiting for approval</span>
-                                        <?php } ?>
+                                    <td style="font-size:16px;"><b>
+                                            <?php if ($result->Status == "1") { echo '<span >Approved By</span>'; } elseif ($result->Status == "2") { echo '<span >Rejected By</span>'; } else { echo '<span >Waiting for approval</span>'; }?></b>
+                                    </td>
+                                    <td colspan="5">
+                                        <?php
+        if ($result->Status == "1") {
+            // If approved, show the admin's name
+            $adminUsername = $_SESSION['alogin']; 
+            $sql = "SELECT FirstName, LastName FROM admin WHERE UserName = :username";
+            $query = $dbh->prepare($sql);
+            $query->bindParam(':username', $adminUsername, PDO::PARAM_STR);
+            $query->execute();
+            $resultAdmin = $query->fetch(PDO::FETCH_OBJ);
+            echo  htmlentities($resultAdmin->FirstName . " " . $resultAdmin->LastName);
+        } elseif ($result->Status == "2") {
+            // If rejected, show the admin's name
+            $adminUsername = $_SESSION['alogin']; 
+            $sql = "SELECT FirstName, LastName FROM admin WHERE UserName = :username";
+            $query = $dbh->prepare($sql);
+            $query->bindParam(':username', $adminUsername, PDO::PARAM_STR);
+            $query->execute();
+            $resultAdmin = $query->fetch(PDO::FETCH_OBJ);
+            echo  htmlentities($resultAdmin->FirstName . " " . $resultAdmin->LastName);
+        } else {
+            echo "NA"; // If the status is neither approved nor rejected
+        }
+        ?>
                                     </td>
                                 </tr>
 
-                                <tr>
-                                    <td style="font-size:16px;"><b>Admin Remark: </b></td>
-                                    <td colspan="5"><?php
-if($result->AdminRemark==""){
-  echo "waiting for Approval";  
-}
-else{
-echo htmlentities($result->AdminRemark);
-}
-?></td>
-                                </tr>
 
                                 <tr>
-                                    <td style="font-size:16px;"><b>Admin Action taken date : </b></td>
+                                    <td style="font-size:16px;"><b>Admin Action Taken Date:</b></td>
                                     <td colspan="5"><?php
-if($result->AdminRemarkDate==""){
-  echo "NA";  
-}
-else{
-echo htmlentities($result->AdminRemarkDate);
-}
-?></td>
+            if ($result->AdminRemarkDate == "") {
+                echo "NA";  
+            } else {
+                echo htmlentities($result->AdminRemarkDate);
+            }
+            ?></td>
                                 </tr>
 
                                 <tr>
                                     <td colspan="5">
                                         <!-- Modal Trigger -->
-                                        <a class="modal-trigger waves-effect waves-light btn"
-                                            href="#modal1">Take&nbsp;Action</a>
+                                        <a class="modal-trigger waves-effect waves-light btn" href="#modal1">Take
+                                            Action</a>
 
                                         <!-- Modal Form -->
                                         <form name="adminaction" method="post" action="">
@@ -271,8 +337,10 @@ echo htmlentities($result->AdminRemarkDate);
                                 <?php } ?>
                                 </form>
                                 </tr>
-                                <?php $cnt++;} ?>
+                                <?php $cnt++; } ?>
                             </tbody>
+                        </table>
+
                         </table>
                     </div>
                 </div>

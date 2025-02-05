@@ -94,26 +94,27 @@ $error="Your current password is wrong";
                         <div class="row">
                             <form class="col s12" name="chngpwd" method="post">
                                 <?php if($error){?><div class="errorWrap">
-                                    <strong>ERROR</strong>:<?php echo htmlentities($error); ?> </div><?php } 
+                                    <strong>ERROR</strong>:<?php echo htmlentities($error); ?>
+                                </div><?php } 
                 else if($msg){?><div class="succWrap"><strong>SUCCESS</strong>:<?php echo htmlentities($msg); ?> </div>
                                 <?php }?>
                                 <div class="row">
                                     <div class="input-field col s12">
+                                        <span for="password">Current Password</span>
                                         <input id="password" type="password" class="validate" autocomplete="off"
                                             name="password" required>
-                                        <label for="password">Current Password</label>
                                     </div>
 
                                     <div class="input-field col s12">
+                                        <span for="password">New Password</span>
                                         <input id="password" type="password" name="newpassword" class="validate"
                                             autocomplete="off" required>
-                                        <label for="password">New Password</label>
                                     </div>
 
                                     <div class="input-field col s12">
+                                        <span for="password">Confirm Password</span>
                                         <input id="password" type="password" name="confirmpassword" class="validate"
                                             autocomplete="off" required>
-                                        <label for="password">Confirm Password</label>
                                     </div>
 
 

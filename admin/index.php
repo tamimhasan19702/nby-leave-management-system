@@ -62,14 +62,14 @@ if (isset($_POST['signin'])) {
                                 <div class="row">
                                     <form class="col s12" name="signin" method="post">
                                         <div class="input-field col s12">
+                                            <span for="username_or_email">Username</span>
                                             <input id="username_or_email" type="text" name="username_or_email"
                                                 class="validate" autocomplete="off" required>
-                                            <label for="username_or_email">Username</label>
                                         </div>
                                         <div class="input-field col s12">
+                                            <span for="password">Password</span>
                                             <input id="password" type="password" class="validate" name="password"
                                                 autocomplete="off" required>
-                                            <label for="password">Password</label>
                                             <span toggle="#password" class="fa fa-eye toggle-password"
                                                 style="cursor: pointer;"></span>
                                         </div>

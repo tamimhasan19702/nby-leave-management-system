@@ -18,10 +18,17 @@ if (strlen($_SESSION['emplogin']) == 0) {
         $status = 0;
         $isread = 0;
 
-        // Calculate ToDate based on FromDate and Duration
+        // Create DateTime object for FromDate
         $fromDateTime = new DateTime($fromdate);
-        $fromDateTime->modify("+$duration days"); // Add duration to FromDate
-        $todate = $fromDateTime->format('d-m-Y'); // Format as d-m-Y
+
+        // Calculate ToDate based on FromDate and Duration
+        if ($duration == 1) {
+            $todate = $fromDateTime->format('d-m-Y'); // Same as FromDate
+        } else {
+            $fromDateTime->modify("+".($duration - 1)." days"); // Add (duration - 1) days to FromDate
+            $todate = $fromDateTime->format('d-m-Y'); // Format as d-m-Y
+        }
+
         $fromdate = (new DateTime($fromdate))->format('d-m-Y'); // Format fromdate as d-m-Y
 
         // Append duration to description
@@ -60,6 +67,7 @@ if (strlen($_SESSION['emplogin']) == 0) {
         }
     }
 
+    // Fetch employee data
     $empid = $_SESSION['eid']; // Get employee ID from session
     $sql = "SELECT Username, EmailId, Phonenumber FROM tblemployees WHERE id = :empid";
     $query = $dbh->prepare($sql);

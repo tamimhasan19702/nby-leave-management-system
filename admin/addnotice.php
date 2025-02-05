@@ -110,24 +110,24 @@ if(strlen($_SESSION['alogin'])==0) {
                                 <?php } ?>
                                 <div class="row">
                                     <div class="input-field col s12">
+                                        <span for="title">Title</span>
                                         <input id="title" type="text" class="validate" name="title"
                                             value="<?php echo htmlentities($title); ?>" required>
-                                        <label for="title">Title</label>
                                     </div>
                                     <div class="input-field col s12">
+                                        <span for="subject">Subject</span>
                                         <input id="subject" type="text" class="validate" name="subject"
                                             value="<?php echo htmlentities($subject); ?>">
-                                        <label for="subject">Subject</label>
                                     </div>
                                     <div class="input-field col s12">
+                                        <span for="description">Description</span>
                                         <textarea id="description" class="materialize-textarea expandable"
                                             name="description"><?php echo htmlentities($description); ?></textarea>
-                                        <label for="description">Description</label>
                                     </div>
                                     <div class="input-field col s12">
+                                        <span for="file_path">File Path Link</span>
                                         <input id="file_path" type="text" class="validate" name="file_path"
                                             value="<?php echo htmlentities($file_path); ?>">
-                                        <label for="file_path">File Path Link</label>
                                     </div>
 
                                     <!-- <div class="input-field col s12">
@@ -148,7 +148,7 @@ if(strlen($_SESSION['alogin'])==0) {
                                             }
                                             ?>
                                         </select>
-                                        <label for="department">Department</label>
+                                        <span for="department">Department</span>
                                     </div> -->
 
                                     <div class="input-field col s12">

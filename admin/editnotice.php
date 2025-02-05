@@ -106,24 +106,24 @@ if(strlen($_SESSION['alogin'])==0) {
                                 ?>
                                     <div class="row">
                                         <div class="input-field col s12">
+                                            <span for="subject">Notice Subject</span>
                                             <input id="subject" type="text" class="validate" name="subject"
                                                 value="<?php echo htmlentities($result->subject); ?>" required>
-                                            <label for="subject">Notice Subject</label>
                                         </div>
                                         <div class="input-field col s12">
+                                            <span for="title">Notice Title</span>
                                             <input id="title" type="text" class="validate" name="title"
                                                 value="<?php echo htmlentities($result->title); ?>">
-                                            <label for="title">Notice Title</label>
                                         </div>
                                         <div class="input-field col s12">
+                                            <span for="description">Notice Description</span>
                                             <textarea id="description" class="materialize-textarea"
                                                 name="description"><?php echo htmlentities($result->description); ?></textarea>
-                                            <label for="description">Notice Description</label>
                                         </div>
                                         <div class="input-field col s12">
+                                            <span for="file_path">File Path</span>
                                             <input id="file_path" type="text" class="validate" name="file_path"
                                                 value="<?php echo htmlentities($result->file_path); ?>">
-                                            <label for="file_path">File Path</label>
                                         </div>
 
                                         <!-- <div class="input-field col s12">
@@ -143,7 +143,7 @@ if(strlen($_SESSION['alogin'])==0) {
                                             }
                                             ?>
                                             </select>
-                                            <label for="department">Department</label>
+                                            <span for="department">Department</span>
                                         </div> -->
 
                                         <div class="input-field col s12">

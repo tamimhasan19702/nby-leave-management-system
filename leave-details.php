@@ -214,7 +214,7 @@ if (strlen($_SESSION['emplogin']) == 0) {
                                     <td style="font-size:16px;"><b>Emp Contact No. :</b></td>
                                     <td><?php echo $leaveDetails['Phonenumber'] ?? 'N/A'; ?></td>
                                     <td style="font-size:16px;"><b>Leave Duration:</b></td>
-                                    <td><?php echo $leaveDetails['Duration'] ? $leaveDetails['Duration'] . ' days' : 'N/A'; ?>
+                                    <td><?php echo $leaveDetails['Duration'] ? $leaveDetails['Duration']  : 'N/A'; ?>
                                     </td>
                                 </tr>
 
