@@ -8,10 +8,7 @@ header('location:index.php');
 }
 else{
 
-    // Fetch the details of the logged-in admin
-    // Assuming this is the username stored in session
-    
-    var_dump($adminUsername);
+  
     
     $sql = "SELECT id, UserName, EmailId, Image FROM admin WHERE UserName = :username"; // Adjust the query to match your database schema
     $query = $dbh->prepare($sql);

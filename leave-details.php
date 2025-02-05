@@ -6,6 +6,56 @@ include('includes/config.php');
 if (strlen($_SESSION['emplogin']) == 0) {
     header('location:index.php');
 } else {
+    if (isset($_POST['apply'])) {
+        $empid = $_SESSION['eid'];
+        $leavetype = $_POST['leavetype'];
+        $fromdate = $_POST['fromdate'];  
+        $duration = intval($_POST['duration']); // Get duration in days
+        $description = $_POST['description'];  
+        $username = $_POST['username'];
+        $emailId = $_POST['emailid'];
+        $phonenumber = $_POST['phonenumber'];
+        $status = 0;
+        $isread = 0;
+
+        // Calculate ToDate based on FromDate and Duration
+        $fromDateTime = new DateTime($fromdate);
+        $fromDateTime->modify("+$duration days"); // Add duration to FromDate
+        $todate = $fromDateTime->format('d-m-Y'); // Format as d-m-Y
+        $fromdate = (new DateTime($fromdate))->format('d-m-Y'); // Format fromdate as d-m-Y
+
+        // Create duration string with suffix
+        $durationString = $duration . ' ' . ($duration > 1 ? 'days' : 'day');
+
+        if ($duration <= 0) {
+            $error = "Duration must be greater than 0";
+        } else {
+            $sql = "INSERT INTO tblleaves (LeaveType, ToDate, FromDate, Description, Status, IsRead, empid, Username, EmailId, Phonenumber, Duration) 
+                    VALUES (:leavetype, :todate, :fromdate, :description, :status, :isread, :empid, :username, :emailid, :phonenumber, :duration)";
+            $query = $dbh->prepare($sql);
+            $query->bindParam(':leavetype', $leavetype, PDO::PARAM_STR);
+            $query->bindParam(':fromdate', $fromdate, PDO::PARAM_STR);
+            $query->bindParam(':todate', $todate, PDO::PARAM_STR);
+            $query->bindParam(':description', $description, PDO::PARAM_STR);
+            $query->bindParam(':status', $status, PDO::PARAM_STR);
+            $query->bindParam(':isread', $isread, PDO::PARAM_STR);
+            $query->bindParam(':empid', $empid, PDO::PARAM_STR);
+            $query->bindParam(':username', $username, PDO::PARAM_STR);
+            $query->bindParam(':emailid', $emailId, PDO::PARAM_STR);
+            $query->bindParam(':phonenumber', $phonenumber, PDO::PARAM_STR);
+            $query->bindParam(':duration', $durationString, PDO::PARAM_STR); // Bind duration with suffix
+            $query->execute();
+            $lastInsertId = $dbh->lastInsertId();
+            if ($lastInsertId) {
+                $msg = "Leave applied successfully";
+                header('location:leavehistory.php'); // Redirect to leave history page
+                exit(); // Ensure no further code is executed after redirection
+            } else {
+                $error = "Something went wrong. Please try again";
+            }
+        }
+    }
+
     $lid = intval($_GET['leaveid']);
     $sql = "SELECT tblleaves.id as lid, 
                    tblemployees.FirstName, 
@@ -31,7 +81,7 @@ if (strlen($_SESSION['emplogin']) == 0) {
     $query->execute();
     $results = $query->fetchAll(PDO::FETCH_OBJ);
 
-    $leaveDetails = []; // Initialize an array to hold leave details
+ $leaveDetails = []; // Initialize an array to hold leave details
 
     if ($query->rowCount() > 0) {
         foreach ($results as $result) {
@@ -55,10 +105,14 @@ if (strlen($_SESSION['emplogin']) == 0) {
                 $leaveDetails['LeaveType'] = htmlentities($result->LeaveType);
             }
             if (!empty($result->FromDate)) {
-                $leaveDetails['FromDate'] = htmlentities($result->FromDate);
+                // Format FromDate to d-m-Y
+                $leaveDetails['FromDate'] = date('d-m-Y', strtotime($result->FromDate));
+                $leaveDetails['FromDateWeekday'] = date('l', strtotime($result->FromDate)); // Get weekday
             }
             if (!empty($result->ToDate)) {
-                $leaveDetails['ToDate'] = htmlentities($result->ToDate);
+                // Format ToDate to d-m-Y
+                $leaveDetails['ToDate'] = date('d-m-Y', strtotime($result->ToDate));
+                $leaveDetails['ToDateWeekday'] = date('l', strtotime($result->ToDate)); // Get weekday
             }
             if (!empty($result->Description)) {
                 $leaveDetails['Description'] = htmlentities($result->Description);
@@ -81,7 +135,7 @@ if (strlen($_SESSION['emplogin']) == 0) {
             }
             if (!empty($result->Duration)) {
                 $leaveDetails['Duration'] = htmlentities($result->Duration);
-            }else {
+            } else {
                 $leaveDetails['Duration'] = "NA";
             }
         }
@@ -104,7 +158,7 @@ if (strlen($_SESSION['emplogin']) == 0) {
     <link type="text/css" rel="stylesheet" href="assets/plugins/materialize/css/materialize.min.css" />
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="assets/plugins/material-preloader/css/materialPreloader.min.css" rel="stylesheet">
-    <link href=" assets/plugins/datatables/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="assets/plugins/datatables/css/jquery.dataTables.min.css" rel="stylesheet">
     <link href="assets/plugins/google-code-prettify/prettify.css" rel="stylesheet" type="text/css" />
     <link href="assets/css/alpha.min.css" rel="stylesheet" type="text/css" />
     <link href="assets/css/custom.css" rel="stylesheet" type="text/css" />
@@ -160,15 +214,21 @@ if (strlen($_SESSION['emplogin']) == 0) {
                                     <td style="font-size:16px;"><b>Emp Contact No. :</b></td>
                                     <td><?php echo $leaveDetails['Phonenumber'] ?? 'N/A'; ?></td>
                                     <td style="font-size:16px;"><b>Leave Duration:</b></td>
-                                    <td><?php echo $leaveDetails['Duration'] ?? 'N/A'; ?></td>
+                                    <td><?php echo $leaveDetails['Duration'] ? $leaveDetails['Duration'] . ' days' : 'N/A'; ?>
+                                    </td>
                                 </tr>
 
                                 <tr>
                                     <td style="font-size:16px;"><b>Leave Type :</b></td>
                                     <td><?php echo $leaveDetails['LeaveType'] ?? 'N/A'; ?></td>
                                     <td style="font-size:16px;"><b>Leave Date :</b></td>
-                                    <td>From <?php echo $leaveDetails['FromDate'] ?? 'N/A'; ?> to
-                                        <?php echo $leaveDetails['ToDate'] ?? 'N/A'; ?></td>
+                                    <td><span style="font-weight:600">From -</span>
+                                        <?php echo $leaveDetails['FromDate'] ?? 'N/A'; ?>
+                                        (<?php echo $leaveDetails['FromDateWeekday'] ?? 'N/A'; ?>)<span
+                                            style="font-weight:600"> - To
+                                            -</span>
+                                        <?php echo $leaveDetails['ToDate'] ?? 'N/A'; ?>
+                                        (<?php echo $leaveDetails['ToDateWeekday'] ?? 'N/A'; ?>)</td>
                                     <td style="font-size:16px;"><b>Posting Date</b></td>
                                     <td><?php echo $leaveDetails['PostingDate'] ?? 'N/A'; ?></td>
                                 </tr>
@@ -183,7 +243,6 @@ if (strlen($_SESSION['emplogin']) == 0) {
                                     <td colspan="5">
                                         <?php 
                                         $stats = $leaveDetails['Status'] ?? null;
-                                       
                                         if ($stats === 1) {
                                             echo "<span style='color: green'>Approved</span>";
                                         } elseif ($stats === 2) {
@@ -217,7 +276,7 @@ if (strlen($_SESSION['emplogin']) == 0) {
 
     <!-- Javascripts -->
     <script src="assets/plugins/jquery/jquery-2.2.0.min.js"></script>
-    <script src="assets/plugins/materialize/js/materialize.min.js"></script>
+    <script src=" assets/plugins/materialize/js/materialize.min.js"></script>
     <script src="assets/plugins/material-preloader/js/materialPreloader.min.js"></script>
     <script src="assets/plugins/jquery-blockui/jquery.blockui.js"></script>
     <script src="assets/plugins/datatables/js/jquery.dataTables.min.js"></script>

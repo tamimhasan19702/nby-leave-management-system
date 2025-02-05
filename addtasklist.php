@@ -107,12 +107,12 @@ if (isset($_POST['addTask'])) {
         <div class="row">
             <form method="POST" action="">
                 <div class="input-field col s12">
+                    <span for="taskName">Task Name</span>
                     <input type="text" name="taskName" required>
-                    <label for="taskName">Task Name</label>
                 </div>
                 <div class="input-field col s12">
+                    <span for="taskDescription">Task Description</span>
                     <input type="text" name="taskDescription">
-                    <label for="taskDescription">Task Description</label>
                 </div>
                 <div class="input-field col s12">
                     <span>Start Date</span>
@@ -134,8 +134,8 @@ if (isset($_POST['addTask'])) {
                     <input type="date" name="endDate">
                 </div>
                 <div class="input-field col s12">
+                    <span for="notes">Notes (optional)</span>
                     <textarea name="notes" class="materialize-textarea"></textarea>
-                    <label for="notes">Notes (optional)</label>
                 </div>
                 <div class="input-field col s12">
                     <button type="submit" name="addTask" class="btn">Add Task</button>

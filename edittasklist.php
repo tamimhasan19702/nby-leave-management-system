@@ -123,13 +123,13 @@ if (isset($_POST['updateTask'])) {
         <div class="row">
             <form method="POST" action="">
                 <div class="input-field col s12">
+                    <span for="taskName">Task Name</span>
                     <input type="text" name="taskName" value="<?php echo htmlentities($task['TaskName']); ?>" required>
-                    <label for="taskName">Task Name</label>
                 </div>
                 <div class="input-field col s12">
+                    <span for="taskDescription">Task Description</span>
                     <input type="text" name="taskDescription"
                         value="<?php echo htmlentities($task['TaskDescription']); ?>">
-                    <label for="taskDescription">Task Description</label>
                 </div>
                 <div class="input-field col s12">
                     <span>Start Date</span>
@@ -152,9 +152,9 @@ if (isset($_POST['updateTask'])) {
                     <input type="date" name="endDate" value="<?php echo htmlentities($task['EndDate']); ?>">
                 </div>
                 <div class="input-field col s12">
+                    <span for="notes">Notes (optional)</span>
                     <textarea name="notes"
                         class="materialize-textarea"><?php echo htmlentities($task['Notes']); ?></textarea>
-                    <label for="notes">Notes (optional)</label>
                 </div>
                 <div class="input-field col s12">
                     <button type="submit" name="updateTask" class="btn">Update Task</button>

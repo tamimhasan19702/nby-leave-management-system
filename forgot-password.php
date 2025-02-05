@@ -180,19 +180,19 @@ if (isset($_POST['change'])) {
                                 <div class="row">
                                     <form class="col s12" name="signin" method="post">
                                         <div class="input-field col s12">
+                                            <span for="empid">Employee Id</span>
                                             <input id="empid" type="text" name="empid" class="validate"
                                                 autocomplete="off" required>
-                                            <label for="empid">Employee Id</label>
                                         </div>
                                         <div class="input-field col s12">
+                                            <span for="emailid">Email id</span>
                                             <input id="emailid" type="text" class="validate" name="emailid"
                                                 autocomplete="off" required>
-                                            <label for="emailid">Email id</label>
                                         </div>
                                         <div class="input-field col s12">
+                                            <span for="newpassword">New Password</span>
                                             <input id="newpassword" type="password" name="newpassword" class="validate"
                                                 autocomplete="off" required>
-                                            <label for="newpassword">New Password</label>
                                             <span class="eye-icon" onclick="togglePassword()"><i
                                                     class="material-icons">visibility</i></span>
                                         </div>
@@ -215,9 +215,9 @@ if (isset($_POST['change'])) {
                                         }
                                         </script>
                                         <div class="input-field col s12">
+                                            <span for="confirmpassword">Confirm Password </span>
                                             <input id="confirmpassword" type="password" name="confirmpassword"
                                                 class="validate" required>
-                                            <label for="confirmpassword">Confirm Password </label>
                                             <span class="eye-icon" onclick="toggleConfirmPassword()"><i
                                                     class="material-icons">visibility</i></span>
                                         </div>

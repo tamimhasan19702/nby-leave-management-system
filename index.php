@@ -8,8 +8,8 @@ if (isset($_POST['signin'])) {
     $username_or_email = $_POST['username_or_email']; // Ensure this matches the input name
     $password = md5($_POST['password']); // Hash the password for security
 
-    // Update the SQL query to check both EmailId and Username
-    $sql = "SELECT EmailId, Password, Status, id FROM tblemployees WHERE (EmailId = :username_or_email OR Username = :username_or_email) AND Password = :password";
+    // Update the SQL query to check both EmailId and EmpId
+    $sql = "SELECT EmailId, Password, Status, id FROM tblemployees WHERE (EmailId = :username_or_email OR EmpId = :username_or_email) AND Password = :password";
     $query = $dbh->prepare($sql);
     
     // Bind parameters
@@ -41,15 +41,12 @@ if (isset($_POST['signin'])) {
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-
     <!-- Title -->
     <title>NBYIT | Employee Leave Management System</title>
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta charset="UTF-8">
     <meta name="description" content="Responsive Admin Dashboard Template" />
@@ -62,12 +59,9 @@ if (isset($_POST['signin'])) {
     <link href="assets/css/materialdesign.css" rel="stylesheet">
     <link href="assets/plugins/material-preloader/css/materialPreloader.min.css" rel="stylesheet">
 
-
     <!-- Theme Styles -->
     <link href="assets/css/alpha.min.css" rel="stylesheet" type="text/css" />
     <link href="assets/css/custom.css" rel="stylesheet" type="text/css" />
-
-
 </head>
 
 <body>
@@ -135,33 +129,21 @@ if (isset($_POST['signin'])) {
                     <div class="header-title col s3">
                         <span class="chapter-title">NBYIT | Employee Leave Management System</span>
                     </div>
-
-
-                    </form>
-
-
                 </div>
             </nav>
         </header>
 
-
         <aside id="slide-out" class="side-nav white fixed">
             <div class="side-nav-wrapper">
-
-
                 <ul class="nby-sidebar-menu nby-collapsible nby-collapsible-accordion" data-collapsible="accordion">
                     <li><a class="" href="index.php"><i class="material-icons">account_box</i>Employee Login</a></li>
-                    <li><a class="" href="forgot-password.php"><i class="material-icons">account_box</i>
-                            Password Recovery</a></li>
+                    <li><a class="" href="forgot-password.php"><i class="material-icons">account_box</i>Password
+                            Recovery</a></li>
                     <li><a class="" href="admin/"><i class="material-icons">account_box</i>Admin Login</a></li>
                 </ul>
 
-
-
-
                 <div class="footer">
                     <p class="copyright">NBYIT Leave Management System</p>
-
                 </div>
             </div>
         </aside>
@@ -171,14 +153,12 @@ if (isset($_POST['signin'])) {
                 <div class="col s12">
                     <div class="col s12 m6 l8 offset-l2 offset-m3">
                         <img src="./assets/images/Logo-of-NBY-IT.webp" alt="nby" class="responsive-img">
-                        <h4 class="nby-title">NBYIT Employee Leave Management System </a>
-                        </h4>
-                        <h2 class="nby-subtitle">EmployeeLogin</h2>
+                        <h4 class="nby-title">NBYIT Employee Leave Management System</h4>
+                        <h2 class="nby-subtitle">Employee Login</h2>
                     </div>
 
                     <div class="col s12 m6 l8 offset-l2 offset-m3">
                         <div class="card white darken-1">
-
                             <div class="card-content">
                                 <span class="card-title" style="font-size:20px;">Employee Login</span>
                                 <?php if($msg){?><div class="errorWrap"><strong>Error</strong> :
@@ -186,14 +166,14 @@ if (isset($_POST['signin'])) {
                                 <div class="row">
                                     <form class="col s12" name="signin" method="post">
                                         <div class="input-field col s12">
+                                            <span for="username_or_email">Email Address or Employee ID</span>
                                             <input id="username_or_email" type="text" name="username_or_email"
                                                 class="nby-validate" autocomplete="off" required>
-                                            <label for="username_or_email">Email Address or Username</label>
                                         </div>
                                         <div class="input-field col s12">
+                                            <span for="password">Password</span>
                                             <input id="password" type="password" class="validate" name="password"
                                                 autocomplete="off" required>
-                                            <label for="password">Password</label>
                                             <span class="eye-icon" onclick="togglePassword()"><i
                                                     class="material-icons">visibility</i></span>
                                         </div>
@@ -223,14 +203,11 @@ if (isset($_POST['signin'])) {
                                     </form>
                                 </div>
                             </div>
-
-
                         </div>
                     </div>
                 </div>
             </div>
         </main>
-
     </div>
     <div class="left-sidebar-hover"></div>
 
@@ -252,7 +229,6 @@ if (isset($_POST['signin'])) {
     <script src="assets/plugins/peity/jquery.peity.min.js"></script>
     <script src="assets/js/alpha.min.js"></script>
     <script src="assets/js/pages/dashboard.js"></script>
-
 </body>
 
 </html>

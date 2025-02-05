@@ -49,6 +49,8 @@ if (isset($_POST['update'])) {
         // Execute the query
         if ($query->execute()) {
             $msg = "Leave updated successfully.";
+            header('Location: leaves.php');
+            exit(); 
         } else {
             $msg = "Failed to update leave. Please try again.";
         }
@@ -158,15 +160,23 @@ foreach($results as $result)
                                     <td style="font-size:16px;"><b>Emp Contact No. :</b></td>
                                     <td><?php echo htmlentities($result->Phonenumber);?></td>
                                     <td style="font-size:16px;"><b>Duration :</b></td>
-                                    <td><?php echo htmlentities($result->Duration);?></td>
+                                    <td><?php echo htmlentities($result->Duration . ' days');?></td>
                                 </tr>
 
                                 <tr>
                                     <td style="font-size:16px;"><b>Leave Type :</b></td>
                                     <td><?php echo htmlentities($result->LeaveType);?></td>
-                                    <td style="font-size:16px;"><b>Leave Date . :</b></td>
-                                    <td>From <?php echo htmlentities($result->FromDate);?> to
-                                        <?php echo htmlentities($result->ToDate);?></td>
+                                    <td style="font-size:16px;"><b>Leave Date :</b></td>
+                                    <td>
+                                        <span style="font-weight:600">From - </span> <?php 
+            $fromDate = htmlentities($result->FromDate);
+            echo $fromDate; 
+        ?> (<?php echo date('l', strtotime($fromDate)); ?>)<span style="font-weight:600"> - To - </span>
+                                        <?php  
+            $toDate = htmlentities($result->ToDate);
+            echo $toDate; 
+        ?> (<?php echo date('l', strtotime($toDate)); ?>)
+                                    </td>
                                     <td style="font-size:16px;"><b>Posting Date</b></td>
                                     <td><?php echo htmlentities($result->PostingDate);?></td>
                                 </tr>
