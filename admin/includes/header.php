@@ -1,54 +1,71 @@
+        <!-- Preloader start -->
         <div class="loader-bg"></div>
 
+        <!-- Preloader end -->
+
+        <!-- Content start -->
         <div class="mn-content fixed-sidebar">
+            <!-- Header start -->
             <header class="mn-header navbar-fixed">
                 <nav class="cyan darken-1">
                     <div class="nav-wrapper row">
+                        <!-- Navigation toggle start -->
                         <section class="material-design-hamburger navigation-toggle">
                             <a href="#" data-activates="slide-out"
                                 class="button-collapse show-on-large material-design-hamburger__icon">
                                 <span class="material-design-hamburger__layer"></span>
                             </a>
                         </section>
+                        <!-- Navigation toggle end -->
+
+                        <!-- Header title start -->
                         <div class="header-title col s3">
-                            <span class="chapter-title">NBYIT | Admin Panel</span>
+                            <span class="chapter-title">NBY IT | Admin Panel</span>
                         </div>
+                        <!-- Header title end -->
 
+                        <!-- Navigation links start -->
                         <ul class="right col s9 m3 nav-right-menu">
-
-                            <li class="hide-on-small-and-down"><a href="javascript:void(0)" data-activates="dropdown1"
+                            <li class="hide-on-small-and-down">
+                                <a href="javascript:void(0)" data-activates="dropdown1"
                                     class="dropdown-button dropdown-right show-on-large"><i
                                         class="material-icons">notifications_none</i>
+
                                     <?php 
-$isread=0;
-$sql = "SELECT id from tblleaves where IsRead=:isread";
-$query = $dbh -> prepare($sql);
-$query->bindParam(':isread',$isread,PDO::PARAM_STR);
-$query->execute();
-$results=$query->fetchAll(PDO::FETCH_OBJ);
-$unreadcount=$query->rowCount();?>
+                                    // Get unread notifications count
+                                    $isread=0;
+                                    $sql = "SELECT id from tblleaves where IsRead=:isread";
+                                    $query = $dbh -> prepare($sql);
+                                    $query->bindParam(':isread',$isread,PDO::PARAM_STR);
+                                    $query->execute();
+                                    $results=$query->fetchAll(PDO::FETCH_OBJ);
+                                    $unreadcount=$query->rowCount();
+                                    ?>
 
-
-                                    <span class="badge"><?php echo htmlentities($unreadcount);?></span></a></li>
+                                    <span class="badge"><?php echo htmlentities($unreadcount);?></span></a>
+                            </li>
                             <li class="hide-on-med-and-up"><a href="javascript:void(0)" class="search-toggle"><i
                                         class="material-icons">search</i></a></li>
                         </ul>
+                        <!-- Navigation links end -->
 
+                        <!-- Notifications dropdown start -->
                         <ul id="dropdown1" class="dropdown-content notifications-dropdown">
                             <li class="notificatoins-dropdown-container">
                                 <ul>
                                     <li class="notification-drop-title">Notifications</li>
                                     <?php 
-$isread=0;
-$sql = "SELECT tblleaves.id as lid,tblemployees.FirstName,tblemployees.LastName,tblemployees.EmpId,tblleaves.PostingDate from tblleaves join tblemployees on tblleaves.empid=tblemployees.id where tblleaves.IsRead=:isread";
-$query = $dbh -> prepare($sql);
-$query->bindParam(':isread',$isread,PDO::PARAM_STR);
-$query->execute();
-$results=$query->fetchAll(PDO::FETCH_OBJ);
-if($query->rowCount() > 0)
-{
-foreach($results as $result)
-{               ?>
+                                    // Get all unread notifications
+                                    $isread=0;
+                                    $sql = "SELECT tblleaves.id as lid,tblemployees.FirstName,tblemployees.LastName,tblemployees.EmpId,tblleaves.PostingDate from tblleaves join tblemployees on tblleaves.empid=tblemployees.id where tblleaves.IsRead=:isread";
+                                    $query = $dbh -> prepare($sql);
+                                    $query->bindParam(':isread',$isread,PDO::PARAM_STR);
+                                    $query->execute();
+                                    $results=$query->fetchAll(PDO::FETCH_OBJ);
+                                    if($query->rowCount() > 0)
+                                    {
+                                    foreach($results as $result)
+                                    {               ?>
 
 
                                     <li>
@@ -71,3 +88,4 @@ foreach($results as $result)
                     </div>
                 </nav>
             </header>
+            <!-- Header end -->

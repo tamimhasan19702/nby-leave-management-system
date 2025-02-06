@@ -102,7 +102,7 @@ foreach($results as $result)
                                 <div class="row">
 
                                     <div class="input-field col s12">
-                                        <span for="leavetype">Leave Type</span>
+                                        <span style="font-weight:bold" for="leavetype">Leave Type</span>
                                         <input id="leavetype" type="text" class="validate" autocomplete="off"
                                             name="leavetype" value="<?php echo htmlentities($result->LeaveType);?>"
                                             required>
@@ -111,7 +111,7 @@ foreach($results as $result)
 
 
                                     <div class="input-field col s12">
-                                        <span for="deptshortname">Description</span>
+                                        <span style="font-weight:bold" for="deptshortname">Description</span>
                                         <textarea id="textarea1" name="description" class="materialize-textarea"
                                             name="description"
                                             length="500"><?php echo htmlentities($result->Description);?></textarea>

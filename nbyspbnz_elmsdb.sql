@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Feb 04, 2025 at 11:08 PM
+-- Generation Time: Feb 05, 2025 at 10:41 PM
 -- Server version: 10.6.20-MariaDB-cll-lve
 -- PHP Version: 8.3.15
 
@@ -77,7 +77,6 @@ CREATE TABLE `notices` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `status` enum('0','1') NOT NULL DEFAULT '0',
-  `department_id` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -180,8 +179,8 @@ CREATE TABLE `tblemployees` (
   `Image` varchar(255) NOT NULL DEFAULT 'https://nbyit.com/wp-content/uploads/2019/05/cropped-n-logo-1.png',
   `Status` int(1) DEFAULT NULL,
   `RegDate` timestamp NULL DEFAULT current_timestamp(),
-  `AnnualLeave` int(11) DEFAULT NULL,
-  `SickLeave` int(11) DEFAULT NULL
+  `AnnualLeave` int(11) NOT NULL DEFAULT 0 CHECK (`AnnualLeave` BETWEEN 0 AND 1000),
+  `SickLeave` int(11) NOT NULL DEFAULT 0 CHECK (`SickLeave` BETWEEN 0 AND 1000)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
@@ -241,7 +240,8 @@ CREATE TABLE `tblleaves` (
 
 INSERT INTO `tblleaves` (`id`, `LeaveType`, `ToDate`, `FromDate`, `Description`, `PostingDate`, `AdminRemark`, `AdminRemarkDate`, `Status`, `IsRead`, `empid`, `Username`, `EmailId`, `Phonenumber`, `Duration`) VALUES
 (24, 'Annual Leave', '2025-02-09', '2025-02-09', '1 Day Leave', '2025-01-28 10:30:34', '', '2025-02-04 16:36:53', 1, 1, 32, 'sanjid', 'sanjid@nbyit.com', '01580929401', '0 days'),
-(25, 'Annual Leave', '2025-02-10', '2025-02-09', 'i Want to go home thats why i need 1 day leave.', '2025-02-04 06:28:53', '', '2025-02-04 16:37:20', 1, 1, 40, 'robiul', 'robiul@nbyit.com', '1739467922', '1 days');
+(25, 'Annual Leave', '2025-02-10', '2025-02-09', 'i Want to go home thats why i need 1 day leave.', '2025-02-04 06:28:53', '', '2025-02-04 16:37:20', 1, 1, 40, 'robiul', 'robiul@nbyit.com', '1739467922', '1 days'),
+(27, 'Sick Leave', '2025-02-04', '2025-02-03', 'i was sick', '2025-02-05 11:09:00', NULL, NULL, 0, 0, 38, 'afsana', 'afsana@nbyit.com', '1719498657', '1 days');
 
 -- --------------------------------------------------------
 
@@ -375,7 +375,7 @@ ALTER TABLE `tblemployees`
 -- AUTO_INCREMENT for table `tblleaves`
 --
 ALTER TABLE `tblleaves`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `tblleavetype`

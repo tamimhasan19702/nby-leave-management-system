@@ -76,7 +76,7 @@
             </li>
         </ul>
         <div class="footer">
-            <p class="copyright">NBYIT Leave Management System</p>
+            <p class="copyright">NBY IT Leave Management System</p>
         </div>
     </div>
 </aside>

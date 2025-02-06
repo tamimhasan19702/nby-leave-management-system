@@ -173,7 +173,8 @@ if(strlen($_SESSION['alogin'])==0) {
 
 
                                                     <div class="input-field col s12">
-                                                        <span for="profilepic">Profile Picture Link</span>
+                                                        <span style="font-weight: bold" for="profilepic">Profile Picture
+                                                            Link</span>
                                                         <div id="image-preview"></div>
                                                         <input name="profilepic" id="profilepic" type="text"
                                                             class="validate" onchange="checkImageLink(this.value)">
@@ -218,7 +219,8 @@ if(strlen($_SESSION['alogin'])==0) {
 
 
                                                     <div class="input-field col s12">
-                                                        <span for="empcode">Employee Code(Must be unique)</span>
+                                                        <span style="font-weight: bold" for="empcode">Employee Code(Must
+                                                            be unique)</span>
                                                         <input name="empcode" id="empcode"
                                                             onBlur="checkAvailabilityEmpid()" type="text"
                                                             autocomplete="off" required>
@@ -226,25 +228,27 @@ if(strlen($_SESSION['alogin'])==0) {
                                                     </div>
 
                                                     <div class="input-field col s12">
-                                                        <span for="username">Username (Must be unique)</span>
+                                                        <span style="font-weight: bold" for="username">Username (Must be
+                                                            unique)</span>
                                                         <input name="username" id="username" type="text"
                                                             autocomplete="off" required>
                                                         <span id="username-availability" style="font-size:12px;"></span>
                                                     </div>
 
                                                     <div class="input-field col m6 s12">
-                                                        <span for="firstName">First name</span>
+                                                        <span style="font-weight: bold" for="firstName">First
+                                                            name</span>
                                                         <input id="firstName" name="firstName" type="text" required>
                                                     </div>
 
                                                     <div class="input-field col m6 s12">
-                                                        <span for="lastName">Last name</span>
+                                                        <span style="font-weight: bold" for="lastName">Last name</span>
                                                         <input id="lastName" name="lastName" type="text"
                                                             autocomplete="off" required>
                                                     </div>
 
                                                     <div class="input-field col s12">
-                                                        <span for="email">Email</span>
+                                                        <span style="font-weight: bold" for="email">Email</span>
                                                         <input name="email" type="email" id="email"
                                                             onBlur="checkAvailabilityEmailid()" autocomplete="off"
                                                             required>
@@ -252,7 +256,7 @@ if(strlen($_SESSION['alogin'])==0) {
                                                     </div>
 
                                                     <div class="input-field col s12">
-                                                        <span for="password">Password</span>
+                                                        <span style="font-weight: bold" for="password">Password</span>
                                                         <input id="password" name="password" type="password"
                                                             autocomplete="off" required>
                                                         <span class="eye-icon" onclick="togglePassword()"><i
@@ -280,10 +284,12 @@ if(strlen($_SESSION['alogin'])==0) {
                                                     </script>
 
                                                     <div class="input-field col s12">
-                                                        <span for="confirm">Confirm password</span>
+                                                        <span style="font-weight: bold" for="confirm">Confirm
+                                                            password</span>
                                                         <input id="confirm" name="confirmpassword" type="password"
                                                             autocomplete="off" required>
-                                                        <span class="eye-icon" onclick="toggleConfirmPassword()"><i
+                                                        <span style="font-weight: bold" class="eye-icon"
+                                                            onclick="toggleConfirmPassword()"><i
                                                                 class="material-icons">visibility</i></span>
                                                     </div>
 
@@ -322,7 +328,7 @@ if(strlen($_SESSION['alogin'])==0) {
                                                     </div>
 
                                                     <div class="input-field col m6 s12">
-                                                        <span for="birthdate">Birthdate</span>
+                                                        <span style="font-weight: bold" for="birthdate">Birthdate</span>
                                                         <input id="birthdate" name="dob" type="text" autocomplete="off">
                                                     </div>
 
@@ -349,38 +355,40 @@ if(strlen($_SESSION['alogin'])==0) {
                                                     </div>
 
                                                     <div class="input-field col m6 s12">
-                                                        <span for="address">Address</span>
+                                                        <span style="font-weight: bold" for="address">Address</span>
                                                         <input id="address" name="address" type="text"
                                                             autocomplete="off" required>
                                                     </div>
 
                                                     <div class="input-field col m6 s12">
-                                                        <span for="city">City/Town</span>
+                                                        <span style="font-weight: bold" for="city">City/Town</span>
                                                         <input id="city" name="city" type="text" autocomplete="off"
                                                             required>
                                                     </div>
 
                                                     <div class="input-field col m6 s12">
-                                                        <span for="country">Country</span>
+                                                        <span style="font-weight: bold" for="country">Country</span>
                                                         <input id="country" name="country" type="text"
                                                             autocomplete="off" required>
                                                     </div>
 
                                                     <div class="input-field col s12">
-                                                        <span for="phone">Mobile number</span>
+                                                        <span style="font-weight: bold" for="phone">Mobile number</span>
                                                         <input id="phone" name="mobileno" type="tel" maxlength="10"
                                                             autocomplete="off" required>
                                                     </div>
 
 
                                                     <div class="input-field col s12">
-                                                        <span for="annual_leave">Set Annual Leave</span>
+                                                        <span style="font-weight: bold" for="annual_leave">Set Annual
+                                                            Leave</span>
                                                         <input id="annual_leave" name="annual_leave" type="number"
                                                             autocomplete="off" required>
                                                     </div>
 
                                                     <div class="input-field col s12">
-                                                        <span for="sick_leave">Set Sick Leave</span>
+                                                        <span style="font-weight: bold" for="sick_leave">Set Sick
+                                                            Leave</span>
                                                         <input id="sick_leave" name="sick_leave" type="number"
                                                             autocomplete="off" required>
                                                     </div>

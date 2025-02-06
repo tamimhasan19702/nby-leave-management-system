@@ -95,18 +95,19 @@ if(strlen($_SESSION['alogin'])==0) {
                                 <?php } ?>
                                 <div class="row">
                                     <div class="input-field col s12">
-                                        <span for="departmentName">Department Name</span>
+                                        <span style="font-weight: bold" for="departmentName">Department Name</span>
                                         <input id="departmentName" type="text" class="validate" name="departmentName"
                                             value="<?php echo htmlentities($departmentName); ?>" required>
                                     </div>
                                     <div class="input-field col s12">
-                                        <span for="departmentShortName">Department Short Name</span>
+                                        <span style="font-weight: bold" for="departmentShortName">Department Short
+                                            Name</span>
                                         <input id="departmentShortName" type="text" class="validate"
                                             name="departmentShortName"
                                             value="<?php echo htmlentities($departmentShortName); ?>" required>
                                     </div>
                                     <div class="input-field col s12">
-                                        <span for="departmentCode">Department Code</span>
+                                        <span style="font-weight: bold" for="departmentCode">Department Code</span>
                                         <input id="departmentCode" type="text" class="validate" name="departmentCode"
                                             value="<?php echo htmlentities($departmentCode); ?>" required>
                                     </div>

@@ -61,7 +61,7 @@
                             </a>
                         </section>
                         <div class="header-title col s3">
-                            <span class="chapter-title">NBYIT | Employee</span>
+                            <span class="chapter-title">NBY IT | Employee</span>
                         </div>
 
 

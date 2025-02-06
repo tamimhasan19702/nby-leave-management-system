@@ -8,6 +8,7 @@ if(strlen($_SESSION['alogin'])==0) {
 } else {
     $eid = intval($_GET['empid']);
     if (isset($_POST['update'])) {
+        $empid = $_POST['empcode'];
         $fname = $_POST['firstName'];
         $lname = $_POST['lastName'];   
         $gender = $_POST['gender']; 
@@ -21,8 +22,9 @@ if(strlen($_SESSION['alogin'])==0) {
         $annualLeave = $_POST['annualLeave']; // Fetching Annual Leave from the form
         $sickLeave = $_POST['sickLeave']; // Fetching Sick Leave from the form
 
-        $sql = "UPDATE tblemployees SET FirstName=:fname, LastName=:lname, Gender=:gender, Dob=:dob, Department=:department, Address=:address, City=:city, Country=:country, Phonenumber=:mobileno, Username=:username, AnnualLeave=:annualLeave, SickLeave=:sickLeave WHERE id=:eid";
+        $sql = "UPDATE tblemployees SET EmpId=:empid, FirstName=:fname, LastName=:lname, Gender=:gender, Dob=:dob, Department=:department, Address=:address, City=:city, Country=:country, Phonenumber=:mobileno, Username=:username, AnnualLeave=:annualLeave, SickLeave=:sickLeave WHERE id=:eid";
         $query = $dbh->prepare($sql);
+        $query->bindParam(':empid', $empid, PDO::PARAM_STR);
         $query->bindParam(':fname', $fname, PDO::PARAM_STR);
         $query->bindParam(':lname', $lname, PDO::PARAM_STR);
         $query->bindParam(':gender', $gender, PDO::PARAM_STR);
@@ -38,6 +40,9 @@ if(strlen($_SESSION['alogin'])==0) {
         $query->bindParam(':eid', $eid, PDO::PARAM_STR);
         $query->execute();
         $msg = "Employee record updated Successfully";
+
+        header("Location: viewprofile.php?empid=" . htmlentities($eid));
+    exit();
     }
 ?>
 
@@ -115,36 +120,38 @@ if(strlen($_SESSION['alogin'])==0) {
                                                         foreach($results as $result) { 
                                                     ?>
                                                     <div class="input-field col s12">
-                                                        <span for="empcode">Employee Code (Must be unique)</span>
+                                                        <span style="font-weight: bold" for="empcode">Employee Code
+                                                            (Must be unique)</span>
                                                         <input name="empcode" id="empcode"
                                                             value="<?php echo htmlentities($result->EmpId); ?>"
-                                                            type="text" autocomplete="off" readonly required>
+                                                            type="text" autocomplete="off" required>
                                                         <span id="empid-availability" style="font-size:12px;"></span>
                                                     </div>
 
                                                     <div class="input-field col m6 s12">
-                                                        <span for="firstName">First name</span>
+                                                        <span style="font-weight: bold" for="firstName">First
+                                                            name</span>
                                                         <input id="firstName" name="firstName"
                                                             value="<?php echo htmlentities($result->FirstName); ?>"
                                                             type="text" required>
                                                     </div>
 
                                                     <div class="input-field col m6 s12">
-                                                        <span for="lastName">Last name</span>
+                                                        <span style="font-weight: bold" for="lastName">Last name</span>
                                                         <input id="lastName" name="lastName"
                                                             value="<?php echo htmlentities($result->LastName); ?>"
                                                             type="text" autocomplete="off" required>
                                                     </div>
 
                                                     <div class="input-field col s12">
-                                                        <span for="username">Username</span>
+                                                        <span style="font-weight: bold" for="username">Username</span>
                                                         <input name="username" type="text" id="username"
                                                             value="<?php echo htmlentities($result->Username); ?>"
                                                             autocomplete="off" required>
                                                     </div>
 
                                                     <div class="input-field col s12">
-                                                        <span for="email">Email</span>
+                                                        <span style="font-weight: bold" for="email">Email</span>
                                                         <input name="email" type="email" id="email"
                                                             value="<?php echo htmlentities($result->EmailId); ?>"
                                                             readonly autocomplete="off" required>
@@ -152,21 +159,23 @@ if(strlen($_SESSION['alogin'])==0) {
                                                     </div>
 
                                                     <div class="input-field col s12">
-                                                        <span for="phone">Mobile number</span>
+                                                        <span style="font-weight: bold" for="phone">Mobile number</span>
                                                         <input id="phone" name="mobileno" type="tel"
                                                             value="<?php echo htmlentities($result->Phonenumber); ?>"
                                                             maxlength="10" autocomplete="off" required>
                                                     </div>
 
                                                     <div class="input-field col s12">
-                                                        <span for="annualLeave">Annual Leave</span>
+                                                        <span style="font-weight: bold" for="annualLeave">Annual
+                                                            Leave</span>
                                                         <input id="annualLeave" name="annualLeave" type="number"
                                                             value="<?php echo htmlentities($result->AnnualLeave); ?>"
                                                             required>
                                                     </div>
 
                                                     <div class="input-field col s12">
-                                                        <span for="sickLeave">Sick Leave</span>
+                                                        <span style="font-weight: bold" for="sickLeave">Sick
+                                                            Leave</span>
                                                         <input id="sickLeave" name="sickLeave" type="number"
                                                             value="<?php echo htmlentities($result->SickLeave); ?>"
                                                             required>
@@ -190,7 +199,8 @@ if(strlen($_SESSION['alogin'])==0) {
                                                     </div>
 
                                                     <div class="input-field col m6 s12">
-                                                        <span for="birthdate">Date of Birth</span>
+                                                        <span style="font-weight: bold" for="birthdate">Date of
+                                                            Birth</span>
                                                         <input id="birthdate" name="dob" type="text"
                                                             value="<?php echo htmlentities($result->Dob); ?>">
                                                     </div>
@@ -219,21 +229,21 @@ if(strlen($_SESSION['alogin'])==0) {
                                                     </div>
 
                                                     <div class="input-field col m6 s12">
-                                                        <span for="address">Address</span>
+                                                        <span style="font-weight: bold" for="address">Address</span>
                                                         <input id="address" name="address" type="text"
                                                             value="<?php echo htmlentities($result->Address); ?>"
                                                             autocomplete="off" required>
                                                     </div>
 
                                                     <div class="input-field col m6 s12">
-                                                        <span for="city">City/Town</span>
+                                                        <span style="font-weight: bold" for="city">City/Town</span>
                                                         <input id="city" name="city" type="text"
                                                             value="<?php echo htmlentities($result->City); ?>"
                                                             autocomplete="off" required>
                                                     </div>
 
                                                     <div class="input-field col m6 s12">
-                                                        <span for="country">Country</span>
+                                                        <span style="font-weight: bold" for="country">Country</span>
                                                         <input id="country" name="country" type="text"
                                                             value="<?php echo htmlentities($result->Country); ?>"
                                                             autocomplete="off" required>

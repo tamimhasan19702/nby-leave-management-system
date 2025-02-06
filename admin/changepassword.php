@@ -100,19 +100,19 @@ $error="Your current password is wrong";
                                 <?php }?>
                                 <div class="row">
                                     <div class="input-field col s12">
-                                        <span for="password">Current Password</span>
+                                        <span style="font-weight: bold" for="password">Current Password</span>
                                         <input id="password" type="password" class="validate" autocomplete="off"
                                             name="password" required>
                                     </div>
 
                                     <div class="input-field col s12">
-                                        <span for="password">New Password</span>
+                                        <span style="font-weight: bold" for="password">New Password</span>
                                         <input id="password" type="password" name="newpassword" class="validate"
                                             autocomplete="off" required>
                                     </div>
 
                                     <div class="input-field col s12">
-                                        <span for="password">Confirm Password</span>
+                                        <span style="font-weight: bold" for="password">Confirm Password</span>
                                         <input id="password" type="password" name="confirmpassword" class="validate"
                                             autocomplete="off" required>
                                     </div>

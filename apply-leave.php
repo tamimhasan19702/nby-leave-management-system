@@ -178,7 +178,8 @@ if (strlen($_SESSION['emplogin']) == 0) {
 
                                                 <div class="input-field col s12">
                                                     <span>From Date</span>
-                                                    <input id="fromdate" name="fromdate" type="date" required>
+                                                    <input id="fromdate" name="fromdate" type="date" required
+                                                        date_format="dd-mm-yyyy">
                                                     <span>Duration (in days)</span>
                                                     <input id="duration" name="duration" type="number" min="1" required>
                                                 </div>

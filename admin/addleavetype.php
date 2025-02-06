@@ -92,14 +92,14 @@ $error="Something went wrong. Please try again";
                                 </div><?php }?>
                                 <div class="row">
                                     <div class="input-field col s12">
-                                        <span for="leavetype">Leave Type</span>
+                                        <span style="font-weight: bold" for="leavetype">Leave Type</span>
                                         <input id="leavetype" type="text" class="validate" autocomplete="off"
                                             name="leavetype" required>
                                     </div>
 
 
                                     <div class="input-field col s12">
-                                        <span for="deptshortname">Description</span>
+                                        <span style="font-weight: bold" for="deptshortname">Description</span>
                                         <textarea id="textarea1" name="description" class="materialize-textarea"
                                             name="description" length="500"></textarea>
                                     </div>

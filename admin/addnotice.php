@@ -11,28 +11,22 @@ if(strlen($_SESSION['alogin'])==0) {
     $title = '';
     $description = '';
     $file_path = '';
-    $department_id = '';
 
     if(isset($_POST['add'])) {
         $subject = $_POST['subject'];
         $title = $_POST['title'];
         $description = $_POST['description'];
         $file_path = $_POST['file_path'];
-        $department_id = $_POST['department_id'];
 
-        // Check if department_id is set and is a valid integer
-        if (!isset($department_id) || !is_numeric($department_id)) {
-            $error = "Invalid department selected.";
-        } else {
-            // Insert notice into the database
-            $sql = "INSERT INTO notices (subject, title, description, file_path, department_id) VALUES (:subject, :title, :description, :file_path, :department_id)";
-            $query = $dbh->prepare($sql);
-            $query->bindParam(':subject', $subject, PDO::PARAM_STR);
-            $query->bindParam(':title', $title, PDO::PARAM_STR);
-            $query->bindParam(':description', $description, PDO::PARAM_STR);
-            $query->bindParam(':file_path', $file_path, PDO::PARAM_STR);
-            $query->bindParam(':department_id', $department_id, PDO::PARAM_INT);
-            
+        // Insert notice into the database
+        $sql = "INSERT INTO notices (subject, title, description, file_path) VALUES (:subject, :title, :description, :file_path)";
+        $query = $dbh->prepare($sql);
+        $query->bindParam(':subject', $subject, PDO::PARAM_STR);
+        $query->bindParam(':title', $title, PDO::PARAM_STR);
+        $query->bindParam(':description', $description, PDO::PARAM_STR);
+        $query->bindParam(':file_path', $file_path, PDO::PARAM_STR);
+        
+        try {
             if ($query->execute()) {
                 $lastInsertId = $dbh->lastInsertId();
                 if($lastInsertId) {
@@ -42,11 +36,16 @@ if(strlen($_SESSION['alogin'])==0) {
                     $title = '';
                     $description = '';
                     $file_path = '';
-                    $department_id = '0'; // Reset to default value for department
+                    
+                    // Redirect to managenotice.php
+                    header('location:managenotice.php');
+                    exit(); // Ensure no further code is executed
                 }
             } else {
                 $error = "Something went wrong. Please try again";
             }
+        } catch (PDOException $e) {
+            $error = "Error: " . $e->getMessage(); // Capture any SQL errors
         }
     }
 ?>
@@ -63,7 +62,7 @@ if(strlen($_SESSION['alogin'])==0) {
 
     <!-- Styles -->
     <link type="text/css" rel="stylesheet" href="../assets/plugins/materialize/css/materialize.min.css" />
-    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="../assets/plugins/material-preloader/css/materialPreloader.min.css" rel="stylesheet">
     <link href="../assets/css/alpha.min.css" rel="stylesheet" type="text/css" />
     <link href="../assets/css/custom.css" rel="stylesheet" type="text/css" />
@@ -110,46 +109,25 @@ if(strlen($_SESSION['alogin'])==0) {
                                 <?php } ?>
                                 <div class="row">
                                     <div class="input-field col s12">
-                                        <span for="title">Title</span>
+                                        <span style="font-weight: bold" for="title">Title</span>
                                         <input id="title" type="text" class="validate" name="title"
                                             value="<?php echo htmlentities($title); ?>" required>
                                     </div>
                                     <div class="input-field col s12">
-                                        <span for="subject">Subject</span>
+                                        <span style="font-weight: bold" for="subject">Subject</span>
                                         <input id="subject" type="text" class="validate" name="subject"
                                             value="<?php echo htmlentities($subject); ?>">
                                     </div>
                                     <div class="input-field col s12">
-                                        <span for="description">Description</span>
+                                        <span style="font-weight: bold" for="description">Description</span>
                                         <textarea id="description" class="materialize-textarea expandable"
                                             name="description"><?php echo htmlentities($description); ?></textarea>
                                     </div>
                                     <div class="input-field col s12">
-                                        <span for="file_path">File Path Link</span>
+                                        <span style="font-weight: bold" for="file_path">File Path Link (optional)</span>
                                         <input id="file_path" type="text" class="validate" name="file_path"
                                             value="<?php echo htmlentities($file_path); ?>">
                                     </div>
-
-                                    <!-- <div class="input-field col s12">
-                                        <select name="department_id" id="department" required>
-                                            <option value="0" selected>All Departments</option>
-
-                                            <?php
-                                            // Fetch departments from the database
-                                            $sql = "SELECT id, DepartmentName FROM tbldepartments";
-                                            $stmt = $dbh->prepare($sql);
-                                            $stmt->execute();
-                                            $departments = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                                            
-                                            foreach ($departments as $department) {
-                                                // Ensure the selected department ID is correctly set
-                                                $selected = ($department_id == $department['id']) ? 'selected' : '';
-                                                echo '<option value="' . htmlentities($department['id']) . '" ' . $selected . '>' . htmlentities($department['DepartmentName']) . '</option>';
-                                            }
-                                            ?>
-                                        </select>
-                                        <span for="department">Department</span>
-                                    </div> -->
 
                                     <div class="input-field col s12">
                                         <button type="submit" name="add"
