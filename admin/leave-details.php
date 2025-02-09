@@ -353,7 +353,7 @@ if (isset($_POST['update'])) {
             if ($result->AdminRemarkDate == "") {
                 echo "NA";  
             } else {
-                echo date('d-m-Y - g:i A - (l)', strtotime($result->AdminRemarkDate));
+                echo htmlentities($result->AdminRemarkDate);
             }
             ?></td>
                                 </tr>

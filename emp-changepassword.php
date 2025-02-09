@@ -88,14 +88,14 @@ if(strlen($_SESSION['emplogin'])==0) {
                                 <?php } ?>
 
                                 <div class="input-field col s12">
-                                    <span for="password">Current Password</span>
+                                    <span style="font-weight: bold" for="password">Current Password</span>
                                     <input id="password" type="password" class="validate" autocomplete="off"
                                         name="password" required>
                                     <span toggle="#password" class="fa fa-eye-slash field-icon toggle-password"></span>
                                 </div>
 
                                 <div class="input-field col s12">
-                                    <span for="newpassword">New Password</span>
+                                    <span style="font-weight: bold" for="newpassword">New Password</span>
                                     <input id="newpassword" type="password" name="newpassword" class="validate"
                                         autocomplete="off" required>
                                     <span toggle="#newpassword"
@@ -103,7 +103,7 @@ if(strlen($_SESSION['emplogin'])==0) {
                                 </div>
 
                                 <div class="input-field col s12">
-                                    <span for="confirmpassword">Confirm Password</span>
+                                    <span style="font-weight: bold" for="confirmpassword">Confirm Password</span>
                                     <input id="confirmpassword" type="password" name="confirmpassword" class="validate"
                                         autocomplete="off" required>
                                     <span toggle="#confirmpassword"

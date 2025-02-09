@@ -167,25 +167,26 @@ if (strlen($_SESSION['emplogin']) == 0) {
                                                 <?php } ?>
 
                                                 <div class="input-field col s12">
-                                                    <span>Username</span>
+                                                    <span style="font-weight:bold;">Username</span>
                                                     <input id="username" name="username" type="text"
                                                         value="<?php echo htmlentities($username); ?>" required>
                                                 </div>
 
                                                 <div class="input-field col s12">
-                                                    <span>Email ID</span>
+                                                    <span style="font-weight:bold;">Email ID</span>
                                                     <input id="emailid" name="emailid" type="email"
                                                         value="<?php echo htmlentities($emailId); ?>" required>
                                                 </div>
 
                                                 <div class="input-field col s12">
-                                                    <span>Phone Number</span>
+                                                    <span style="font-weight:bold;">Phone Number</span>
                                                     <input id="phonenumber" name="phonenumber" type="text"
                                                         value="<?php echo htmlentities($phonenumber); ?>" required>
                                                 </div>
 
                                                 <div class="input-field col s12">
-                                                    <select name="leavetype" autocomplete="off" class="browser-default">
+                                                    <select name="leavetype" autocomplete="off" class="browser-default"
+                                                        required>
                                                         <option value="">Select leave type...</option>
                                                         <?php 
                                                             $sql = "SELECT LeaveType from tblleavetype";
@@ -202,22 +203,22 @@ if (strlen($_SESSION['emplogin']) == 0) {
                                                 </div>
 
                                                 <div class="input-field col s12">
-                                                    <span>Leave Date</span>
+                                                    <span style="font-weight:bold;">Leave Date</span>
                                                     <input id="fromdate" name="fromdate" type="date" required>
-                                                    <span>Leave Time</span>
+                                                    <span style="font-weight:bold;">Leave Time</span>
                                                     <input id="fromtime" name="fromtime" type="time" value="09:00"
                                                         required> <!-- Default to 9 AM -->
                                                 </div>
 
                                                 <div class="input-field col s12">
-                                                    <span>Duration (in days)</span>
+                                                    <span style="font-weight:bold;">Duration (in days)</span>
                                                     <input id="duration" name="duration" type="number" min="1" required>
                                                 </div>
 
                                                 <div class="input-field col m12 s12">
-                                                    <span>Description</span>
+                                                    <span style="font-weight:bold;">Description</span>
                                                     <textarea id="textarea1" name="description"
-                                                        class="materialize-textarea" length="500" required></textarea>
+                                                        class="materialize-textarea" length="500"></textarea>
                                                 </div>
 
                                                 <button type="submit" name="apply" id="apply"

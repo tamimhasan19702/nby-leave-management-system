@@ -53,16 +53,23 @@ if(strlen($_SESSION['alogin'])==0) {
             <li class="no-padding"><a class="waves-effect waves-grey" href="employeelogs.php"><i
                         class="material-icons">login</i>Employee Logs</a></li>
 
+            <li class="no-padding"><a class="waves-effect waves-grey" href="complains.php"><i
+                        class="material-icons">notes</i>All Complains</a></li>
+
             <li class="no-padding">
-                <a class="collapsible-header waves-effect waves-grey"><i class="material-icons">apps</i>Department<i
-                        class="nav-drop-icon material-icons">keyboard_arrow_right</i></a>
+                <a class="collapsible-header waves-effect waves-grey"><i class="material-icons">desktop_windows</i>Leave
+                    Management<i class="nav-drop-icon material-icons">keyboard_arrow_right</i></a>
                 <div class="collapsible-body">
                     <ul>
-                        <li><a href="adddepartment.php">Add Department</a></li>
-                        <li><a href="managedepartments.php">Manage Department</a></li>
+                        <li><a href="leaves.php">All Leaves </a></li>
+                        <li><a href="pending-leavehistory.php">Pending Leaves </a></li>
+                        <li><a href="approvedleave-history.php">Approved Leaves</a></li>
+                        <li><a href="notapproved-leaves.php">Not Approved Leaves</a></li>
                     </ul>
                 </div>
             </li>
+
+
 
 
             <li class="no-padding">
@@ -88,22 +95,21 @@ if(strlen($_SESSION['alogin'])==0) {
                 </div>
             </li>
 
+
+
+
+
+
             <li class="no-padding">
-                <a class="collapsible-header waves-effect waves-grey"><i class="material-icons">desktop_windows</i>Leave
-                    Management<i class="nav-drop-icon material-icons">keyboard_arrow_right</i></a>
+                <a class="collapsible-header waves-effect waves-grey"><i class="material-icons">apps</i>Department<i
+                        class="nav-drop-icon material-icons">keyboard_arrow_right</i></a>
                 <div class="collapsible-body">
                     <ul>
-                        <li><a href="leaves.php">All Leaves </a></li>
-                        <li><a href="pending-leavehistory.php">Pending Leaves </a></li>
-                        <li><a href="approvedleave-history.php">Approved Leaves</a></li>
-                        <li><a href="notapproved-leaves.php">Not Approved Leaves</a></li>
+                        <li><a href="adddepartment.php">Add Department</a></li>
+                        <li><a href="managedepartments.php">Manage Department</a></li>
                     </ul>
                 </div>
             </li>
-
-
-            <li class="no-padding"><a class="waves-effect waves-grey" href="complains.php"><i
-                        class="material-icons">notes</i>All Complains</a></li>
 
             <li class="no-padding">
                 <a class="collapsible-header waves-effect waves-grey"><i class="material-icons">code</i>Leave

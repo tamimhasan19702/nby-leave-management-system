@@ -110,11 +110,11 @@ $results = $query->fetchAll(PDO::FETCH_OBJ);
                         <?php } ?>
                         <form method="POST" action="">
                             <div class="input-field nby-complaint">
-                                <span for="complaint_title">Complaint Subject</span>
+                                <span style="font-weight: bold" for="complaint_title">Complaint Subject</span>
                                 <input type="text" id="complaint_title" name="complaint_title" required>
                             </div>
                             <div class="input-field nby-complaint">
-                                <span for="complaint">Write your Complaint</span>
+                                <span style="font-weight: bold" for="complaint">Write your Complaint</span>
                                 <textarea id="complaint" name="complaint" class="materialize-textarea"
                                     required></textarea>
                             </div>

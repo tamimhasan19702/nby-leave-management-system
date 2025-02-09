@@ -218,7 +218,7 @@ if (strlen($_SESSION['alogin']) == 0) {
                     echo "<tr>";
                     echo "<td>" . $srNo++ . "</td>";
                     echo "<td>" . htmlentities($log['FirstName'] . ' ' . $log['LastName']) . "</td>";
-                    echo "<td>" . htmlentities($logDate) . "</td>";
+                    echo "<td>" . htmlentities($logDate . ' (' . (new DateTime($log['LogDate']))->format('l') . ')') . "</td>";
                     echo "<td>" . htmlentities($loginTime) . "</td>";
                     echo "<td>" . (empty($log['LogoutTime']) ? 'Not Logged Out' : htmlentities($logoutTime)) . "</td>";
                     echo "<td>" . htmlentities($workingTime) . "</td>"; // Display Working Time

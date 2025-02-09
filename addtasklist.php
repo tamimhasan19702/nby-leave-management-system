@@ -107,20 +107,20 @@ if (isset($_POST['addTask'])) {
         <div class="row">
             <form method="POST" action="">
                 <div class="input-field col s12">
-                    <span style="font: weight:bold;" for="taskName">Task Name</span>
+                    <span style="font-weight:bold;" for="taskName">Task Name</span>
                     <input type="text" name="taskName" required>
                 </div>
                 <div class="input-field col s12">
-                    <span style="font: weight:bold;" for="taskDescription">Task Description</span>
+                    <span style="font-weight:bold;" for="taskDescription">Task Description</span>
                     <input type="text" name="taskDescription">
                 </div>
                 <div class="input-field col s12">
-                    <span style="font: weight:bold;">Start Date</span>
+                    <span style="font-weight:bold;">Start Date</span>
                     <input type="date" name="startDate" required>
                 </div>
 
                 <div class="input-field col s12">
-                    <span style="font: weight:bold;">Status</span>
+                    <span style="font-weight:bold;">Status</span>
                     <select name="status" required class="browser-default">
                         <option value="0">Starting</option>
                         <option value="1">In Progress</option>
@@ -130,11 +130,11 @@ if (isset($_POST['addTask'])) {
                 </div>
 
                 <div class="input-field col s12">
-                    <span style="font: weight:bold;">End Date</span>
+                    <span style="font-weight:bold;">End Date</span>
                     <input type="date" name="endDate">
                 </div>
                 <div class="input-field col s12">
-                    <span style="font: weight:bold;" for="notes">Notes (optional)</span>
+                    <span style="font-weight:bold;" for="notes">Notes (optional)</span>
                     <textarea name="notes" class="materialize-textarea"></textarea>
                 </div>
                 <div class="input-field col s12">
