@@ -40,6 +40,31 @@ if (strlen($_SESSION['emplogin']) == 0) {
         if ($duration <= 0) {
             $error = "Duration must be greater than 0";
         } else {
+            // Create DateTime object for FromDate
+            $fromDateTime = new DateTime($fromdate);
+            
+            // Get the time from the input
+            $fromTime = $_POST['fromtime'];
+            $fromDateTime->setTime((int)explode(':', $fromTime)[0], (int)explode(':', $fromTime)[1]); // Set the time for FromDate
+        
+            // Calculate ToDate based on FromDate and Duration
+            if ($duration == 1) {
+                // Same as FromDate but set to PM
+                $todate = $fromDateTime->format('d-m-Y') . ' 17:00'; // Set to 5 PM
+            } else {
+                $fromDateTime->modify("+".($duration - 1)." days"); // Add (duration - 1) days to FromDate
+                $todate = $fromDateTime->format('d-m-Y'); // Format as d-m-Y
+            }
+        
+            $fromdate = (new DateTime($fromdate))->format('d-m-Y'); // Format fromdate as d-m-Y
+        
+            // Append duration to description
+            $description .= " (Duration: $duration days)";
+        
+            // Create duration string with suffix
+            $durationString = $duration . ' ' . ($duration > 1 ? 'days' : 'day');
+        
+            // Insert into database
             $sql = "INSERT INTO tblleaves (LeaveType, ToDate, FromDate, Description, Status, IsRead, empid, Username, EmailId, Phonenumber, Duration) 
                     VALUES (:leavetype, :todate, :fromdate, :description, :status, :isread, :empid, :username, :emailid, :phonenumber, :duration)";
             $query = $dbh->prepare($sql);
@@ -177,9 +202,14 @@ if (strlen($_SESSION['emplogin']) == 0) {
                                                 </div>
 
                                                 <div class="input-field col s12">
-                                                    <span>From Date</span>
-                                                    <input id="fromdate" name="fromdate" type="date" required
-                                                        date_format="dd-mm-yyyy">
+                                                    <span>Leave Date</span>
+                                                    <input id="fromdate" name="fromdate" type="date" required>
+                                                    <span>Leave Time</span>
+                                                    <input id="fromtime" name="fromtime" type="time" value="09:00"
+                                                        required> <!-- Default to 9 AM -->
+                                                </div>
+
+                                                <div class="input-field col s12">
                                                     <span>Duration (in days)</span>
                                                     <input id="duration" name="duration" type="number" min="1" required>
                                                 </div>

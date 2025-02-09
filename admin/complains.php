@@ -81,11 +81,11 @@ if (strlen($_SESSION['alogin']) == 0) {
                             <td><?php echo htmlentities($result->FirstName . ' ' . $result->LastName); ?></td>
                             <td><?php echo htmlentities($result->complaint_title); ?></td>
                             <td><?php echo htmlentities($result->complaint); ?></td>
-                            <td><?php echo htmlentities($result->created_at); ?></td>
+                            <td><?php echo date('d-m-Y - h:i A - l', strtotime($result->created_at)); ?></td>
                             <td>
                                 <a href="?cid=<?php echo $result->id; ?>"
                                     onclick="return confirm('Do you really want to delete this complaint?');">
-                                    <i class="material-icons">delete_forever</i>
+                                    <i class="material-icons" style="color: red;">delete_forever</i>
                                 </a>
                             </td>
                         </tr>

@@ -145,8 +145,8 @@ $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     }
                                     echo "</td>";
                                     echo "<td>" . htmlentities($task['Notes']) . "</td>";
-                                    echo "<td>" . htmlentities($task['StartDate']) . "</td>";
-                                    echo "<td>" . htmlentities($task['EndDate']) . "</td>";
+                                    echo "<td>" . date('d-m-Y - h:i A - (l)', strtotime($task['StartDate'])) . "</td>";
+                                    echo "<td>" . date('d-m-Y - h:i A - (l)', strtotime($task['EndDate'])) . "</td>";
                                     echo "<td><a href='edittasklist.php?empId=" . $eid . "&taskId=" . $task['id'] . "' class='btn'>Edit</a></td>"; // Edit button
                                     echo "</tr>";
                                 }

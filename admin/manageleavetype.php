@@ -104,7 +104,7 @@ foreach($results as $result)
                                     <td> <?php echo htmlentities($cnt);?></td>
                                     <td><?php echo htmlentities($result->LeaveType);?></td>
                                     <td><?php echo htmlentities($result->Description);?></td>
-                                    <td><?php echo htmlentities($result->CreationDate);?></td>
+                                    <td><?php echo date('d-m-Y - h:i A - (l)', strtotime($result->CreationDate));?></td>
                                     <td>
                                         <div class="tbl-row">
                                             <a href="editleavetype.php?lid=<?php echo htmlentities($result->id);?>"><i

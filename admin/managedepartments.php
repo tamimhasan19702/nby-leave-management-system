@@ -107,7 +107,7 @@ foreach($results as $result)
                                     <td><?php echo htmlentities($result->DepartmentName);?></td>
                                     <td><?php echo htmlentities($result->DepartmentShortName);?></td>
                                     <td><?php echo htmlentities($result->DepartmentCode);?></td>
-                                    <td><?php echo htmlentities($result->CreationDate);?></td>
+                                    <td><?php echo date('d-m-Y - h:i A - (l)', strtotime($result->CreationDate));?></td>
                                     <td>
                                         <div class="tbl-row">
                                             <a href="editdepartment.php?deptid=<?php echo htmlentities($result->id);?>"><i

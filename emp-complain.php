@@ -141,6 +141,7 @@ $results = $query->fetchAll(PDO::FETCH_OBJ);
                                     <th>No</th>
                                     <th>Complaint Subject</th>
                                     <th>Complaint</th>
+                                    <th>Created At</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -152,8 +153,11 @@ $results = $query->fetchAll(PDO::FETCH_OBJ);
                                 <tr>
                                     <td style="width: 5%"><?php echo $count++; ?></td>
                                     <td style="width: 25%"><?php echo htmlentities($result->complaint_title); ?></td>
-                                    <td style="width: 65%">
+                                    <td style="width: 45%">
                                         <?php echo htmlentities($result->complaint); ?>
+                                    </td>
+                                    <td style="width: 20%">
+                                        <?php echo date('d-m-Y - h:i A - (l)', strtotime($result->created_at)); ?>
                                     </td>
                                     <td style="width: 10%">
                                         <a href="emp-complain.php?id=<?php echo $result->id; ?>"

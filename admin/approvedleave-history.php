@@ -106,7 +106,7 @@ foreach($results as $result)
                                             target="_blank"><?php echo htmlentities($result->FirstName." ".$result->LastName);?>(<?php echo htmlentities($result->EmpId);?>)</a>
                                     </td>
                                     <td><?php echo htmlentities($result->LeaveType);?></td>
-                                    <td><?php echo htmlentities($result->PostingDate);?></td>
+                                    <td><?php echo date('d-m-Y - h:i A - (l)', strtotime($result->PostingDate));?></td>
                                     <td><?php $stats=$result->Status;
 if($stats==1){
                                              ?>

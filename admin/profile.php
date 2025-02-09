@@ -169,7 +169,7 @@ if(strlen($_SESSION['alogin'])==0) {
                     </tr>
                     <tr>
                         <td><strong>Last Updated:</strong></td>
-                        <td><?php echo htmlentities($updationDate); ?></td>
+                        <td><?php echo date('d-m-Y - h:i A - l', strtotime($updationDate)); ?></td>
                     </tr>
                     <tr>
                         <td colspan="2">
