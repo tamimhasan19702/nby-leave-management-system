@@ -11,6 +11,13 @@ if (strlen($_SESSION['alogin']) == 0) {
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Current page number
     $offset = ($page - 1) * $limit; // Calculate offset for SQL query
 
+    // Fetch total logs for pagination
+    $totalQuery = "SELECT COUNT(*) FROM tblemployeelogs";
+    $totalStmt = $dbh->prepare($totalQuery);
+    $totalStmt->execute();
+    $totalLogs = $totalStmt->fetchColumn();
+    $totalPages = ceil($totalLogs / $limit); // Calculate total pages
+
     ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -59,58 +66,71 @@ if (strlen($_SESSION['alogin']) == 0) {
 
     <main class="mn-inner">
         <div class="row">
-
-
             <div class="card">
                 <div class="card-content">
-                    <h1 class=" nby-title">Employee Logs</h1>
+                    <h1 class="nby-title">Employee Logs</h1>
                     <table id="logTable" class="display responsive-table">
                         <thead>
                             <tr>
                                 <th>Sr No</th>
                                 <th>Employee Name</th>
-                                <th>Log Date</th>
+                                <th>Log Date (Day)</th> <!-- Updated header -->
                                 <th>Login Time</th>
                                 <th>Logout Time</th>
+                                <th>Working Time</th>
+                                <th>Action</th> <!-- New column for action -->
                             </tr>
                         </thead>
                         <tbody>
                             <?php
-                            // Fetch all logs with pagination
-                            $query = "SELECT tblemployeelogs.id, tblemployeelogs.LogDate, tblemployeelogs.LoginTime, tblemployeelogs.LogoutTime, tblemployees.FirstName, tblemployees.LastName
-                                      FROM tblemployeelogs
-                                      INNER JOIN tblemployees ON tblemployeelogs.EmpId = tblemployees.id
-                                      ORDER BY tblemployeelogs.LogDate DESC, tblemployeelogs.LoginTime DESC
-                                      LIMIT :offset, :limit"; // Order by date and time
+                // Fetch all logs with pagination
+                $query = "SELECT tblemployeelogs.id, tblemployeelogs.LogDate, tblemployeelogs.LoginTime, tblemployeelogs.LogoutTime, tblemployees.id AS empId, tblemployees.FirstName, tblemployees.LastName
+                          FROM tblemployeelogs
+                          INNER JOIN tblemployees ON tblemployeelogs.EmpId = tblemployees.id
+                          ORDER BY tblemployeelogs.LogDate DESC, tblemployeelogs.LoginTime DESC
+                          LIMIT :offset, :limit"; // Order by date and time
 
-                            $stmt = $dbh->prepare($query);
-                            $stmt->bindParam(':offset', $offset, PDO::PARAM_INT); // Bind the offset
-                            $stmt->bindParam(':limit', $limit, PDO::PARAM_INT); // Bind the limit
-                            $stmt->execute();
-                            $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                $stmt = $dbh->prepare($query);
+                $stmt->bindParam(':offset', $offset, PDO::PARAM_INT); // Bind the offset
+                $stmt->bindParam(':limit', $limit, PDO::PARAM_INT); // Bind the limit
+                $stmt->execute();
+                $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                            $srNo = $offset + 1; // Initialize serial number based on offset
-                            foreach ($logs as $log) {
-                                echo "<tr>";
-                                echo "<td>" . $srNo++ . "</td>";
-                                echo "<td>" . htmlentities($log['FirstName'] . ' ' . $log['LastName ']) . "</td>";
-                                echo "<td>" . htmlentities($log['LogDate']) . "</td>";
-                                echo "<td>" . htmlentities($log['LoginTime']) . "</td>";
-                                echo "<td>" . (empty($log['LogoutTime']) ? 'Not Logged Out' : htmlentities($log['LogoutTime'])) . "</td>";
-                                echo "</tr>";
-                            }
-                            ?>
+                $srNo = $offset + 1; // Initialize serial number based on offset
+                foreach ($logs as $log) {
+                    // Format LogDate and get the day of the week
+                    $logDateTime = new DateTime($log['LogDate']);
+                    $logDate = $logDateTime->format('d-m-Y');
+                    $dayOfWeek = $logDateTime->format('l'); // Get the full textual representation of the day
+
+                    // Format LoginTime and LogoutTime
+                    $loginTime = (new DateTime($log['LoginTime']))->format('h:i A');
+                    $logoutTime = (new DateTime($log['LogoutTime']))->format('h:i A');
+
+                    // Calculate Working Time
+                    $workingTime = '';
+                    if (!empty($log['LoginTime']) && !empty($log['LogoutTime'])) {
+                        $loginDateTime = new DateTime($log['LoginTime']);
+                        $logoutDateTime = new DateTime($log['LogoutTime']);
+                        $interval = $loginDateTime->diff($logoutDateTime);
+                        $workingTime = $interval->format('%h hours %i minutes');
+                    } else {
+                        $workingTime = 'Not Logged Out';
+                    }
+
+                    echo "<tr>";
+                    echo "<td>" . $srNo++ . "</td>";
+                    echo "<td>" . htmlentities($log['FirstName'] . ' ' . $log['LastName']) . "</td>";
+                    echo "<td>" . htmlentities($logDate . " (" . $dayOfWeek . ")") . "</td>"; // Updated to include day of the week
+                    echo "<td>" . htmlentities($loginTime) . "</td>";
+                    echo "<td>" . (empty($log['LogoutTime']) ? 'Not Logged Out' : htmlentities($logoutTime)) . "</td>";
+                    echo "<td>" . htmlentities($workingTime) . "</td>";
+                    echo "<td><a href='viewprofile.php?empid=" . htmlentities($log['empId']) . "' class='waves-effect waves-light btn'>View Profile</a></td>"; // Button to view profile
+                    echo "</tr>";
+                }
+                ?>
                         </tbody>
                     </table>
-                    <div class="pagination">
-                        <?php
-    // Display pagination controls
-    for ($i = 1; $i <= $totalPages; $i++) {
-        $activeClass = ($i == $page) ? 'active' : ''; // Add active class for current page
-        echo "<a href='?page=$i' class='pagination-link $activeClass'>" . $i . "</a> ";
-    }
-    ?>
-                    </div>
                 </div>
             </div>
         </div>

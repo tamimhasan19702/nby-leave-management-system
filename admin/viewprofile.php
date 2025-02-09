@@ -126,7 +126,9 @@ if (strlen($_SESSION['alogin']) == 0) {
                                     <td><b>Username:</b></td>
                                     <td><?php echo htmlentities($username); ?></td>
                                     <td><b>Status:</b></td>
-                                    <td><?php echo htmlentities($status); ?></td>
+                                    <td>
+                                        <?php echo htmlentities($status == 1 ? 'Active' : 'Inactive'); ?>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td><b>Email:</b></td>
@@ -174,34 +176,52 @@ if (strlen($_SESSION['alogin']) == 0) {
                                 <thead>
                                     <tr>
                                         <th>Sr No</th>
-                                        <th>Employee ID</th>
+                                        <th>Employee Name</th>
                                         <th>Log Date</th>
                                         <th>Login Time</th>
                                         <th>Logout Time</th>
-
+                                        <th>Working Time</th> <!-- New column for Working Time -->
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-
-$query = "SELECT tblemployeelogs.id, tblemployeelogs.LogDate, tblemployeelogs.LoginTime, tblemployeelogs.LogoutTime, tblemployees.FirstName, tblemployees.LastName
-FROM tblemployeelogs
-INNER JOIN tblemployees ON tblemployeelogs.EmpId = tblemployees.id
-WHERE tblemployeelogs.EmpId = :eid"; // Filter by employee ID
-$stmt = $dbh->prepare($query);
-$stmt->bindParam(':eid', $eid, PDO::PARAM_INT); // Bind the employee ID
-$stmt->execute();
-$logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                // Assuming $eid is defined and holds the employee ID
+                $query = "SELECT tblemployeelogs.id, tblemployeelogs.LogDate, tblemployeelogs.LoginTime, tblemployeelogs.LogoutTime, tblemployees.FirstName, tblemployees.LastName
+                          FROM tblemployeelogs
+                          INNER JOIN tblemployees ON tblemployeelogs.EmpId = tblemployees.id
+                          WHERE tblemployeelogs.EmpId = :eid"; // Filter by employee ID
+                $stmt = $dbh->prepare($query);
+                $stmt->bindParam(':eid', $eid, PDO::PARAM_INT); // Bind the employee ID
+                $stmt->execute();
+                $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 $srNo = 1; // Initialize serial number
                 foreach ($logs as $log) {
+                    // Format LogDate
+                    $logDate = (new DateTime($log['LogDate']))->format('d-m-Y');
+
+                    // Format LoginTime and LogoutTime
+                    $loginTime = (new DateTime($log['LoginTime']))->format('h:i A');
+                    $logoutTime = (new DateTime($log['LogoutTime']))->format('h:i A');
+
+                    // Calculate Working Time
+                    $workingTime = '';
+                    if (!empty($log['LoginTime']) && !empty($log['LogoutTime'])) {
+                        $loginDateTime = new DateTime($log['LoginTime']);
+                        $logoutDateTime = new DateTime($log['LogoutTime']);
+                        $interval = $loginDateTime->diff($logoutDateTime);
+                        $workingTime = $interval->format('%h hours %i minutes');
+                    } else {
+                        $workingTime = 'Not Logged Out';
+                    }
+
                     echo "<tr>";
                     echo "<td>" . $srNo++ . "</td>";
                     echo "<td>" . htmlentities($log['FirstName'] . ' ' . $log['LastName']) . "</td>";
-                    echo "<td>" . htmlentities($log['LogDate']) . "</td>";
-                    echo "<td>" . htmlentities($log['LoginTime']) . "</td>";
-                    echo "<td>" . (empty($log['LogoutTime']) ? 'Not Logged Out' : htmlentities($log['LogoutTime'])) . "</td>";
-                    
+                    echo "<td>" . htmlentities($logDate) . "</td>";
+                    echo "<td>" . htmlentities($loginTime) . "</td>";
+                    echo "<td>" . (empty($log['LogoutTime']) ? 'Not Logged Out' : htmlentities($logoutTime)) . "</td>";
+                    echo "<td>" . htmlentities($workingTime) . "</td>"; // Display Working Time
                     echo "</tr>";
                 }
                 ?>

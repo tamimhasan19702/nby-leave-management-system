@@ -10,7 +10,7 @@ else{
 
   
     
-    $sql = "SELECT id, UserName, EmailId, Image FROM admin WHERE UserName = :username"; // Adjust the query to match your database schema
+    $sql = "SELECT id, FirstName, LastName, UserName, EmailId, Image FROM admin WHERE UserName = :username"; // Adjust the query to match your database schema
     $query = $dbh->prepare($sql);
     $query->bindParam(':username', $adminUsername, PDO::PARAM_STR);
     $query->execute();
@@ -20,6 +20,7 @@ else{
     if ($result) {
         $adminId = $result->id;
         $adminUserName = $result->UserName;
+        $adminName = $result->FirstName . ' ' . $result->LastName;
         $adminEmail = $result->EmailId;
         $adminImage = $result->Image;
     } else {
@@ -68,7 +69,7 @@ else{
         <div class="">
             <div class="row no-m-t no-m-b">
 
-                <h1 class="nby-title">Welcome, <?php echo $adminUserName; ?></h1>
+                <h1 class="nby-title">Welcome, <?php echo $adminName; ?></h1>
 
                 <a href="manageemployee.php" target="blank">
 
@@ -237,7 +238,7 @@ $approvedleaves=$query->rowCount();
                                         <th width="200">Employe Name</th>
                                         <th width="120">Leave Type</th>
 
-                                        <th width="120">Posting Date</th>
+                                        <th width="180">Posting Date</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -261,7 +262,8 @@ foreach($results as $result)
                                                 target="_blank"><?php echo htmlentities($result->FirstName." ".$result->LastName);?>(<?php echo htmlentities($result->EmpId);?>)</a>
                                         </td>
                                         <td><?php echo htmlentities($result->LeaveType);?></td>
-                                        <td><?php echo htmlentities($result->PostingDate);?></td>
+                                        <td><?php echo htmlentities((new DateTime($result->PostingDate))->format('d-m-Y - h:i A - (l)'));?>
+                                        </td>
                                         <td><?php $stats=$result->Status;
 if($stats==1){
                                              ?>

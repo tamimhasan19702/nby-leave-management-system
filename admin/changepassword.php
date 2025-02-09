@@ -27,6 +27,16 @@ $chngpwd1-> bindParam(':username', $username, PDO::PARAM_STR);
 $chngpwd1-> bindParam(':newpassword', $newpassword, PDO::PARAM_STR);
 $chngpwd1->execute();
 $msg="Your Password succesfully changed";
+
+
+// Clear the session
+session_unset(); // Unset all session variables
+session_destroy(); // Destroy the session
+
+// Redirect to index.php
+header('location:index.php');
+exit();
+
 }
 else {
 $error="Your current password is wrong";    

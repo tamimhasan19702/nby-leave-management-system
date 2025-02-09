@@ -8,6 +8,8 @@ header('location:index.php');
 }
 else{
 
+   
+
  ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -77,9 +79,10 @@ else{
                                     <th width="120">Leave Type</th>
                                     <th>From</th>
                                     <th>To</th>
-                                    <th width="120">Posting Date</th>
+                                    <th>Posting Date</th>
                                     <th>Status</th>
                                     <th>Action</th>
+
                                 </tr>
                             </thead>
 
@@ -99,9 +102,9 @@ foreach($results as $result)
                                 <tr>
                                     <td> <?php echo htmlentities($cnt);?></td>
                                     <td><?php echo htmlentities($result->LeaveType);?></td>
-                                    <td><?php echo htmlentities($result->FromDate);?></td>
-                                    <td><?php echo htmlentities($result->ToDate);?></td>
-                                    <td><?php echo htmlentities($result->PostingDate);?></td>
+                                    <td><?php echo date('d-m-Y - h:i A - (l)', strtotime($result->FromDate)); ?></td>
+                                    <td><?php echo date('d-m-Y - h:i A - (l)', strtotime($result->ToDate)); ?></td>
+                                    <td><?php echo date('d-m-Y - h:i A - (l)', strtotime($result->PostingDate)); ?></td>
 
                                     <td><?php $stats=$result->Status;
 if($stats==1){
@@ -118,6 +121,8 @@ if($stats==1){
                                         <a href="leave-details.php?leaveid=<?php echo htmlentities($result->lid);?>"
                                             class="waves-effect waves-light btn blue m-b-xs"> View Details</a>
                                     </td>
+
+
                                 </tr>
                                 <?php $cnt++;} }?>
                             </tbody>

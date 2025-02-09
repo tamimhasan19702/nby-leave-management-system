@@ -32,33 +32,100 @@ if (isset($_POST['update'])) {
         date_default_timezone_set('Asia/Kolkata');
         $admremarkdate = date('Y-m-d G:i:s', strtotime("now"));
 
-        // Update Query
-        $sql = "UPDATE tblleaves 
-                SET AdminRemark = :description, 
-                    Status = :status, 
-                    AdminRemarkDate = :admremarkdate 
-                WHERE id = :did";
+        // Fetch leave details to get duration and employee ID
+        $sql = "SELECT empid, Duration, LeaveType FROM tblleaves WHERE id = :did";
         $query = $dbh->prepare($sql);
-
-        // Bind parameters
-        $query->bindParam(':description', $description, PDO::PARAM_STR);
-        $query->bindParam(':status', $status, PDO::PARAM_INT);
-        $query->bindParam(':admremarkdate', $admremarkdate, PDO::PARAM_STR);
         $query->bindParam(':did', $did, PDO::PARAM_INT);
+        $query->execute();
+        $leaveDetails = $query->fetch(PDO::FETCH_OBJ);
 
-        // Execute the query
-        if ($query->execute()) {
-            $msg = "Leave updated successfully.";
-            header('Location: leaves.php');
-            exit(); 
+        if ($leaveDetails) {
+            $empId = $leaveDetails->empid;
+            $duration = $leaveDetails->Duration; // Assuming Duration is in days
+            $leaveType = $leaveDetails->LeaveType;
+
+            // Update Query for leave status
+            $sql = "UPDATE tblleaves 
+                    SET AdminRemark = :description, 
+                        Status = :status, 
+                        AdminRemarkDate = :admremarkdate 
+                    WHERE id = :did";
+            $query = $dbh->prepare($sql);
+
+            // Bind parameters
+            $query->bindParam(':description', $description, PDO::PARAM_STR);
+            $query->bindParam(':status', $status, PDO::PARAM_INT);
+            $query->bindParam(':admremarkdate', $admremarkdate, PDO::PARAM_STR);
+            $query->bindParam(':did', $did, PDO::PARAM_INT);
+
+            // Execute the query
+            if ($query->execute()) {
+                // If approved, reduce leave balance
+                if ($status == 1) { // Approved
+                    // Fetch current leave balance
+                    $sql = "SELECT AnnualLeave, SickLeave FROM tblemployees WHERE id = :empId";
+                    $query = $dbh->prepare($sql);
+                    $query->bindParam(':empId', $empId, PDO::PARAM_INT);
+                    $query->execute();
+                    $employeeDetails = $query->fetch(PDO::FETCH_OBJ);
+
+                    if ($employeeDetails) {
+                        // Update the leave balance based on leave type
+                        if ($leaveType == 'Annual Leave') {
+                            $newAnnualLeave = $employeeDetails->AnnualLeave - $duration;
+                            $sql = "UPDATE tblemployees SET AnnualLeave = :newAnnualLeave WHERE id = :empId";
+                            $query = $dbh->prepare($sql);
+                            $query->bindParam(':newAnnualLeave', $newAnnualLeave, PDO::PARAM_INT);
+                            $query->bindParam(':empId', $empId, PDO::PARAM_INT);
+                            $query->execute();
+                        } elseif ($leaveType == 'Sick Leave') {
+                            $newSickLeave = $employeeDetails->SickLeave - $duration;
+                            $sql = "UPDATE tblemployees SET SickLeave = :newSickLeave WHERE id = :empId";
+                            $query = $dbh->prepare($sql);
+                            $query->bindParam(':newSickLeave', $newSickLeave, PDO::PARAM_INT);
+                            $query->bindParam(':empId', $empId, PDO::PARAM_INT);
+                            $query->execute();
+                        }
+                    }
+                } elseif ($status == 2) { // Rejected
+                    // Fetch current leave balance
+                    $sql = "SELECT AnnualLeave, SickLeave FROM tblemployees WHERE id = :empId";
+                    $query = $dbh->prepare($sql);
+                    $query->bindParam(':empId', $empId, PDO::PARAM_INT);
+                    $query->execute();
+                    $employeeDetails = $query->fetch(PDO::FETCH_OBJ);
+
+                    if ($employeeDetails) {
+                        // Update the leave balance based on leave type
+                        if ($leaveType == 'Annual Leave') {
+                            $newAnnualLeave = $employeeDetails->AnnualLeave + $duration; // Restore leave
+                            $sql = "UPDATE tblemployees SET AnnualLeave = :newAnnualLeave WHERE id = :empId";
+                            $query = $dbh->prepare($sql);
+                            $query->bindParam(':newAnnualLeave', $newAnnualLeave, PDO::PARAM_INT);
+                            $query->bindParam(':empId', $empId, PDO::PARAM_INT);
+                            $query->execute();
+                        } elseif ($leaveType == 'Sick Leave') {
+                            $newSickLeave = $employeeDetails->SickLeave + $duration; // Restore leave
+                            $sql = "UPDATE tblemployees SET SickLeave = :newSickLeave WHERE id = :empId";
+                            $query = $dbh->prepare($sql);
+                            $query->bindParam(':newSickLeave', $newSickLeave, PDO::PARAM_INT);
+                            $query->bindParam(':empId', $empId, PDO::PARAM_INT);
+                            $query->execute();
+                        }
+                    }
+                }
+                $msg = "Leave updated successfully.";
+                header('Location: leaves.php');
+                exit(); 
+            } else {
+                $msg = "Failed to update leave. Please try again.";
+            }
         } else {
-            $msg = "Failed to update leave. Please try again.";
+            $msg = "Leave details not found.";
         }
     } else {
         $msg = "Invalid Leave ID.";
     }
-
-   
 }
 
 
@@ -195,15 +262,15 @@ if (isset($_POST['update'])) {
                                     <td>
                                         <span style="font-weight:600">From - </span> <?php 
                 $fromDate = htmlentities($result->FromDate);
-                echo $fromDate; 
-            ?> (<?php echo date('l', strtotime($fromDate)); ?>)<span style="font-weight:600"> - To - </span>
+                echo date('d-m-Y - h:i A - (l)', strtotime($fromDate)); 
+            ?> <span style="font-weight:600"> - To - </span>
                                         <?php  
                 $toDate = htmlentities($result->ToDate);
-                echo $toDate; 
-            ?> (<?php echo date('l', strtotime($toDate)); ?>)
+                echo date('d-m-Y - h:i A - (l)', strtotime($toDate)); 
+            ?>
                                     </td>
                                     <td style="font-size:16px;"><b>Posting Date</b></td>
-                                    <td><?php echo htmlentities($result->PostingDate); ?></ td>
+                                    <td><?php echo date('d-m-Y - h:i A - (l)', strtotime($result->PostingDate)); ?></td>
                                 </tr>
 
 

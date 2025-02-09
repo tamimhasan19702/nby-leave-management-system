@@ -157,30 +157,32 @@ foreach($results as $result)
                                         <a class="waves-effect btn-flat m-b-xs " style=" color: white;">Inactive</a>
                                         <?php } ?>
                                     </td>
-                                    <td><?php echo htmlentities($result->RegDate);?></td>
+                                    <td><?php echo date('d-m-Y - h:i A - (l)', strtotime($result->RegDate));?></td>
                                     <td>
-                                        <a href="editemployee.php?empid=<?php echo htmlentities($result->id);?>">
-                                            <i class="material-icons" style="color: blue">mode_edit</i>
+                                        <div class="tbl-row">
+                                            <a href="editemployee.php?empid=<?php echo htmlentities($result->id);?>">
+                                                <i class="material-icons" style="color: blue">mode_edit</i>
 
-                                        </a>
-                                        <?php if($result->Status == 1) { ?>
-                                        <a href="manageemployee.php?inid=<?php echo htmlentities($result->id);?>"
-                                            onclick="return confirm('Are you sure you want to inactive this employee?');">
-                                            <i class="material-icons" title="Inactive" style="color: green">clear</i>
+                                            </a>
+                                            <?php if($result->Status == 1) { ?>
+                                            <a href="manageemployee.php?inid=<?php echo htmlentities($result->id);?>"
+                                                onclick="return confirm('Are you sure you want to inactive this employee?');">
+                                                <i class="material-icons" title="Inactive" style="color: red">clear</i>
 
-                                        </a>
-                                        <?php } else { ?>
-                                        <a href="manageemployee.php?id=<?php echo htmlentities($result->id);?>"
-                                            onclick="return confirm('Are you sure you want to active this employee?');">
-                                            <i class="material-icons" title="Active" style="color: red">done</i>
+                                            </a>
+                                            <?php } else { ?>
+                                            <a href="manageemployee.php?id=<?php echo htmlentities($result->id);?>"
+                                                onclick="return confirm('Are you sure you want to active this employee?');">
+                                                <i class="material-icons" title="Active" style="color: green">done</i>
 
-                                        </a>
-                                        <?php } ?>
-                                        <a href="manageemployee.php?delid=<?php echo htmlentities($result->id);?>"
-                                            onclick="return confirm('Are you sure you want to delete this employee?');">
-                                            <i class="material-icons" title="Delete" style="color: gray">delete</i>
+                                            </a>
+                                            <?php } ?>
+                                            <a href="manageemployee.php?delid=<?php echo htmlentities($result->id);?>"
+                                                onclick="return confirm('Are you sure you want to delete this employee?');">
+                                                <i class="material-icons" title="Delete" style="color: gray">delete</i>
 
-                                        </a>
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                                 <?php $cnt++;} }?>

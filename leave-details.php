@@ -105,20 +105,19 @@ if (strlen($_SESSION['emplogin']) == 0) {
                 $leaveDetails['LeaveType'] = htmlentities($result->LeaveType);
             }
             if (!empty($result->FromDate)) {
-                // Format FromDate to d-m-Y
-                $leaveDetails['FromDate'] = date('d-m-Y', strtotime($result->FromDate));
-                $leaveDetails['FromDateWeekday'] = date('l', strtotime($result->FromDate)); // Get weekday
+                $fromDateTime = new DateTime($result->FromDate);
+                $leaveDetails['FromDate'] = $fromDateTime->format('d-m-Y') . ' (' . $fromDateTime->format('l') . ') - ' . $fromDateTime->format('h:i A');
             }
             if (!empty($result->ToDate)) {
-                // Format ToDate to d-m-Y
-                $leaveDetails['ToDate'] = date('d-m-Y', strtotime($result->ToDate));
-                $leaveDetails['ToDateWeekday'] = date('l', strtotime($result->ToDate)); // Get weekday
+                $toDateTime = new DateTime($result->ToDate);
+                $leaveDetails['ToDate'] = $toDateTime->format('d-m-Y') . ' (' . $toDateTime->format('l') . ') - ' . $toDateTime->format('h:i A');
             }
             if (!empty($result->Description)) {
                 $leaveDetails['Description'] = htmlentities($result->Description);
             }
             if (!empty($result->PostingDate)) {
-                $leaveDetails['PostingDate'] = htmlentities($result->PostingDate);
+                $postingDateTime = new DateTime($result->PostingDate);
+                $leaveDetails['PostingDate'] = $postingDateTime->format('d-m-Y') . ' (' . $postingDateTime->format('l') . ') - ' . $postingDateTime->format('h:i A');
             }
             if (isset($result->Status)) {
                 $leaveDetails['Status'] = (int)$result->Status; // Status can be 0, 1, or 2, so we check if it's set
@@ -129,7 +128,8 @@ if (strlen($_SESSION['emplogin']) == 0) {
                 $leaveDetails['AdminRemark'] = "waiting for Approval"; // Default message if empty
             }
             if (!empty($result->AdminRemarkDate)) {
-                $leaveDetails['AdminRemarkDate'] = htmlentities($result->AdminRemarkDate);
+                $adminRemarkDateTime = new DateTime($result->AdminRemarkDate);
+                $leaveDetails['AdminRemarkDate'] = $adminRemarkDateTime->format('d-m-Y') . ' (' . $adminRemarkDateTime->format('l') . ') - ' . $adminRemarkDateTime->format('h:i A');
             } else {
                 $leaveDetails['AdminRemarkDate'] = "NA"; // Default message if empty
             }

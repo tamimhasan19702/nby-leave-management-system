@@ -104,7 +104,7 @@ if(strlen($_SESSION['alogin'])==0) {
                                     <td><?php echo htmlentities($result->title);?></td>
                                     <td><?php echo htmlentities($result->description);?></td>
                                     <td><?php echo htmlentities($result->file_path);?></td>
-                                    <td><?php echo htmlentities($result->created_at);?></td>
+                                    <td><?php echo date('d-m-Y - h:i A - (l)', strtotime($result->created_at));?></td>
                                     <td>
                                         <a
                                             href="managenotice.php?status=<?php echo htmlentities($result->status);?>&id=<?php echo htmlentities($result->id);?>">
@@ -115,13 +115,15 @@ if(strlen($_SESSION['alogin'])==0) {
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="editnotice.php?noticeid=<?php echo htmlentities($result->id);?>">
-                                            <i class="material-icons">mode_edit</i>
-                                        </a>
-                                        <a href="managenotice.php?del=<?php echo htmlentities($result->id);?>"
-                                            onclick="return confirm('Do you want to delete');">
-                                            <i class="material-icons">delete_forever</i>
-                                        </a>
+                                        <div class="tbl-row">
+                                            <a href="editnotice.php?noticeid=<?php echo htmlentities($result->id);?>">
+                                                <i class="material-icons">mode_edit</i>
+                                            </a>
+                                            <a href="managenotice.php?del=<?php echo htmlentities($result->id);?>"
+                                                onclick="return confirm('Do you want to delete');">
+                                                <i class="material-icons">delete_forever</i>
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                                 <?php 
