@@ -25,7 +25,7 @@ if (strlen($_SESSION['emplogin']) == 0) {
         $fromdate = (new DateTime($fromdate))->format('d-m-Y'); // Format fromdate as d-m-Y
 
         // Create duration string with suffix
-        $durationString = $duration . ' ' . ($duration > 1 ? 'days' : 'day');
+        $durationString = $duration ;
 
         if ($duration <= 0) {
             $error = "Duration must be greater than 0";
@@ -85,59 +85,41 @@ if (strlen($_SESSION['emplogin']) == 0) {
 
     if ($query->rowCount() > 0) {
         foreach ($results as $result) {
-            // Only add values that are available (not null or empty)
-            if (!empty($result->FirstName) && !empty($result->LastName)) {
-                $leaveDetails['EmployeeName'] = htmlentities($result->FirstName . " " . $result->LastName);
-            }
-            if (!empty($result->EmpId)) {
-                $leaveDetails['EmpId'] = htmlentities($result->EmpId);
-            }
-            if (!empty($result->Gender)) {
-                $leaveDetails['Gender'] = htmlentities($result->Gender);
-            }
-            if (!empty($result->EmailId)) {
-                $leaveDetails['EmailId'] = htmlentities($result->EmailId);
-            }
-            if (!empty($result->Phonenumber)) {
-                $leaveDetails['Phonenumber'] = htmlentities($result->Phonenumber);
-            }
-            if (!empty($result->LeaveType)) {
-                $leaveDetails['LeaveType'] = htmlentities($result->LeaveType);
-            }
+            $leaveDetails['EmployeeName'] = !empty($result->FirstName) && !empty($result->LastName) ? htmlentities($result->FirstName . " " . $result->LastName) : null;
+            $leaveDetails['EmpId'] = !empty($result->EmpId) ? htmlentities($result->EmpId) : null;
+            $leaveDetails['Gender'] = !empty($result->Gender) ? htmlentities($result->Gender) : null;
+            $leaveDetails['EmailId'] = !empty($result->EmailId) ? htmlentities($result->EmailId) : null;
+            $leaveDetails['Phonenumber'] = !empty($result->Phonenumber) ? htmlentities($result->Phonenumber) : null;
+            $leaveDetails['LeaveType'] = !empty($result->LeaveType) ? htmlentities($result->LeaveType) : null;
+            
             if (!empty($result->FromDate)) {
                 $fromDateTime = new DateTime($result->FromDate);
-                $leaveDetails['FromDate'] = $fromDateTime->format('d-m-Y') . ' (' . $fromDateTime->format('l') . ') - ' . $fromDateTime->format('h:i A');
+                $leaveDetails['FromDate'] = $fromDateTime->format('d-m-Y') . ' (' . $fromDateTime->format('l') . ')';
             }
+            
             if (!empty($result->ToDate)) {
                 $toDateTime = new DateTime($result->ToDate);
-                $leaveDetails['ToDate'] = $toDateTime->format('d-m-Y') . ' (' . $toDateTime->format('l') . ') - ' . $toDateTime->format('h:i A');
+                $leaveDetails['ToDate'] = $toDateTime->format('d-m-Y') . ' (' . $toDateTime->format('l') . ')';
             }
-            if (!empty($result->Description)) {
-                $leaveDetails['Description'] = htmlentities($result->Description);
-            }
+            
+            $leaveDetails['Description'] = !empty($result->Description) ? htmlentities($result->Description) : null;
+            
             if (!empty($result->PostingDate)) {
                 $postingDateTime = new DateTime($result->PostingDate);
                 $leaveDetails['PostingDate'] = $postingDateTime->format('d-m-Y') . ' (' . $postingDateTime->format('l') . ') - ' . $postingDateTime->format('h:i A');
             }
-            if (isset($result->Status)) {
-                $leaveDetails['Status'] = (int)$result->Status; // Status can be 0, 1, or 2, so we check if it's set
-            }
-            if (!empty($result->AdminRemark)) {
-                $leaveDetails['AdminRemark'] = htmlentities($result->AdminRemark);
-            } else {
-                $leaveDetails['AdminRemark'] = "waiting for Approval"; // Default message if empty
-            }
+            
+            $leaveDetails['Status'] = isset($result->Status) ? (int)$result->Status : null;
+            $leaveDetails['AdminRemark'] = !empty($result->AdminRemark) ? htmlentities($result->AdminRemark) : "waiting for Approval";
+            
             if (!empty($result->AdminRemarkDate)) {
                 $adminRemarkDateTime = new DateTime($result->AdminRemarkDate);
                 $leaveDetails['AdminRemarkDate'] = $adminRemarkDateTime->format('d-m-Y') . ' (' . $adminRemarkDateTime->format('l') . ') - ' . $adminRemarkDateTime->format('h:i A');
             } else {
-                $leaveDetails['AdminRemarkDate'] = "NA"; // Default message if empty
+                $leaveDetails['AdminRemarkDate'] = "NA";
             }
-            if (!empty($result->Duration)) {
-                $leaveDetails['Duration'] = htmlentities($result->Duration);
-            } else {
-                $leaveDetails['Duration'] = "NA";
-            }
+            
+            $leaveDetails['Duration'] = !empty($result->Duration) ? htmlentities($result->Duration) : "NA";
         }
     }
 }

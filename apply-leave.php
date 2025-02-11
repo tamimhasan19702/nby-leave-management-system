@@ -17,10 +17,10 @@ if (strlen($_SESSION['emplogin']) == 0) {
         $phonenumber = $_POST['phonenumber'];
         $status = 0;
         $isread = 0;
-
+    
         // Create DateTime object for FromDate
         $fromDateTime = new DateTime($fromdate);
-
+    
         // Calculate ToDate based on FromDate and Duration
         if ($duration == 1) {
             $todate = $fromDateTime->format('d-m-Y'); // Same as FromDate
@@ -28,42 +28,21 @@ if (strlen($_SESSION['emplogin']) == 0) {
             $fromDateTime->modify("+".($duration - 1)." days"); // Add (duration - 1) days to FromDate
             $todate = $fromDateTime->format('d-m-Y'); // Format as d-m-Y
         }
-
+    
         $fromdate = (new DateTime($fromdate))->format('d-m-Y'); // Format fromdate as d-m-Y
-
-        // Append duration to description
-        $description .= " (Duration: $duration days)";
-
+    
         // Create duration string with suffix
         $durationString = $duration . ' ' . ($duration > 1 ? 'days' : 'day');
-
+    
+        // Check if the description already contains the duration
+        if (strpos($description, 'Duration:') === false) {
+            // Append duration to description only if it's not already included
+            $description .= " (Duration: $durationString)";
+        }
+    
         if ($duration <= 0) {
             $error = "Duration must be greater than 0";
         } else {
-            // Create DateTime object for FromDate
-            $fromDateTime = new DateTime($fromdate);
-            
-            // Get the time from the input
-            $fromTime = $_POST['fromtime'];
-            $fromDateTime->setTime((int)explode(':', $fromTime)[0], (int)explode(':', $fromTime)[1]); // Set the time for FromDate
-        
-            // Calculate ToDate based on FromDate and Duration
-            if ($duration == 1) {
-                // Same as FromDate but set to PM
-                $todate = $fromDateTime->format('d-m-Y') . ' 17:00'; // Set to 5 PM
-            } else {
-                $fromDateTime->modify("+".($duration - 1)." days"); // Add (duration - 1) days to FromDate
-                $todate = $fromDateTime->format('d-m-Y'); // Format as d-m-Y
-            }
-        
-            $fromdate = (new DateTime($fromdate))->format('d-m-Y'); // Format fromdate as d-m-Y
-        
-            // Append duration to description
-            $description .= " (Duration: $duration days)";
-        
-            // Create duration string with suffix
-            $durationString = $duration . ' ' . ($duration > 1 ? 'days' : 'day');
-        
             // Insert into database
             $sql = "INSERT INTO tblleaves (LeaveType, ToDate, FromDate, Description, Status, IsRead, empid, Username, EmailId, Phonenumber, Duration) 
                     VALUES (:leavetype, :todate, :fromdate, :description, :status, :isread, :empid, :username, :emailid, :phonenumber, :duration)";
@@ -83,8 +62,7 @@ if (strlen($_SESSION['emplogin']) == 0) {
             $lastInsertId = $dbh->lastInsertId();
             if ($lastInsertId) {
                 $msg = "Leave applied successfully";
-                // Redirect to leave history page
-                header('location:leavehistory.php');
+                header('location:leavehistory.php'); // Redirect to leave history page
                 exit(); // Ensure no further code is executed after redirection
             } else {
                 $error = "Something went wrong. Please try again";
@@ -205,9 +183,6 @@ if (strlen($_SESSION['emplogin']) == 0) {
                                                 <div class="input-field col s12">
                                                     <span style="font-weight:bold;">Leave Date</span>
                                                     <input id="fromdate" name="fromdate" type="date" required>
-                                                    <span style="font-weight:bold;">Leave Time</span>
-                                                    <input id="fromtime" name="fromtime" type="time" value="09:00"
-                                                        required> <!-- Default to 9 AM -->
                                                 </div>
 
                                                 <div class="input-field col s12">

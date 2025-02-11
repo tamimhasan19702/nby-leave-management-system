@@ -4,6 +4,13 @@ define('DB_HOST','localhost');
 define('DB_USER','root');
 define('DB_PASS','');
 define('DB_NAME','nbyspbnz_elmsdb');
+
+
+// define('DB_HOST','https://premium34.web-hosting.com');
+// define('DB_USER','nbyspbnz_hrm');
+// define('DB_PASS','w;&aI2!Mqs2&');
+// define('DB_NAME','nbyspbnz_elmsdb');
+
 // Establish database connection.
 try
 {

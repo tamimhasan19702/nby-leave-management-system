@@ -262,11 +262,11 @@ if (isset($_POST['update'])) {
                                     <td>
                                         <span style="font-weight:600">From - </span> <?php 
                 $fromDate = htmlentities($result->FromDate);
-                echo date('d-m-Y - h:i A - (l)', strtotime($fromDate)); 
+                echo date('d-m-Y - (l)', strtotime($fromDate)); 
             ?> <span style="font-weight:600"> - To - </span>
                                         <?php  
                 $toDate = htmlentities($result->ToDate);
-                echo date('d-m-Y - h:i A - (l)', strtotime($toDate)); 
+                echo date('d-m-Y - (l)', strtotime($toDate)); 
             ?>
                                     </td>
                                     <td style="font-size:16px;"><b>Posting Date</b></td>

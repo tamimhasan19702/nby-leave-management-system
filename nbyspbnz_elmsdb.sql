@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Feb 05, 2025 at 10:41 PM
--- Server version: 10.6.20-MariaDB-cll-lve
--- PHP Version: 8.3.15
+-- Host: 127.0.0.1
+-- Generation Time: Feb 09, 2025 at 08:05 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -44,7 +44,7 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`id`, `adid`, `FirstName`, `LastName`, `UserName`, `Password`, `EmailId`, `Image`, `updationDate`) VALUES
-(4, 'ad01', 'Md. Babul', 'Hossain', 'Babul123', 'e1d0cc48bbd022ba68ce8d3d457e9afb', 'bablu.pm@gmail.com', 'https://nbyit.com/wp-content/uploads/2019/05/cropped-n-logo-1.png', '2025-01-20 05:07:39'),
+(4, 'ad01', 'Md. Babul', 'Hossain', 'Babul123', 'e1d0cc48bbd022ba68ce8d3d457e9afb', 'bablu.pm@gmail.com', 'https://nbyit.com/wp-content/uploads/2019/05/cropped-n-logo-1.png', '2025-02-06 06:33:35'),
 (6, 'ad02', 'Aeysha', 'Khanom Urmi\r\n', 'Urmi123', 'e1d0cc48bbd022ba68ce8d3d457e9afb', 'hr@nbyit.com', 'https://nbyit.com/wp-content/uploads/2019/05/cropped-n-logo-1.png', '2025-01-22 09:08:27'),
 (7, 'ad03', 'Abdul', 'Kaium', 'Abdul_Kaium', 'e560e7cf33235e0d46bf235c6cd67bb8', 'akaium85@gmail.com', 'https://nbyit.com/wp-content/uploads/2019/05/cropped-n-logo-1.png', '2025-01-27 06:19:57');
 
@@ -60,7 +60,7 @@ CREATE TABLE `complaints` (
   `complaint_title` varchar(255) NOT NULL,
   `complaint` text NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -77,6 +77,7 @@ CREATE TABLE `notices` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `status` enum('0','1') NOT NULL DEFAULT '0',
+  `department_id` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -146,12 +147,8 @@ CREATE TABLE `tblemployeelogs` (
 INSERT INTO `tblemployeelogs` (`id`, `EmpId`, `LogDate`, `LoginTime`, `LogoutTime`, `Timezone`) VALUES
 (6, 49, '2025-01-23', '10:26:31', NULL, 'UTC+6 BST'),
 (7, 43, '2025-01-23', '10:29:18', '10:29:28', 'UTC+6 BST'),
-(10, 6, '2025-01-27', '02:23:42', '02:23:50', 'UTC+6 BST'),
 (13, 41, '2025-01-27', '02:36:27', '02:36:33', 'UTC+6 BST'),
 (14, 12, '2025-01-27', '03:03:59', NULL, 'UTC+6 BST'),
-(15, 6, '2025-01-28', '10:07:31', NULL, 'UTC+6 BST'),
-(16, 6, '2025-01-29', '10:08:11', '05:54:36', 'UTC+6 BST'),
-(17, 6, '2025-01-30', '10:12:15', NULL, 'UTC+6 BST'),
 (18, 39, '2025-02-04', '12:29:43', NULL, 'UTC+6 BST'),
 (19, 40, '2025-02-04', '12:40:42', NULL, 'UTC+6 BST');
 
@@ -179,8 +176,8 @@ CREATE TABLE `tblemployees` (
   `Image` varchar(255) NOT NULL DEFAULT 'https://nbyit.com/wp-content/uploads/2019/05/cropped-n-logo-1.png',
   `Status` int(1) DEFAULT NULL,
   `RegDate` timestamp NULL DEFAULT current_timestamp(),
-  `AnnualLeave` int(11) NOT NULL DEFAULT 0 CHECK (`AnnualLeave` BETWEEN 0 AND 1000),
-  `SickLeave` int(11) NOT NULL DEFAULT 0 CHECK (`SickLeave` BETWEEN 0 AND 1000)
+  `AnnualLeave` int(11) DEFAULT NULL,
+  `SickLeave` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
@@ -196,7 +193,7 @@ INSERT INTO `tblemployees` (`id`, `EmpId`, `FirstName`, `LastName`, `EmailId`, `
 (35, 'nby10', 'Shamim', 'Uddin', 'shamim@nbyit.com', 'e1d0cc48bbd022ba68ce8d3d457e9afb', 'Male', NULL, 'Department of Mimics', 'Village: Gullakhali, P.O : Surjamukhi, P.S :Hatiya, Noakhali.', 'Noakhali', 'Bangladesh', '1787758812', 'shamim', 'https://nbyit.com/wp-content/uploads/2019/05/cropped-n-logo-1.png', 1, '2025-01-22 09:11:22', 22, 7),
 (36, 'nby11', 'MD. Abu', 'Zahed', 'zahed@nbyit.com', 'e1d0cc48bbd022ba68ce8d3d457e9afb', 'Male', NULL, 'Department of Mimics', 'Vill: Nekmorad, P.O: Nekmorad, P.S: Ranisankail, Dist: Thakurgaon', 'Thakurgaon', 'Bangladesh', '1870044821', 'zahed', 'https://nbyit.com/wp-content/uploads/2019/05/cropped-n-logo-1.png', 1, '2025-01-22 09:11:22', 22, 7),
 (37, 'nby12', 'MD. Shahidul', 'Islam', 'shahidul@nbyit.com', 'e1d0cc48bbd022ba68ce8d3d457e9afb', 'Male', NULL, 'Department of Mimics', '18/24 ,East Badda,Koborsthan road, Badda,Dhaka', 'Dhaka', 'Bangladesh', '1914446848', 'shahidul', 'https://nbyit.com/wp-content/uploads/2019/05/cropped-n-logo-1.png', 1, '2025-01-22 09:11:22', 22, 7),
-(38, 'nby13', 'Mst.', 'Afsana', 'afsana@nbyit.com', 'e1d0cc48bbd022ba68ce8d3d457e9afb', 'Female', NULL, 'Department of Mimics', 'Vill: Lalbag Club Mor, Post: Lalbag Club Mor, Kotwali, Dinajpur.', 'Dinajpur', 'Bangladesh', '1719498657', 'afsana', 'https://nbyit.com/wp-content/uploads/2019/05/cropped-n-logo-1.png', 1, '2025-01-22 09:11:22', 22, 7),
+(38, 'nby13', 'Mst.', 'Afsana', 'afsana@nbyit.com', 'e1d0cc48bbd022ba68ce8d3d457e9afb', 'Female', '', 'Department of Mimics', 'Vill: Lalbag Club Mor, Post: Lalbag Club Mor, Kotwali, Dinajpur.', 'Dinajpur', 'Bangladesh', '1719498657', 'afsana', 'https://nbyit.com/wp-content/uploads/2019/05/cropped-n-logo-1.png', 1, '2025-01-22 09:11:22', 22, 7),
 (39, 'nby14', 'Md. Khaza Mainuddin', 'Akram', 'akram@nbyit.com', 'e1d0cc48bbd022ba68ce8d3d457e9afb', 'Male', NULL, 'Department of Mimics', 'Vill: Palishara, P.S: Hazigong, Chandpur', 'Chandpur', 'Bangladesh', '1758132122', 'akram', 'https://nbyit.com/wp-content/uploads/2019/05/cropped-n-logo-1.png', 1, '2025-01-22 09:11:22', 22, 7),
 (40, 'nby15', 'Robiul', 'Islam', 'robiul@nbyit.com', 'e1d0cc48bbd022ba68ce8d3d457e9afb', 'Male', NULL, 'Department of Mimics', 'Village: Bacharigram, Post: Aledabpur, Post code: 6500, Naogoan Sadar, Naogaon', 'Naogaon', 'Bangladesh', '1739467922', 'robiul', 'https://nbyit.com/wp-content/uploads/2019/05/cropped-n-logo-1.png', 1, '2025-01-22 09:11:22', 21, 7),
 (41, 'nby18', 'Raqibul', 'Mia', 'raqib@nbyit.com', 'e1d0cc48bbd022ba68ce8d3d457e9afb', 'Male', '30-06-1998', 'Department of Marketing', 'Sultanpur, Khalilpur, Rajbari Sarad, Rajbari', 'Faridpur', 'Bangladesh', '01768044211', 'Raqib4you', 'https://nbyit.com/wp-content/uploads/2019/05/cropped-n-logo-1.png', 1, '2025-01-22 09:11:22', 22, 7),
@@ -241,7 +238,7 @@ CREATE TABLE `tblleaves` (
 INSERT INTO `tblleaves` (`id`, `LeaveType`, `ToDate`, `FromDate`, `Description`, `PostingDate`, `AdminRemark`, `AdminRemarkDate`, `Status`, `IsRead`, `empid`, `Username`, `EmailId`, `Phonenumber`, `Duration`) VALUES
 (24, 'Annual Leave', '2025-02-09', '2025-02-09', '1 Day Leave', '2025-01-28 10:30:34', '', '2025-02-04 16:36:53', 1, 1, 32, 'sanjid', 'sanjid@nbyit.com', '01580929401', '0 days'),
 (25, 'Annual Leave', '2025-02-10', '2025-02-09', 'i Want to go home thats why i need 1 day leave.', '2025-02-04 06:28:53', '', '2025-02-04 16:37:20', 1, 1, 40, 'robiul', 'robiul@nbyit.com', '1739467922', '1 days'),
-(27, 'Sick Leave', '2025-02-04', '2025-02-03', 'i was sick', '2025-02-05 11:09:00', NULL, NULL, 0, 0, 38, 'afsana', 'afsana@nbyit.com', '1719498657', '1 days');
+(27, 'Sick Leave', '2025-02-03', '2025-02-03', 'i was sick', '2025-02-05 11:09:00', NULL, NULL, 0, 1, 38, 'afsana', 'afsana@nbyit.com', '1719498657', '1 days');
 
 -- --------------------------------------------------------
 
@@ -339,13 +336,13 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `complaints`
 --
 ALTER TABLE `complaints`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `notices`
 --
 ALTER TABLE `notices`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `tasklist`
@@ -363,7 +360,7 @@ ALTER TABLE `tbldepartments`
 -- AUTO_INCREMENT for table `tblemployeelogs`
 --
 ALTER TABLE `tblemployeelogs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `tblemployees`
@@ -375,7 +372,7 @@ ALTER TABLE `tblemployees`
 -- AUTO_INCREMENT for table `tblleaves`
 --
 ALTER TABLE `tblleaves`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `tblleavetype`
