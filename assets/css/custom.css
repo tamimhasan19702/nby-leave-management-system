@@ -429,3 +429,10 @@ strong {
 }
 
 /*# sourceMappingURL=custom.css.map */
+
+.comp-button {
+  display: flex;
+  justify-content: start;
+  gap: 50px;
+  flex-direction: row;
+}

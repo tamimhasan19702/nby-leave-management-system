@@ -53,8 +53,30 @@ if(strlen($_SESSION['alogin'])==0) {
             <li class="no-padding"><a class="waves-effect waves-grey" href="employeelogs.php"><i
                         class="material-icons">login</i>Employee Logs</a></li>
 
-            <li class="no-padding"><a class="waves-effect waves-grey" href="complains.php"><i
-                        class="material-icons">notes</i>All Complains</a></li>
+            <?php 
+$complains = "SELECT id, empid, complaint_title, complaint, created_at, isread FROM complaints";
+$complainsQuery = $dbh->prepare($complains);
+$complainsQuery->execute();
+$complainsResult = $complainsQuery->fetchAll(PDO::FETCH_ASSOC);
+$today = date('Y-m-d');
+$newComplain = 0;
+
+// Count new complaints with isread = 0
+foreach ($complainsResult as $complain) {
+    if (date('Y-m-d', strtotime($complain['created_at'])) == $today && $complain['isread'] == 0) {
+        $newComplain++;
+    }
+}
+
+// Show the new complaint banner if there are new complaints
+if ($newComplain > 0) {
+    echo '<li class="no-padding"><a class="waves-effect waves-grey" href="complains.php"><i class="material-icons">notes</i>All Complains
+        <span class="badge red white-text">'.$newComplain.' New</span>
+    </a></li>';
+} else {
+    echo '<li class="no-padding"><a class="waves-effect waves-grey" href="complains.php"><i class="material-icons">notes</i>All Complains</a></li>';
+}
+?>
 
             <li class="no-padding">
                 <a class="collapsible-header waves-effect waves-grey"><i class="material-icons">desktop_windows</i>Leave

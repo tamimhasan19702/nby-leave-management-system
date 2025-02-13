@@ -43,7 +43,7 @@ if (strlen($_SESSION['alogin']) == 0) {
                 $deleteQuery = $dbh->prepare($deleteSql);
                 $deleteQuery->bindParam(':id', $complaintId, PDO::PARAM_INT);
                 if ($deleteQuery->execute()) {
-                    echo "<script>alert('Complaint deleted successfully.');</script>";
+                    echo "<script>alert('Complaint deleted successfully.'); window.location.href='complains.php'</script>";
                 } else {
                     echo "<script>alert('Error deleting complaint.');</script>";
                 }
@@ -83,10 +83,53 @@ if (strlen($_SESSION['alogin']) == 0) {
                             <td><?php echo htmlentities($result->complaint); ?></td>
                             <td><?php echo date('d-m-Y - h:i A - l', strtotime($result->created_at)); ?></td>
                             <td>
-                                <a href="?cid=<?php echo $result->id; ?>"
-                                    onclick="return confirm('Do you really want to delete this complaint?');">
-                                    <i class="material-icons" style="color: red;">delete_forever</i>
-                                </a>
+                                <div class="comp-button">
+                                    <a href="?cid=<?php echo $result->id; ?>"
+                                        onclick="return confirm('Do you really want to delete this complaint?');">
+                                        <i class="material-icons" style="color: red;">delete_forever</i>
+                                    </a>
+
+
+                                    <?php 
+// Assuming you have a database connection in $dbh
+
+$complainId = $result->id;
+
+// Check if the action is set in the URL
+if (isset($_GET['action']) && $_GET['action'] === 'mark-read' && isset($_GET['cid'])) {
+    $cid = $_GET['cid'];
+
+    // Update the read status in the database
+    $updateReadStatus = "UPDATE complaints SET isread = 1 WHERE id = :id";
+    $updateQuery = $dbh->prepare($updateReadStatus);
+    $updateQuery->bindParam(':id', $cid, PDO::PARAM_INT);
+    
+    if ($updateQuery->execute()) {
+        // Redirect back to the same page after updating
+        header("Location: " . $_SERVER['PHP_SELF']);
+        exit();
+    } else {
+        // Handle the error if the update fails
+        echo "Error updating read status.";
+    }
+}
+
+// Determine the current read status
+$complainIsRead = "SELECT isread FROM complaints WHERE id = :id";
+$complainsQuery = $dbh->prepare($complainIsRead);
+$complainsQuery->bindParam(':id', $complainId, PDO::PARAM_INT);
+$complainsQuery->execute();
+$complainStatus = $complainsQuery->fetch(PDO::FETCH_ASSOC);
+
+// Display the button to mark as read
+?>
+
+                                    <a href="?cid=<?php echo $complainId; ?>&action=mark-read"
+                                        class="waves-effect waves-light btn blue">
+                                        <i class="material-icons">done</i> Mark as Read
+                                    </a>
+
+                                </div>
                             </td>
                         </tr>
                         <?php 
