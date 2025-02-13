@@ -63,7 +63,8 @@ if (strlen($_SESSION['emplogin']) == 0) {
                    tblemployees.EmpId, 
                    tblemployees.Gender, 
                    tblemployees.Phonenumber, 
-                   tblemployees.EmailId, 
+                   tblemployees.EmailId,
+                   tblemployees.Image, 
                    tblleaves.LeaveType, 
                    tblleaves.ToDate, 
                    tblleaves.FromDate, 
@@ -91,6 +92,7 @@ if (strlen($_SESSION['emplogin']) == 0) {
             $leaveDetails['EmailId'] = !empty($result->EmailId) ? htmlentities($result->EmailId) : null;
             $leaveDetails['Phonenumber'] = !empty($result->Phonenumber) ? htmlentities($result->Phonenumber) : null;
             $leaveDetails['LeaveType'] = !empty($result->LeaveType) ? htmlentities($result->LeaveType) : null;
+            $leaveDetails['Image'] = !empty($result->Image) ? htmlentities($result->Image) : null;
             
             if (!empty($result->FromDate)) {
                 $fromDateTime = new DateTime($result->FromDate);
@@ -179,6 +181,10 @@ if (strlen($_SESSION['emplogin']) == 0) {
                         <?php if (isset($msg) && $msg) { ?>
                         <div class="succWrap"><strong>SUCCESS</strong> : <?php echo htmlentities($msg); ?> </div>
                         <?php } ?>
+                        <div style="margin-bottom: 20px;">
+                            <img src="<?php echo $leaveDetails['Image'] ?? 'N/A'; ?>" alt="Employee Image"
+                                style="width: 100px; height: auto;">
+                        </div>
                         <table id="example" class="display responsive-table ">
                             <tbody>
                                 <tr>

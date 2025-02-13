@@ -193,6 +193,7 @@ if (isset($_POST['update'])) {
                    tblemployees.EmailId,
                    tblemployees.AnnualLeave,
                    tblemployees.SickLeave,
+                   tblemployees.Image,
                    tblleaves.LeaveType,
                    tblleaves.ToDate,
                    tblleaves.FromDate,
@@ -218,9 +219,9 @@ if (isset($_POST['update'])) {
     <main class="mn-inner">
         <div class="row">
 
-            <div class="col s12 nby-view-profile">
+            <div class="col s12 ">
                 <h1 class="nby-title">Leave Details</h1>
-                <a href="viewprofile.php?empid=<?php echo htmlentities($result->id); ?>" class="btn">View Profile</a>
+
             </div>
 
             <div class="col s12 m12 l12">
@@ -231,6 +232,12 @@ if (isset($_POST['update'])) {
                             <?php echo htmlentities($msg); ?> </div><?php }?>
                         <table id="example" class="display responsive-table ">
 
+                            <div class="nby-view-profile" style="margin-bottom: 20px;">
+                                <img src="<?php echo $result->Image ? $result->Image : 'N/A'; ?>" alt="Employee Image"
+                                    style="width: 100px; height: auto; ">
+                                <a href="viewprofile.php?empid=<?php echo htmlentities($result->id); ?>"
+                                    class="btn">View Profile</a>
+                            </div>
 
                             <tbody>
 
