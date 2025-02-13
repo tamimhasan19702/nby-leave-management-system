@@ -182,12 +182,21 @@ if (strlen($_SESSION['emplogin']) == 0) {
 
                                                 <div class="input-field col s12">
                                                     <span style="font-weight:bold;">Leave Date</span>
-                                                    <input id="fromdate" name="fromdate" type="date" required>
+                                                    <input id="fromdate" name="fromdate" type="date" required
+                                                        onchange="calculateToDate()">
+                                                    <div id="fromdate-weekday" style="font-weight:bold;"></div>
                                                 </div>
 
                                                 <div class="input-field col s12">
                                                     <span style="font-weight:bold;">Duration (in days)</span>
-                                                    <input id="duration" name="duration" type="number" min="1" required>
+                                                    <input id="duration" name="duration" type="number" min="1" required
+                                                        oninput="calculateToDate()">
+                                                </div>
+
+                                                <div class="input-field col s12">
+                                                    <span style="font-weight:bold;">To Date</span>
+                                                    <input id="todate" name="todate" type="date" readonly>
+                                                    <div id="todate-weekday" style="font-weight:bold;"></div>
                                                 </div>
 
                                                 <div class="input-field col m12 s12">
@@ -210,6 +219,47 @@ if (strlen($_SESSION['emplogin']) == 0) {
         </div>
     </main>
     <div class="left-sidebar-hover"></div>
+
+
+    <script>
+    function calculateToDate() {
+        const fromDateInput = document.getElementById('fromdate');
+        const durationInput = document.getElementById('duration');
+        const toDateInput = document.getElementById('todate');
+
+        const fromDate = new Date(fromDateInput.value);
+        const duration = parseInt(durationInput.value, 10);
+
+        // Display the weekday for the From Date
+        displayWeekday(fromDate, 'fromdate-weekday');
+
+        if (!isNaN(fromDate) && duration > 0) {
+            // Calculate the To Date
+            const toDate = new Date(fromDate);
+            toDate.setDate(fromDate.getDate() + duration - 1);
+
+            // Set the value of the To Date input
+            toDateInput.value = toDate.toISOString().split('T')[0]; // Format to YYYY-MM-DD
+
+            // Display the weekday for the To Date
+            displayWeekday(toDate, 'todate-weekday');
+        } else {
+            // Clear the To Date and its weekday if inputs are invalid
+            toDateInput.value = '';
+            document.getElementById('todate-weekday').innerText = '';
+        }
+    }
+
+    function displayWeekday(date, elementId) {
+        if (!isNaN(date)) {
+            const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            const weekday = weekdays[date.getDay()];
+            document.getElementById(elementId).innerText = `Selected Day: ${weekday}`;
+        } else {
+            document.getElementById(elementId).innerText = '';
+        }
+    }
+    </script>
 
     <!-- Javascripts -->
     <script src="assets/plugins/jquery/jquery-2.2.0.min.js"></script>

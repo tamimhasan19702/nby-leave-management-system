@@ -3,13 +3,12 @@ session_start();
 error_reporting(0);
 include('includes/config.php');
 
-if(strlen($_SESSION['alogin'])==0) {   
+if (strlen($_SESSION['alogin']) == 0) {
     header('location:index.php');
 } else {
-    
     $adminUsername = $_SESSION['alogin']; // Assuming this is the username stored in session
     $sql = "SELECT id, UserName, EmailId, Image, FirstName, LastName, adid, updationDate FROM admin WHERE UserName = :username";
-    
+
     $query = $dbh->prepare($sql);
     $query->bindParam(':username', $adminUsername, PDO::PARAM_STR);
     $query->execute();
@@ -28,40 +27,6 @@ if(strlen($_SESSION['alogin'])==0) {
     } else {
         // Handle case where no admin info is found
         $errorMessage = "No admin information found.";
-    }
-
-    // Handle image link update
-    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['imageLink'])) {
-        $newImageLink = $_POST['imageLink'];
-        
-        // Update the image link in the database
-        $updateSql = "UPDATE admin SET Image = :image WHERE UserName = :username";
-        $updateQuery = $dbh->prepare($updateSql);
-        $updateQuery->bindParam(':image', $newImageLink, PDO::PARAM_STR);
-        $updateQuery->bindParam(':username', $adminUsername, PDO::PARAM_STR);
-        
-        if ($updateQuery->execute()) {
-            $successMessage = "Image updated successfully!";
-            $image = $newImageLink; // Update the image variable for preview
-        } else {
-            $errorMessage = "Failed to update image.";
-        }
-    }
-
-    // Handle image removal
-    if (isset($_POST['removeImage'])) {
-        $defaultImage = '../assets/images/default.png'; // Path to your default image
-        $updateSql = "UPDATE admin SET Image = :image WHERE UserName = :username";
-        $updateQuery = $dbh->prepare($updateSql);
-        $updateQuery->bindParam(':image', $defaultImage, PDO::PARAM_STR);
-        $updateQuery->bindParam(':username', $adminUsername, PDO::PARAM_STR);
-        
-        if ($updateQuery->execute()) {
-            $successMessage = "Image removed successfully!";
-            $image = $defaultImage; // Update the image variable for preview
-        } else {
-            $errorMessage = "Failed to remove image.";
-        }
     }
 
     // Handle profile update
@@ -99,6 +64,57 @@ if(strlen($_SESSION['alogin'])==0) {
             }
         }
     }
+
+    // Handle profile image upload
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['profileImage'])) {
+        // FTP connection details
+        $ftp_server = "premium34.web-hosting.com";
+        $ftp_username = "tareq@nbyit.com";
+        $ftp_password = "tamim19702021";
+
+        // File details
+        $file = $_FILES['profileImage'];
+        $fileName = basename($file['name']);
+        $tempFilePath = $file['tmp_name'];
+
+        // Connect to FTP server
+        $conn_id = ftp_connect($ftp_server);
+        if (!$conn_id) {
+            die("Couldn't connect to $ftp_server");
+        }
+
+        // Login to FTP server
+        if (@ftp_login($conn_id, $ftp_username, $ftp_password)) {
+            // Upload file to FTP server
+            $remoteFilePath = "/hrm.nbysoft.com/admin/assets/uploads/" . $fileName;
+            if (ftp_put($conn_id, $remoteFilePath, $tempFilePath, FTP_BINARY)) {
+                // Construct the image URL
+                $imageUrl = "https://hrm.nbysoft.com/admin/assets/uploads/" . $fileName;
+
+                // Update the Image field in the database
+                $updateImageSql = "UPDATE admin SET Image = :imageUrl WHERE UserName = :username";
+                $updateImageQuery = $dbh->prepare($updateImageSql);
+                $updateImageQuery->bindParam(':imageUrl', $imageUrl, PDO::PARAM_STR);
+                $updateImageQuery->bindParam(':username', $adminUsername, PDO::PARAM_STR);
+
+                if ($updateImageQuery->execute()) {
+                    // Redirect to the same page to refresh
+                    header("Location: " . $_SERVER['PHP_SELF']);
+                    exit();
+                } else {
+                    echo "<div class='errorWrap'>Failed to update the Image URL in the database.</div>";
+                }
+            } else {
+                echo "<div class='errorWrap'>Failed to upload file.</div>";
+            }
+        } else {
+            echo "<div class='errorWrap'>FTP login failed.</div>";
+        }
+
+        // Close FTP connection
+        ftp_close($conn_id);
+    }
+
 ?>
 
 <!DOCTYPE html>
@@ -215,18 +231,17 @@ if(strlen($_SESSION['alogin'])==0) {
                     <img id="profileImage" src="<?php echo htmlentities($image); ?>" alt="Profile Image"
                         style="width: 200px; height: auto;" />
                 </p>
-                <form method="post" action="">
+
+
+
+                <form method="post" action="" enctype="multipart/form-data">
                     <div class="nby-input-field">
-                        <label for="imageLink">Image Link</label>
-                        <input type="text" id="imageLink" name="imageLink" placeholder="Enter image URL"
-                            value="<?php echo htmlentities($image); ?>" required>
+                        <label for="profileImage">Upload Profile Image</label>
+                        <input type="file" name="profileImage" accept="image/*" required>
                     </div>
                     <button type="submit" class="waves-effect waves-light btn">Update Image</button>
                 </form>
-                <form method="post" action="" style="margin-top: 20px;">
-                    <button type="submit" name="removeImage" class="waves-effect waves-light btn red">Remove
-                        Image</button>
-                </form>
+
             </div>
 
             <?php if (isset($successMessage)): ?>

@@ -24,12 +24,11 @@ if(strlen($_SESSION['alogin'])==0) {
         $annualLeave = $_POST['annual_leave'];
         $sickLeave = $_POST['sick_leave'];
 
-        // Get the profile picture link
-        $imageData = isset($_POST['profilepic']) && !empty($_POST['profilepic']) ? $_POST['profilepic'] : '../assets/images/NBY_IT_SOLUTION_LOGO_SYMBLE-removebg-preview.png'; // Set your default image link here
+        
 
         // Updated SQL query to include Image
-        $sql = "INSERT INTO tblemployees(EmpId, FirstName, LastName, EmailId, Username, Password, Gender, Dob, Department, Address, City, Country, Phonenumber, Status, Image) 
-                VALUES(:empid, :fname, :lname, :email, :username, :password, :gender, :dob, :department, :address, :city, :country, :mobileno, :status, :image)";
+        $sql = "INSERT INTO tblemployees(EmpId, FirstName, LastName, EmailId, Username, Password, Gender, Dob, Department, Address, City, Country, Phonenumber, Status) 
+                VALUES(:empid, :fname, :lname, :email, :username, :password, :gender, :dob, :department, :address, :city, :country, :mobileno, :status )";
         $query = $dbh->prepare($sql);
         $query->bindParam(':empid', $empid, PDO::PARAM_STR);
         $query->bindParam(':fname', $fname, PDO::PARAM_STR);
@@ -45,7 +44,7 @@ if(strlen($_SESSION['alogin'])==0) {
         $query->bindParam(':country', $country, PDO::PARAM_STR);
         $query->bindParam(':mobileno', $mobileno, PDO::PARAM_STR);
         $query->bindParam(':status', $status, PDO::PARAM_STR);
-        $query->bindParam(':image', $imageData, PDO::PARAM_STR);
+       
         $query->execute();
         $lastInsertId = $dbh->lastInsertId();
         if($lastInsertId) {
@@ -172,49 +171,6 @@ if(strlen($_SESSION['alogin'])==0) {
 
 
 
-                                                    <div class="input-field col s12">
-                                                        <span style="font-weight: bold" for="profilepic">Profile Picture
-                                                            Link</span>
-                                                        <div id="image-preview"></div>
-                                                        <input name="profilepic" id="profilepic" type="text"
-                                                            class="validate" onchange="checkImageLink(this.value)">
-                                                        <span id="profilepic-availability"
-                                                            style="font-size:12px;"></span>
-                                                        <button type="button" onclick="previewImage()"
-                                                            class="waves-effect waves-light btn indigo m-b-xs">Preview
-                                                            Image</button>
-                                                        <button type="button" onclick="removeImage()"
-                                                            class="waves-effect waves-light btn red m-b-xs">Remove
-                                                            Image</button>
-                                                    </div>
-
-                                                    <script>
-                                                    function checkImageLink(link) {
-                                                        var img = new Image();
-                                                        img.onload = function() {
-                                                            $("#profilepic-availability").html("");
-                                                        };
-                                                        img.onerror = function() {
-                                                            $("#profilepic-availability").html(
-                                                                "<span style='color:red'>Warning: This image link is not accessible</span>"
-                                                            );
-                                                        };
-                                                        img.src = link;
-                                                    }
-
-                                                    function previewImage() {
-                                                        var link = document.getElementById('profilepic').value;
-                                                        var imgHtml = '<img src="' + link +
-                                                            '" alt="Image Preview" style="width: 100px; height: auto;">';
-                                                        document.getElementById('image-preview').innerHTML = imgHtml;
-                                                    }
-
-                                                    function removeImage() {
-                                                        document.getElementById('profilepic').value = '';
-                                                        document.getElementById('image-preview').innerHTML = '';
-                                                        $("#profilepic-availability").html("");
-                                                    }
-                                                    </script>
 
 
 

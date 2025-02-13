@@ -16,7 +16,7 @@ $eid = $_SESSION['eid'];
 $successMessage = "";
 
 // Handle form submission for updating profile
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['editProfile'])) {
     // Get the updated values from the form
     $firstName = $_POST['firstName'];
     $lastName = $_POST['lastName'];
@@ -28,37 +28,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $city = $_POST['city'];
     $country = $_POST['country'];
     $phoneNumber = $_POST['phoneNumber'];
-    $profileImage = $_POST['profileImage']; // Get the new profile image link
 
-    // Prepare the SQL statement to update employee details
-    $updateSql = "UPDATE tblemployees SET FirstName = :firstName, LastName = :lastName, EmailId = :emailId, 
-                  Username = :username, Dob = :dob, Department = :department, Address = :address, 
-                  City = :city, Country = :country, Phonenumber = :phoneNumber, Image = :profileImage 
-                  WHERE id = :eid";
+    // Prepare the SQL statement to update the employee details
+    $sql = "UPDATE tblemployees 
+            SET FirstName = :firstName, LastName = :lastName, EmailId = :emailId, Username = :username, Dob = :dob, 
+            Department = :department, Address = :address, City = :city, Country = :country, Phonenumber = :phoneNumber 
+            WHERE id = :eid";
 
-    $updateQuery = $dbh->prepare($updateSql);
-    $updateQuery->bindParam(':firstName', $firstName);
-    $updateQuery->bindParam(':lastName', $lastName);
-    $updateQuery->bindParam(':emailId', $emailId);
-    $updateQuery->bindParam(':username', $username); // Bind the username
-    $updateQuery->bindParam(':dob', $dob); // Bind the date of birth
-    $updateQuery->bindParam(':department', $department);
-    $updateQuery->bindParam(':address', $address);
-    $updateQuery->bindParam(':city', $city);
-    $updateQuery->bindParam(':country', $country);
-    $updateQuery->bindParam(':phoneNumber', $phoneNumber);
-    $updateQuery->bindParam(':profileImage', $profileImage); // Bind the profile image link
-    $updateQuery->bindParam(':eid', $eid, PDO::PARAM_INT);
-    
-    if ($updateQuery->execute()) {
-        $successMessage = "Profile updated successfully!";
-    } else {
-        echo "<div class='errorWrap'>Error updating profile. Please try again.</div>";
-    }
+    $query = $dbh->prepare($sql);
+    $query->bindParam(':eid', $eid, PDO::PARAM_INT);
+    $query->bindParam(':firstName', $firstName, PDO::PARAM_STR);
+    $query->bindParam(':lastName', $lastName, PDO::PARAM_STR);
+    $query->bindParam(':emailId', $emailId, PDO::PARAM_STR);
+    $query->bindParam(':username', $username, PDO::PARAM_STR);
+    $query->bindParam(':dob', $dob, PDO::PARAM_STR);
+    $query->bindParam(':department', $department, PDO::PARAM_STR);
+    $query->bindParam(':address', $address, PDO::PARAM_STR);
+    $query->bindParam(':city', $city, PDO::PARAM_STR);
+    $query->bindParam(':country', $country, PDO::PARAM_STR);
+    $query->bindParam(':phoneNumber', $phoneNumber, PDO::PARAM_STR);
+
+    // Execute the query
+    $query->execute();
+
+    // Display a success message
+    $successMessage = "Profile updated successfully.";
 }
 
 // Prepare the SQL statement to fetch employee details
-$sql = "SELECT EmpId, FirstName, LastName, EmailId, Gender, Dob, Department, Address, City, Country, Phonenumber, Username, Image 
+$sql = "SELECT EmpId, FirstName, LastName, EmailId, Gender, Dob, Department, Address, City, Country, Phonenumber, Username 
         FROM tblemployees 
         WHERE id = :eid";
 
@@ -83,12 +81,66 @@ if ($result) {
     $country = $result->Country;
     $phoneNumber = $result->Phonenumber;
     $username = $result->Username;
-    $image = $result->Image;
+
 } else {
     echo "No employee found with the given ID.";
 }
-?>
 
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['profileImage'])) {
+    // FTP connection details
+    $ftp_server = "premium34.web-hosting.com";
+    $ftp_username = "tareq@nbyit.com";
+    $ftp_password = "tamim19702021";
+
+    // File details
+    $file = $_FILES['profileImage'];
+    $fileName = basename($file['name']);
+    $tempFilePath = $file['tmp_name'];
+
+    // Connect to FTP server
+    $conn_id = ftp_connect($ftp_server);
+    if (!$conn_id) {
+        die("Couldn't connect to $ftp_server");
+    }
+
+    // Login to FTP server
+    if (@ftp_login($conn_id, $ftp_username, $ftp_password)) {
+        // Upload file to FTP server
+        $remoteFilePath = "/hrm.nbysoft.com/assets/uploads/" . $fileName;
+        if (ftp_put($conn_id, $remoteFilePath, $tempFilePath, FTP_BINARY)) {
+            // Construct the image URL
+            $imageUrl = "https://hrm.nbysoft.com/assets/uploads/" . $fileName;
+
+            // Update the Image field in the database
+            $updateImageSql = "UPDATE tblemployees SET Image = :imageUrl WHERE id = :eid";
+            $updateImageQuery = $dbh->prepare($updateImageSql);
+            $updateImageQuery->bindParam(':imageUrl', $imageUrl, PDO::PARAM_STR);
+            $updateImageQuery->bindParam(':eid', $eid, PDO::PARAM_INT);
+
+            if ($updateImageQuery->execute()) {
+                // Redirect to the same page to refresh
+                header("Location: " . $_SERVER['PHP_SELF']);
+                exit();
+            } else {
+                echo "<div class='errorWrap'>Failed to update the Image URL in the database.</div>";
+            }
+        } else {
+            echo "<div class='errorWrap'>Failed to upload file.</div>";
+        }
+    } else {
+        echo "<div class='errorWrap'>FTP login failed.</div>";
+    }
+
+    // Close FTP connection
+    ftp_close($conn_id);
+}
+
+
+
+
+
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -122,6 +174,11 @@ if ($result) {
     .modal-success {
         display: none;
     }
+
+    #imagePreview {
+        width: 200px;
+        height: auto;
+    }
     </style>
 </head>
 
@@ -135,6 +192,15 @@ if ($result) {
                 <h1 class="nby-title">Profile</h1>
                 <img style="width: 200px; height: auto;" class="nby-img" src="<?php echo $image; ?>"
                     alt="<?php echo $firstName . ' ' . $lastName; ?>">
+
+                <form action="" method="post" enctype="multipart/form-data">
+                    <div class="nby-input-field">
+                        <label for="profileImage">Upload Profile Image</label>
+                        <input type="file" name="profileImage" accept="image/*" required>
+                    </div>
+
+                    <button type="submit" name="uploadImage" class="waves-effect waves-light btn">Upload</button>
+                </form>
             </div>
         </div>
 
@@ -200,14 +266,9 @@ if ($result) {
         <div id="editModal" class="modal">
             <div class="modal-content">
                 <h4 class="nby-modal-title">Edit Profile</h4>
-                <form method="post" action="">
+                <form method="post" action="" enctype="multipart/form-data">
                     <input type="hidden" name="eid" value="<?php echo htmlentities($eid); ?>">
-                    <div class="nby-input-field">
-                        <label for="profileImage">Profile Picture Link</label>
-                        <input type="url" name="profileImage" id="profileImage"
-                            value="<?php echo htmlentities($image); ?>" required class="short-input"
-                            oninput="previewImage()">
-                    </div>
+
                     <div class="nby-input-field">
                         <label for="firstName">First Name</label>
                         <input type="text" name="firstName" value="<?php echo htmlentities($firstName); ?>" required
@@ -259,13 +320,12 @@ if ($result) {
                             class="short-input">
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="waves-effect waves-light btn">Update</button>
+                        <button type="submit" name="editProfile" class="waves-effect waves-light btn">Update</button>
                         <a href="#!" class="modal-close waves-effect waves-red btn-flat">Cancel</a>
                     </div>
                 </form>
             </div>
         </div>
-
 
         <script>
         function previewImage() {
@@ -279,11 +339,12 @@ if ($result) {
             // Create a new Image object to check if the URL is valid
             const img = new Image();
             img.onload = function() {
-                // If the image loads successfully, set the preview
+                console.log('Image loaded successfully:', imageUrl);
                 imagePreview.src = imageUrl;
+                imagePreview.style.display = 'block'; // Show the image
             };
             img.onerror = function() {
-                // If the image fails to load, show an error message
+                console.error('Image failed to load:', imageUrl);
                 imageError.style.display = 'block';
                 imagePreview.src = ''; // Clear the preview
             };
@@ -300,14 +361,6 @@ if ($result) {
         <script>
         $(document).ready(function() {
             $('.modal').modal();
-
-            // Show success modal if there is a success message
-            <?php if (!empty($successMessage)): ?>
-            $('#successModal').modal('open'); // Open the success modal
-            setTimeout(function() {
-                $('#successModal').modal('close'); // Close after 3 seconds
-            }, 3000); // Close after 3 seconds
-            <?php endif; ?>
         });
         </script>
 
