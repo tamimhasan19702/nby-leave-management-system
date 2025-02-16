@@ -21,7 +21,7 @@ if (isset($_GET['compid']) && is_numeric($_GET['compid'])) {
 
     if ($complaint) {
         // Toggle the isread status
-        $newStatus = ($complaint['isread'] == 1) ? 0 : 1; // Toggle between 0 and 1
+        $newStatus = ($complaint['isread'] == 0) ? 1 : 0; // Toggle between 0 and 1
 
         // Prepare the SQL statement to update the isread status
         $updateQuery = "UPDATE complaints SET isread = :status WHERE id = :compid";

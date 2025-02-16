@@ -100,13 +100,13 @@ $stmt->execute();
 $isread = $stmt->fetchColumn();
 ?>
 
-                                    <?php if($isread == 0): ?>
+                                    <?php if($isread == 1): ?>
                                     <a href="markasread.php?compid=<?php echo $result->id; ?>"
                                         class="waves-effect waves-light btn blue"
                                         style="background-color: Green !important;">
                                         <i class="material-icons">done</i> Mark as Read
                                     </a>
-                                    <?php elseif($isread == 1): ?>
+                                    <?php elseif($isread == 0): ?>
                                     <a href="markasread.php?compid=<?php echo $result->id; ?>"
                                         class="waves -effect waves-light btn blue">
                                         <i class="material-icons">done</i> Mark as Unread

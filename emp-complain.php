@@ -143,6 +143,7 @@ $results = $query->fetchAll(PDO::FETCH_OBJ);
                                     <th>Complaint</th>
                                     <th>Created At</th>
                                     <th>Action</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -153,19 +154,27 @@ $results = $query->fetchAll(PDO::FETCH_OBJ);
                                 <tr>
                                     <td style="width: 5%"><?php echo $count++; ?></td>
                                     <td style="width: 25%"><?php echo htmlentities($result->complaint_title); ?></td>
-                                    <td style="width: 45%">
+                                    <td style="width: 35%">
                                         <?php echo htmlentities($result->complaint); ?>
                                     </td>
-                                    <td style="width: 20%">
+                                    <td style="width: 15%">
                                         <?php echo date('d-m-Y - h:i A - (l)', strtotime($result->created_at)); ?>
                                     </td>
-                                    <td style="width: 10%">
+
+                                    <td style="width: 20%">
+                                        <p style="color: <?php echo ($result->isread == 1) ? 'green' : 'red'; ?>">
+                                            <?php echo ($result->isread == 1) ? 'Noticed By Admin' : 'Unnoticed'; ?></p>
+                                    </td>
+
+                                    <td style="width: 5%">
                                         <a href="emp-complain.php?id=<?php echo $result->id; ?>"
                                             class="waves-effect waves-light btn red"
                                             onclick="return confirm('Are you sure you want to delete this complaint?');">
                                             <i class="material-icons">delete</i>
                                         </a>
                                     </td>
+
+
                                 </tr>
                                 <?php }
                         } else { ?>

@@ -40,6 +40,10 @@
                         class="material-icons">settings_input_svideo</i>Dashboard</a></li>
             <li class="no-padding"><a class="waves-effect waves-grey" href="profile.php"><i
                         class="material-icons">account_box</i>My Profile</a></li>
+
+            <li class="no-padding"><a class="waves-effect waves-grey" href="emp-complain.php"><i
+                        class="material-icons">question_answer</i>Complain Form</a></li>
+
             <li class="no-padding"><a class="waves-effect waves-grey" href="emp-changepassword.php"><i
                         class="material-icons">logout</i>Change Password</a></li>
             <li class="no-padding">
@@ -66,8 +70,7 @@
                 </div>
             </li>
 
-            <li class="no-padding"><a class="waves-effect waves-grey" href="emp-complain.php"><i
-                        class="material-icons">question_answer</i>Complain Form</a></li>
+
 
 
             <li class="no-padding">
