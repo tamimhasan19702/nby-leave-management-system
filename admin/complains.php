@@ -90,44 +90,28 @@ if (strlen($_SESSION['alogin']) == 0) {
                                     </a>
 
 
+
                                     <?php 
-// Assuming you have a database connection in $dbh
-
-$complainId = $result->id;
-
-// Check if the action is set in the URL
-if (isset($_GET['action']) && $_GET['action'] === 'mark-read' && isset($_GET['cid'])) {
-    $cid = $_GET['cid'];
-
-    // Update the read status in the database
-    $updateReadStatus = "UPDATE complaints SET isread = 1 WHERE id = :id";
-    $updateQuery = $dbh->prepare($updateReadStatus);
-    $updateQuery->bindParam(':id', $cid, PDO::PARAM_INT);
-    
-    if ($updateQuery->execute()) {
-        // Redirect back to the same page after updating
-        header("Location: " . $_SERVER['PHP_SELF']);
-        exit();
-    } else {
-        // Handle the error if the update fails
-        echo "Error updating read status.";
-    }
-}
-
-// Determine the current read status
-$complainIsRead = "SELECT isread FROM complaints WHERE id = :id";
-$complainsQuery = $dbh->prepare($complainIsRead);
-$complainsQuery->bindParam(':id', $complainId, PDO::PARAM_INT);
-$complainsQuery->execute();
-$complainStatus = $complainsQuery->fetch(PDO::FETCH_ASSOC);
-
-// Display the button to mark as read
+$compid = $result->id;
+$statusQuery = "SELECT isread FROM complaints WHERE id = :compid";
+$stmt = $dbh->prepare($statusQuery);
+$stmt->bindParam(':compid', $compid, PDO::PARAM_INT);
+$stmt->execute();
+$isread = $stmt->fetchColumn();
 ?>
 
-                                    <a href="?cid=<?php echo $complainId; ?>&action=mark-read"
-                                        class="waves-effect waves-light btn blue">
+                                    <?php if($isread == 0): ?>
+                                    <a href="markasread.php?compid=<?php echo $result->id; ?>"
+                                        class="waves-effect waves-light btn blue"
+                                        style="background-color: Green !important;">
                                         <i class="material-icons">done</i> Mark as Read
                                     </a>
+                                    <?php elseif($isread == 1): ?>
+                                    <a href="markasread.php?compid=<?php echo $result->id; ?>"
+                                        class="waves -effect waves-light btn blue">
+                                        <i class="material-icons">done</i> Mark as Unread
+                                    </a>
+                                    <?php endif; ?>
 
                                 </div>
                             </td>
