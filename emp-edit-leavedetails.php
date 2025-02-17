@@ -6,34 +6,39 @@ include('includes/config.php');
 if (strlen($_SESSION['emplogin']) == 0) {   
     header('location:index.php');
 } else {
-    if (isset($_POST['apply'])) {
-        $empid = $_SESSION['eid'];
+    // Fetch leave details if leaveid is set
+    $leaveid = intval($_GET['leaveid']);
+    $sql = "SELECT * FROM tblleavestest WHERE id = :leaveid";
+    $query = $dbh->prepare($sql);
+    $query->bindParam(':leaveid', $leaveid, PDO::PARAM_INT);
+    $query->execute();
+    $leaveDetails = $query->fetch(PDO::FETCH_OBJ);
+
+    // Check if leave details were found
+    if (!$leaveDetails) {
+        echo "<script>alert('Leave details not found.'); window.location.href='leavehistory.php';</script>";
+        exit();
+    }
+
+    // Handle form submission for updating leave details
+    if (isset($_POST['update'])) {
         $leavetype = $_POST['leavetype'];
         $leaveDates = json_encode($_POST['leave_dates']); // Store leave dates as JSON
         $description = $_POST['description'];  
-        $username = $_POST['username'];
-        $emailId = $_POST['emailid'];
-        $phonenumber = $_POST['phonenumber'];
-        $status = 0;
-        $isread = 0;
+        $status = 0; // Set status to 0 (Waiting for Approval)
+        $empid = $leaveDetails->empid; // Keep the same employee ID
 
-        // Insert into database
-        $sql = "INSERT INTO tblleavestest (LeaveType, LeaveDates, Description, Status, IsRead, empid, Username, EmailId, Phonenumber) 
-                VALUES (:leavetype, :leavedates, :description, :status, :isread, :empid, :username, :emailid, :phonenumber)";
+        // Update leave details in the database
+        $sql = "UPDATE tblleavestest SET LeaveType = :leavetype, LeaveDates = :leavedates, Description = :description, Status = :status WHERE id = :leaveid";
         $query = $dbh->prepare($sql);
         $query->bindParam(':leavetype', $leavetype, PDO::PARAM_STR);
         $query->bindParam(':leavedates', $leaveDates, PDO::PARAM_STR);
         $query->bindParam(':description', $description, PDO::PARAM_STR);
-        $query->bindParam(':status', $status, PDO::PARAM_STR);
-        $query->bindParam(':isread', $isread, PDO::PARAM_STR);
-        $query->bindParam(':empid', $empid, PDO::PARAM_STR);
-        $query->bindParam(':username', $username, PDO::PARAM_STR);
-        $query->bindParam(':emailid', $emailId, PDO::PARAM_STR);
-        $query->bindParam(':phonenumber', $phonenumber, PDO::PARAM_STR);
-        $query->execute();
-        $lastInsertId = $dbh->lastInsertId();
-        if ($lastInsertId) {
-            $msg = "Leave applied successfully";
+        $query->bindParam(':status', $status, PDO::PARAM_INT);
+        $query->bindParam(':leaveid', $leaveid, PDO::PARAM_INT);
+
+        if ($query->execute()) {
+            echo "<script>M.toast({html: 'Leave details updated successfully. The status has been set to \"Waiting for Approval\".'});</script>";
             header('location:leavehistory.php'); // Redirect to leave history page
             exit(); // Ensure no further code is executed after redirection
         } else {
@@ -59,7 +64,7 @@ if (strlen($_SESSION['emplogin']) == 0) {
 <html lang="en">
 
 <head>
-    <title>Employee | Apply Leave</title>
+    <title>Employee | Edit Leave</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta charset="UTF-8">
     <meta name="description" content="Responsive Admin Dashboard Template" />
@@ -94,8 +99,8 @@ if (strlen($_SESSION['emplogin']) == 0) {
         color: red;
         margin-left: 10px;
         font-size: 20px;
-        display: none;
-        /* Hide by default */
+        display: inline;
+        /* Show by default */
     }
 
     .date-field-container {
@@ -115,8 +120,8 @@ if (strlen($_SESSION['emplogin']) == 0) {
         <div class="col s12 m12 l8">
             <div class="card">
                 <div class="card-content">
-                    <h3 class="nby-title">Apply Leave Form</h3>
-                    <form id="example-form" method="post" name="addemp">
+                    <h3 class="nby-title">Edit Leave Form</h3>
+                    <form id="example-form" method="post" name="editleave">
                         <div>
                             <section>
                                 <div class="wizard-content">
@@ -150,6 +155,7 @@ if (strlen($_SESSION['emplogin']) == 0) {
                                                 </div>
 
                                                 <div class="input-field col s12">
+                                                    <span style="font-weight:bold;">Leave Type</span>
                                                     <select name="leavetype" autocomplete="off" class="browser-default"
                                                         required>
                                                         <option value="">Select leave type...</option>
@@ -160,7 +166,8 @@ if (strlen($_SESSION['emplogin']) == 0) {
                                                             $results = $query->fetchAll(PDO::FETCH_OBJ);
                                                             if ($query->rowCount() > 0) {
                                                                 foreach ($results as $result) { ?>
-                                                        <option value="<?php echo htmlentities($result->LeaveType); ?>">
+                                                        <option value="<?php echo htmlentities($result->LeaveType); ?>"
+                                                            <?php echo ($result->LeaveType == $leaveDetails->LeaveType) ? 'selected' : ''; ?>>
                                                             <?php echo htmlentities($result->LeaveType); ?></option>
                                                         <?php }
  } ?>
@@ -170,10 +177,15 @@ if (strlen($_SESSION['emplogin']) == 0) {
                                                 <div class="input-field col s12">
                                                     <span style="font-weight:bold;">Leave Dates</span>
                                                     <div id="date_fields">
-                                                        <div class="date-field-container">
-                                                            <input id="leave_dates" name="leave_dates[]" type="date"
-                                                                required>
-                                                        </div>
+                                                        <?php
+                                                        $leaveDates = json_decode($leaveDetails->LeaveDates);
+                                                        // Ensure only one leave date is shown by default
+                                                        echo '<div class="date-field-container"><input name="leave_dates[]" type="date" value="' . htmlentities($leaveDates[0]) . '" required>';
+                                                        if (count($leaveDates) > 1) {
+                                                            echo '<span class="material-icons remove-icon" onclick="removeDateField(this)">close</span>';
+                                                        }
+                                                        echo '</div>';
+                                                        ?>
                                                     </div>
 
                                                     <div id="additional_dates"></div>
@@ -185,17 +197,26 @@ if (strlen($_SESSION['emplogin']) == 0) {
                                                 <div class="input-field col m12 s12">
                                                     <span style="font-weight:bold;">Description</span>
                                                     <textarea id="textarea1" name="description"
-                                                        class="materialize-textarea" length="500"></textarea>
+                                                        class="materialize-textarea" length="500"
+                                                        required><?php echo htmlentities($leaveDetails->Description); ?></textarea>
                                                 </div>
 
-                                                <button type="submit" name="apply" id="apply"
-                                                    class="waves-effect waves-light btn indigo m-b-xs">Apply</button>
+                                                <div class="warning-message"
+                                                    style="color: orange; font-weight: bold; font-size: 16px;">
+                                                    Note: Updating leave details will change the status to "Waiting for
+                                                    Approval".
+                                                </div>
+
+                                                <button type="submit" name="update" id="update"
+                                                    class="waves-effect waves-light btn indigo m-b-xs"
+                                                    style="margin-top: 20px;">Update</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </section>
                         </div>
+
                     </form>
                 </div>
             </div>
@@ -218,14 +239,31 @@ if (strlen($_SESSION['emplogin']) == 0) {
         removeIcon.textContent = 'close'; // Cross icon
         removeIcon.onclick = function() {
             additionalDatesDiv.removeChild(dateFieldContainer);
+            updateRemoveIcons();
         };
 
         dateFieldContainer.appendChild(newDateField);
         dateFieldContainer.appendChild(removeIcon);
         additionalDatesDiv.appendChild(dateFieldContainer);
+        updateRemoveIcons();
+    }
 
-        // Show the remove icon
-        removeIcon.style.display = 'inline';
+    function removeDateField(element) {
+        const dateFieldContainer = element.parentElement;
+        dateFieldContainer.parentElement.removeChild(dateFieldContainer);
+        updateRemoveIcons();
+    }
+
+    function updateRemoveIcons() {
+        const dateFieldContainers = document.querySelectorAll('.date-field-container');
+        dateFieldContainers.forEach((container, index) => {
+            const removeIcon = container.querySelector('.remove-icon');
+            if (dateFieldContainers.length > 1) {
+                removeIcon.style.display = 'inline';
+            } else {
+                removeIcon.style.display = 'none';
+            }
+        });
     }
     </script>
 

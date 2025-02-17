@@ -64,8 +64,6 @@ else{
 
     <main class="mn-inner">
         <div class="row">
-
-
             <div class="col s12 m12 l12">
                 <div class="card">
                     <div class="card-content">
@@ -77,54 +75,61 @@ else{
                                 <tr>
                                     <th>no</th>
                                     <th width="120">Leave Type</th>
-                                    <th>From</th>
-                                    <th>To</th>
+                                    <th>Leave Dates</th>
                                     <th>Posting Date</th>
                                     <th>Status</th>
                                     <th>Action</th>
-
                                 </tr>
                             </thead>
 
                             <tbody>
                                 <?php 
-$eid=$_SESSION['eid'];
-$sql = "SELECT tblleaves.id as lid ,LeaveType,ToDate,FromDate,Description,PostingDate,AdminRemarkDate,AdminRemark,Status from tblleaves where empid=:eid";
-$query = $dbh -> prepare($sql);
-$query->bindParam(':eid',$eid,PDO::PARAM_STR);
-$query->execute();
-$results=$query->fetchAll(PDO::FETCH_OBJ);
-$cnt=1;
-if($query->rowCount() > 0)
-{
-foreach($results as $result)
-{               ?>
+                            $eid = $_SESSION['eid'];
+                            $sql = "SELECT id as lid, LeaveType, LeaveDates, Duration, PostingDate, AdminRemarkDate, AdminRemark, Status FROM tblleavestest WHERE empid=:eid";
+                            $query = $dbh->prepare($sql);
+                            $query->bindParam(':eid', $eid, PDO::PARAM_STR);
+                            $query->execute();
+                            $results = $query->fetchAll(PDO::FETCH_OBJ);
+                            $cnt = 1;
+                            if($query->rowCount() > 0) {
+                                foreach($results as $result) {
+                            ?>
                                 <tr>
-                                    <td> <?php echo htmlentities($cnt);?></td>
+                                    <td><?php echo htmlentities($cnt);?></td>
                                     <td><?php echo htmlentities($result->LeaveType);?></td>
-                                    <td><?php echo date('d-m-Y - h:i A - (l)', strtotime($result->FromDate)); ?></td>
-                                    <td><?php echo date('d-m-Y - h:i A - (l)', strtotime($result->ToDate)); ?></td>
+                                    <td>
+                                        <?php 
+                                    $leaveDates = json_decode($result->LeaveDates);
+                                    if (is_array($leaveDates)) {
+                                        foreach ($leaveDates as $date) {
+                                            echo date('d-m-Y - (l)', strtotime($date)) . "<br>";
+                                        }
+                                    }
+                                    ?>
+                                    </td>
                                     <td><?php echo date('d-m-Y - h:i A - (l)', strtotime($result->PostingDate)); ?></td>
-
-                                    <td><?php $stats=$result->Status;
-if($stats==1){
-                                             ?>
-                                        <span style="color: green">Approved</span>
-                                        <?php } if($stats==2)  { ?>
-                                        <span style="color: red">Not Approved</span>
-                                        <?php } if($stats==0)  { ?>
-                                        <span style="color: blue">waiting for approval</span>
-                                        <?php } ?>
-
+                                    <td>
+                                        <?php 
+                                    $stats = $result->Status;
+                                    if ($stats == 1) {
+                                        echo '<span style="color: green">Approved</span>';
+                                    } elseif ($stats == 2) {
+                                        echo '<span style="color: red">Not Approved</span>';
+                                    } elseif ($stats == 0) {
+                                        echo '<span style="color: blue">Waiting for approval</span>';
+                                    }
+                                    ?>
                                     </td>
                                     <td>
                                         <a href="leave-details.php?leaveid=<?php echo htmlentities($result->lid);?>"
-                                            class="waves-effect waves-light btn blue m-b-xs"> View Details</a>
+                                            class="waves-effect waves-light btn blue m-b-xs">View Details</a>
                                     </td>
-
-
                                 </tr>
-                                <?php $cnt++;} }?>
+                                <?php 
+                                $cnt++;
+                                }
+                            } 
+                            ?>
                             </tbody>
                         </table>
                     </div>

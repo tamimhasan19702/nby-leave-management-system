@@ -88,7 +88,7 @@ else{
                             <tbody>
                                 <?php 
 $status=2;
-$sql = "SELECT tblleaves.id as lid,tblemployees.FirstName,tblemployees.LastName,tblemployees.EmpId,tblemployees.id,tblleaves.LeaveType,tblleaves.PostingDate,tblleaves.Status from tblleaves join tblemployees on tblleaves.empid=tblemployees.id where tblleaves.Status=:status order by lid desc";
+$sql = "SELECT tblleavestest.id as lid,tblemployees.FirstName,tblemployees.LastName,tblemployees.EmpId,tblemployees.id,tblleavestest.LeaveType,tblleavestest.PostingDate,tblleavestest.Status from tblleavestest join tblemployees on tblleavestest.empid=tblemployees.id where tblleavestest.Status=:status order by lid desc";
 $query = $dbh -> prepare($sql);
 $query->bindParam(':status',$status,PDO::PARAM_STR);
 $query->execute();

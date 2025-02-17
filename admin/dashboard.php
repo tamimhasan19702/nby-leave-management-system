@@ -77,7 +77,7 @@ else{
                         <div class="card stats-card">
                             <div class="card-content">
 
-                                <span class="card-title">Total NBYIT Employees</span>
+                                <span class="card-title">Total NBY IT Employees</span>
                                 <span class="stats-counter">
                                     <?php
 $sql = "SELECT id from tblemployees";
@@ -150,7 +150,7 @@ $noticount=$query->rowCount();
                             <div class="card-content">
                                 <span class="card-title">Total Leaves</span>
                                 <?php
-$sql = "SELECT id from  tblleaves";
+$sql = "SELECT id from  tblleavestest";
 $query = $dbh -> prepare($sql);
 $query->execute();
 $results=$query->fetchAll(PDO::FETCH_OBJ);
@@ -173,7 +173,7 @@ $totalleaves=$query->rowCount();
                             <div class="card-content">
                                 <span class="card-title">Approved Leaves</span>
                                 <?php
-$sql = "SELECT id from  tblleaves where Status=1";
+$sql = "SELECT id from  tblleavestest where Status=1";
 $query = $dbh -> prepare($sql);
 $query->execute();
 $results=$query->fetchAll(PDO::FETCH_OBJ);
@@ -198,7 +198,7 @@ $approvedleaves=$query->rowCount();
                             <div class="card-content">
                                 <span class="card-title">New Leaves Applications</span>
                                 <?php
-$sql = "SELECT id from  tblleaves where Status=0";
+$sql = "SELECT id from  tblleavestest where Status=0";
 $query = $dbh -> prepare($sql);
 $query->execute();
 $results=$query->fetchAll(PDO::FETCH_OBJ);
@@ -216,28 +216,21 @@ $approvedleaves=$query->rowCount();
                 </a>
 
 
-
-
-
-
-
-
-
             </div>
+
+
 
             <div class="row no-m-t no-m-b">
                 <div class="col s15 m12 l12">
                     <div class="card invoices-card">
                         <div class="card-content">
-
                             <span class="card-title">Latest Leave Applications</span>
                             <table id="example" class="display responsive-table ">
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th width="200">Employe Name</th>
+                                        <th width="200">Employee Name</th>
                                         <th width="120">Leave Type</th>
-
                                         <th width="180">Posting Date</th>
                                         <th>Status</th>
                                         <th>Action</th>
@@ -245,50 +238,66 @@ $approvedleaves=$query->rowCount();
                                 </thead>
 
                                 <tbody>
-                                    <?php $sql = "SELECT tblleaves.id as lid,tblemployees.FirstName,tblemployees.LastName,tblemployees.EmpId,tblemployees.id,tblleaves.LeaveType,tblleaves.PostingDate,tblleaves.Status from tblleaves join tblemployees on tblleaves.empid=tblemployees.id order by lid desc limit 6";
-$query = $dbh -> prepare($sql);
-$query->execute();
-$results=$query->fetchAll(PDO::FETCH_OBJ);
-$cnt=1;
-if($query->rowCount() > 0)
-{
-foreach($results as $result)
-{         
-      ?>
-
+                                    <?php 
+                        $sql = "SELECT tblleavestest.id as lid, 
+                                       tblemployees.FirstName, 
+                                       tblemployees.LastName, 
+                                       tblemployees.EmpId, 
+                                       tblleavestest.LeaveType, 
+                                       tblleavestest.PostingDate, 
+                                       tblleavestest.Status 
+                                FROM tblleavestest 
+                                JOIN tblemployees ON tblleavestest.empid = tblemployees.id 
+                                ORDER BY lid DESC 
+                                LIMIT 6";
+                        $query = $dbh->prepare($sql);
+                        $query->execute();
+                        $results = $query->fetchAll(PDO::FETCH_OBJ);
+                        $cnt = 1;
+                        if ($query->rowCount() > 0) {
+                            foreach ($results as $result) {         
+                        ?>
                                     <tr>
-                                        <td> <b><?php echo htmlentities($cnt);?></b></td>
-                                        <td><a href="viewprofile.php?empid=<?php echo htmlentities($result->id);?>"
-                                                target="_blank"><?php echo htmlentities($result->FirstName." ".$result->LastName);?>(<?php echo htmlentities($result->EmpId);?>)</a>
+                                        <td><b><?php echo htmlentities($cnt); ?></b></td>
+                                        <td>
+                                            <a href="viewprofile.php?empid=<?php echo htmlentities($result->empid); ?>"
+                                                target="_blank">
+                                                <?php echo htmlentities($result->FirstName . " " . $result->LastName); ?>(<?php echo htmlentities($result->EmpId); ?>)
+                                            </a>
                                         </td>
-                                        <td><?php echo htmlentities($result->LeaveType);?></td>
-                                        <td><?php echo htmlentities((new DateTime($result->PostingDate))->format('d-m-Y - h:i A - (l)'));?>
+                                        <td><?php echo htmlentities($result->LeaveType); ?></td>
+                                        <td><?php echo htmlentities((new DateTime($result->PostingDate))->format('d-m-Y - h:i A - (l)')); ?>
                                         </td>
-                                        <td><?php $stats=$result->Status;
-if($stats==1){
-                                             ?>
-                                            <span style="color: green">Approved</span>
-                                            <?php } if($stats==2)  { ?>
-                                            <span style="color: red">Not Approved</span>
-                                            <?php } if($stats==0)  { ?>
-                                            <span style="color: blue">waiting for approval</span>
-                                            <?php } ?>
-
-
+                                        <td>
+                                            <?php 
+                                $stats = $result->Status;
+                                if ($stats == 1) {
+                                    echo '<span style="color: green">Approved</span>';
+                                } elseif ($stats == 2) {
+                                    echo '<span style="color: red">Not Approved</span>';
+                                } elseif ($stats == 0) {
+                                    echo '<span style="color: blue">Waiting for approval</span>';
+                                }
+                                ?>
                                         </td>
-
-
-                                        <td><a href="leave-details.php?leaveid=<?php echo htmlentities($result->lid);?>"
-                                                class="waves-effect waves-light btn blue m-b-xs"> View Details</a></td>
+                                        <td>
+                                            <a href="leave-details.php?leaveid=<?php echo htmlentities($result->lid); ?>"
+                                                class="waves-effect waves-light btn blue m-b-xs">View Details</a>
+                                        </td>
                                     </tr>
-                                    <?php $cnt++;} }?>
+                                    <?php 
+                                $cnt++;
+                            }
+                        } 
+                        ?>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+
+
 
     </main>
 

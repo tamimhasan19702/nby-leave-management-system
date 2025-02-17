@@ -434,5 +434,5 @@ strong {
   display: flex;
   justify-content: start;
   gap: 50px;
-  flex-direction: row;
+  flex-direction: row !important;
 }

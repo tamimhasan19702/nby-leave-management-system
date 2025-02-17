@@ -20,6 +20,7 @@ $query->bindParam(':did',$did,PDO::PARAM_STR);
 $query->execute();
 
 // code for action taken on leave
+
 if (isset($_POST['update'])) {
     // Get form inputs
     $did = intval($_POST['leaveid']); // Get Leave ID from the form
@@ -33,7 +34,7 @@ if (isset($_POST['update'])) {
         $admremarkdate = date('Y-m-d G:i:s', strtotime("now"));
 
         // Fetch leave details to get duration and employee ID
-        $sql = "SELECT empid, Duration, LeaveType FROM tblleaves WHERE id = :did";
+        $sql = "SELECT empid, Duration, LeaveType FROM tblleavestest WHERE id = :did";
         $query = $dbh->prepare($sql);
         $query->bindParam(':did', $did, PDO::PARAM_INT);
         $query->execute();
@@ -45,7 +46,7 @@ if (isset($_POST['update'])) {
             $leaveType = $leaveDetails->LeaveType;
 
             // Update Query for leave status
-            $sql = "UPDATE tblleaves 
+            $sql = "UPDATE tblleavestest 
                     SET AdminRemark = :description, 
                         Status = :status, 
                         AdminRemarkDate = :admremarkdate 
@@ -180,40 +181,38 @@ if (isset($_POST['update'])) {
 
     <?php include('includes/sidebar.php');?>
 
-
-    <?php 
+    <?php
     $lid = intval($_GET['leaveid']);
-    $sql = "SELECT tblleaves.id as lid,
-                   tblemployees.FirstName,
-                   tblemployees.LastName,
-                   tblemployees.EmpId,
-                   tblemployees.id,
-                   tblemployees.Gender,
-                   tblemployees.Phonenumber,
-                   tblemployees.EmailId,
-                   tblemployees.AnnualLeave,
-                   tblemployees.SickLeave,
-                   tblemployees.Image,
-                   tblleaves.LeaveType,
-                   tblleaves.ToDate,
-                   tblleaves.FromDate,
-                   tblleaves.Description,
-                   tblleaves.PostingDate,
-                   tblleaves.Status,
-                   tblleaves.AdminRemark,
-                   tblleaves.AdminRemarkDate,
-                   tblleaves.Duration 
-            FROM tblleaves 
-            JOIN tblemployees ON tblleaves.empid = tblemployees.id 
-            WHERE tblleaves.id = :lid";
-    $query = $dbh->prepare($sql);
-    $query->bindParam(':lid', $lid, PDO::PARAM_STR);
-    $query->execute();
-    $results = $query->fetchAll(PDO::FETCH_OBJ);
-    $cnt = 1;
-    if ($query->rowCount() > 0) {
-        foreach ($results as $result) {         
-    ?>
+$sql = "SELECT tblleavestest.id as lid,
+               tblemployees.FirstName,
+               tblemployees.LastName,
+               tblemployees.EmpId,
+               tblemployees.id,
+               tblemployees.Gender,
+               tblemployees.Phonenumber,
+               tblemployees.EmailId,
+               tblemployees.AnnualLeave,
+               tblemployees.SickLeave,
+               tblemployees.Image,
+               tblleavestest.LeaveType,
+               tblleavestest.LeaveDates,
+               tblleavestest.Description,
+               tblleavestest.PostingDate,
+               tblleavestest.Status,
+               tblleavestest.AdminRemark,
+               tblleavestest.AdminRemarkDate,
+               tblleavestest.Duration 
+        FROM tblleavestest 
+        JOIN tblemployees ON tblleavestest.empid = tblemployees.id 
+        WHERE tblleavestest.id = :lid";
+$query = $dbh->prepare($sql);
+$query->bindParam(':lid', $lid, PDO::PARAM_STR);
+$query->execute();
+$results = $query->fetchAll(PDO::FETCH_OBJ);
+$cnt = 1;
+if ($query->rowCount() > 0) {
+    foreach ($results as $result) {         
+?>
 
 
     <main class="mn-inner">
@@ -265,16 +264,19 @@ if (isset($_POST['update'])) {
                                 <tr>
                                     <td style="font-size:16px;"><b>Leave Type :</b></td>
                                     <td><?php echo htmlentities($result->LeaveType); ?></td>
-                                    <td style="font-size:16px;"><b>Leave Date :</b></td>
+                                    <td style="font-size:16px;"><b>Leave Dates :</b></td>
                                     <td>
-                                        <span style="font-weight:600">From - </span> <?php 
-                $fromDate = htmlentities($result->FromDate);
-                echo date('d-m-Y - (l)', strtotime($fromDate)); 
-            ?> <span style="font-weight:600"> - To - </span>
-                                        <?php  
-                $toDate = htmlentities($result->ToDate);
-                echo date('d-m-Y - (l)', strtotime($toDate)); 
-            ?>
+
+                                        <?php 
+    $leaveDates = json_decode($result->LeaveDates);
+    if (is_array($leaveDates)) {
+        foreach ($leaveDates as $date) {
+            echo date('d-m-Y - (l)', strtotime($date)) . "<br>";
+        }
+    } else {
+        echo "No leave dates available.";
+    }
+    ?>
                                     </td>
                                     <td style="font-size:16px;"><b>Posting Date</b></td>
                                     <td><?php echo date('d-m-Y - h:i A - (l)', strtotime($result->PostingDate)); ?></td>
@@ -360,7 +362,7 @@ if (isset($_POST['update'])) {
             if ($result->AdminRemarkDate == "") {
                 echo "NA";  
             } else {
-                echo htmlentities($result->AdminRemarkDate);
+                echo htmlentities(date('d-m-Y - h:i A - (l)', strtotime($result->AdminRemarkDate)));
             }
             ?></td>
                                 </tr>

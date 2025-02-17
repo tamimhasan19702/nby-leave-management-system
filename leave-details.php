@@ -6,58 +6,8 @@ include('includes/config.php');
 if (strlen($_SESSION['emplogin']) == 0) {
     header('location:index.php');
 } else {
-    if (isset($_POST['apply'])) {
-        $empid = $_SESSION['eid'];
-        $leavetype = $_POST['leavetype'];
-        $fromdate = $_POST['fromdate'];  
-        $duration = intval($_POST['duration']); // Get duration in days
-        $description = $_POST['description'];  
-        $username = $_POST['username'];
-        $emailId = $_POST['emailid'];
-        $phonenumber = $_POST['phonenumber'];
-        $status = 0;
-        $isread = 0;
-
-        // Calculate ToDate based on FromDate and Duration
-        $fromDateTime = new DateTime($fromdate);
-        $fromDateTime->modify("+$duration days"); // Add duration to FromDate
-        $todate = $fromDateTime->format('d-m-Y'); // Format as d-m-Y
-        $fromdate = (new DateTime($fromdate))->format('d-m-Y'); // Format fromdate as d-m-Y
-
-        // Create duration string with suffix
-        $durationString = $duration ;
-
-        if ($duration <= 0) {
-            $error = "Duration must be greater than 0";
-        } else {
-            $sql = "INSERT INTO tblleaves (LeaveType, ToDate, FromDate, Description, Status, IsRead, empid, Username, EmailId, Phonenumber, Duration) 
-                    VALUES (:leavetype, :todate, :fromdate, :description, :status, :isread, :empid, :username, :emailid, :phonenumber, :duration)";
-            $query = $dbh->prepare($sql);
-            $query->bindParam(':leavetype', $leavetype, PDO::PARAM_STR);
-            $query->bindParam(':fromdate', $fromdate, PDO::PARAM_STR);
-            $query->bindParam(':todate', $todate, PDO::PARAM_STR);
-            $query->bindParam(':description', $description, PDO::PARAM_STR);
-            $query->bindParam(':status', $status, PDO::PARAM_STR);
-            $query->bindParam(':isread', $isread, PDO::PARAM_STR);
-            $query->bindParam(':empid', $empid, PDO::PARAM_STR);
-            $query->bindParam(':username', $username, PDO::PARAM_STR);
-            $query->bindParam(':emailid', $emailId, PDO::PARAM_STR);
-            $query->bindParam(':phonenumber', $phonenumber, PDO::PARAM_STR);
-            $query->bindParam(':duration', $durationString, PDO::PARAM_STR); // Bind duration with suffix
-            $query->execute();
-            $lastInsertId = $dbh->lastInsertId();
-            if ($lastInsertId) {
-                $msg = "Leave applied successfully";
-                header('location:leavehistory.php'); // Redirect to leave history page
-                exit(); // Ensure no further code is executed after redirection
-            } else {
-                $error = "Something went wrong. Please try again";
-            }
-        }
-    }
-
     $lid = intval($_GET['leaveid']);
-    $sql = "SELECT tblleaves.id as lid, 
+    $sql = "SELECT tblleavestest.id as lid, 
                    tblemployees.FirstName, 
                    tblemployees.LastName, 
                    tblemployees.EmpId, 
@@ -65,24 +15,23 @@ if (strlen($_SESSION['emplogin']) == 0) {
                    tblemployees.Phonenumber, 
                    tblemployees.EmailId,
                    tblemployees.Image, 
-                   tblleaves.LeaveType, 
-                   tblleaves.ToDate, 
-                   tblleaves.FromDate, 
-                   tblleaves.Description, 
-                   tblleaves.PostingDate, 
-                   tblleaves.Status, 
-                   tblleaves.AdminRemark, 
-                   tblleaves.AdminRemarkDate,
-                   tblleaves.Duration 
-            FROM tblleaves 
-            JOIN tblemployees ON tblleaves.empid = tblemployees.id 
-            WHERE tblleaves.id = :lid";
+                   tblleavestest.LeaveType, 
+                   tblleavestest.LeaveDates, 
+                   tblleavestest.Description, 
+                   tblleavestest.PostingDate, 
+                   tblleavestest.Status, 
+                   tblleavestest.AdminRemark, 
+                   tblleavestest.AdminRemarkDate,
+                   tblleavestest.Duration 
+            FROM tblleavestest 
+            JOIN tblemployees ON tblleavestest.empid = tblemployees.id 
+            WHERE tblleavestest.id = :lid";
     $query = $dbh->prepare($sql);
     $query->bindParam(':lid', $lid, PDO::PARAM_STR);
     $query->execute();
     $results = $query->fetchAll(PDO::FETCH_OBJ);
 
- $leaveDetails = []; // Initialize an array to hold leave details
+    $leaveDetails = []; // Initialize an array to hold leave details
 
     if ($query->rowCount() > 0) {
         foreach ($results as $result) {
@@ -93,34 +42,33 @@ if (strlen($_SESSION['emplogin']) == 0) {
             $leaveDetails['Phonenumber'] = !empty($result->Phonenumber) ? htmlentities($result->Phonenumber) : null;
             $leaveDetails['LeaveType'] = !empty($result->LeaveType) ? htmlentities($result->LeaveType) : null;
             $leaveDetails['Image'] = !empty($result->Image) ? htmlentities($result->Image) : null;
-            
-            if (!empty($result->FromDate)) {
-                $fromDateTime = new DateTime($result->FromDate);
-                $leaveDetails['FromDate'] = $fromDateTime->format('d-m-Y') . ' (' . $fromDateTime->format('l') . ')';
+
+            // Decode LeaveDates JSON
+            $leaveDates = json_decode($result->LeaveDates);
+            $formattedLeaveDates = [];
+            if (is_array($leaveDates)) {
+                foreach ($leaveDates as $date) {
+                    $dateTime = new DateTime($date);
+                    $formattedLeaveDates[] = $dateTime->format('d-m-Y') . ' (' . $dateTime->format('l') . ')';
+                }
             }
-            
-            if (!empty($result->ToDate)) {
-                $toDateTime = new DateTime($result->ToDate);
-                $leaveDetails['ToDate'] = $toDateTime->format('d-m-Y') . ' (' . $toDateTime->format('l') . ')';
-            }
-            
-            $leaveDetails['Description'] = !empty($result->Description) ? htmlentities($result->Description) : null;
-            
+            $leaveDetails['LeaveDates'] = implode(", ", $formattedLeaveDates);
+
             if (!empty($result->PostingDate)) {
                 $postingDateTime = new DateTime($result->PostingDate);
                 $leaveDetails['PostingDate'] = $postingDateTime->format('d-m-Y') . ' (' . $postingDateTime->format('l') . ') - ' . $postingDateTime->format('h:i A');
             }
-            
+
             $leaveDetails['Status'] = isset($result->Status) ? (int)$result->Status : null;
             $leaveDetails['AdminRemark'] = !empty($result->AdminRemark) ? htmlentities($result->AdminRemark) : "waiting for Approval";
-            
+
             if (!empty($result->AdminRemarkDate)) {
                 $adminRemarkDateTime = new DateTime($result->AdminRemarkDate);
                 $leaveDetails['AdminRemarkDate'] = $adminRemarkDateTime->format('d-m-Y') . ' (' . $adminRemarkDateTime->format('l') . ') - ' . $adminRemarkDateTime->format('h:i A');
             } else {
                 $leaveDetails['AdminRemarkDate'] = "NA";
-            }
-            
+ }
+
             $leaveDetails['Duration'] = !empty($result->Duration) ? htmlentities($result->Duration) : "NA";
         }
     }
@@ -181,9 +129,15 @@ if (strlen($_SESSION['emplogin']) == 0) {
                         <?php if (isset($msg) && $msg) { ?>
                         <div class="succWrap"><strong>SUCCESS</strong> : <?php echo htmlentities($msg); ?> </div>
                         <?php } ?>
-                        <div style="margin-bottom: 20px;">
+                        <div
+                            style="margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;">
                             <img src="<?php echo $leaveDetails['Image'] ?? 'N/A'; ?>" alt="Employee Image"
                                 style="width: 100px; height: auto;">
+
+
+                            <a href="emp-edit-leavedetails.php?leaveid=<?php echo $lid; ?>"
+                                class="waves-effect waves-light btn indigo m-b-xs">Edit Leave Details</a>
+
                         </div>
                         <table id="example" class="display responsive-table ">
                             <tbody>
@@ -209,14 +163,8 @@ if (strlen($_SESSION['emplogin']) == 0) {
                                 <tr>
                                     <td style="font-size:16px;"><b>Leave Type :</b></td>
                                     <td><?php echo $leaveDetails['LeaveType'] ?? 'N/A'; ?></td>
-                                    <td style="font-size:16px;"><b>Leave Date :</b></td>
-                                    <td><span style="font-weight:600">From -</span>
-                                        <?php echo $leaveDetails['FromDate'] ?? 'N/A'; ?>
-                                        (<?php echo $leaveDetails['FromDateWeekday'] ?? 'N/A'; ?>)<span
-                                            style="font-weight:600"> - To
-                                            -</span>
-                                        <?php echo $leaveDetails['ToDate'] ?? 'N/A'; ?>
-                                        (<?php echo $leaveDetails['ToDateWeekday'] ?? 'N/A'; ?>)</td>
+                                    <td style="font-size:16px;"><b>Leave Dates :</b></td>
+                                    <td><?php echo $leaveDetails['LeaveDates'] ?? 'N/A'; ?></td>
                                     <td style="font-size:16px;"><b>Posting Date</b></td>
                                     <td><?php echo $leaveDetails['PostingDate'] ?? 'N/A'; ?></td>
                                 </tr>
@@ -264,7 +212,7 @@ if (strlen($_SESSION['emplogin']) == 0) {
 
     <!-- Javascripts -->
     <script src="assets/plugins/jquery/jquery-2.2.0.min.js"></script>
-    <script src=" assets/plugins/materialize/js/materialize.min.js"></script>
+    <script src="assets/plugins/materialize/js/materialize.min.js"></script>
     <script src="assets/plugins/material-preloader/js/materialPreloader.min.js"></script>
     <script src="assets/plugins/jquery-blockui/jquery.blockui.js"></script>
     <script src="assets/plugins/datatables/js/jquery.dataTables.min.js"></script>
