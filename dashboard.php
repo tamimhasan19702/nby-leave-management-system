@@ -153,7 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="card-content">
                                 <span class="card-title">Total Leaves</span>
                                 <?php $eid=$_SESSION['eid'];
-$sql = "SELECT id from  tblleaves where empid ='$eid'";
+$sql = "SELECT id from  tblleavestest where empid ='$eid'";
 $query = $dbh -> prepare($sql);
 $query->execute();
 $results=$query->fetchAll(PDO::FETCH_OBJ);
@@ -176,7 +176,7 @@ $totalleaves=$query->rowCount();
                             <div class="card-content">
                                 <span class="card-title">Approved Leaves</span>
                                 <?php
-$sql = "SELECT id from  tblleaves where Status=1 and empid ='$eid'";
+$sql = "SELECT id from  tblleavestest where Status=1 and empid ='$eid'";
 $query = $dbh -> prepare($sql);
 $query->execute();
 $results=$query->fetchAll(PDO::FETCH_OBJ);
@@ -201,7 +201,7 @@ $approvedleaves=$query->rowCount();
                             <div class="card-content">
                                 <span class="card-title">New Leaves Applications</span>
                                 <?php
-$sql = "SELECT id from  tblleaves where Status=0 and empid ='$eid'";
+$sql = "SELECT id from  tblleavestest where Status=0 and empid ='$eid'";
 $query = $dbh -> prepare($sql);
 $query->execute();
 $results=$query->fetchAll(PDO::FETCH_OBJ);
@@ -235,7 +235,7 @@ $approvedleaves=$query->rowCount();
                     $employee_id = $_SESSION['eid'];
                     
                     // Fetch leave records to calculate remaining leaves
-                    $sql = "SELECT * FROM tblleaves WHERE empid = :employee_id";
+                    $sql = "SELECT * FROM tblleavestest WHERE empid = :employee_id";
                     $stmt = $dbh->prepare($sql);
                     $stmt->bindParam(':employee_id', $employee_id, PDO::PARAM_INT); // Bind the employee ID
                     $stmt->execute();

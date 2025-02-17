@@ -8,7 +8,7 @@ header('location:index.php');
 }
 else{
 
-  
+    $adminUserName = $_SESSION['alogin'];
     
     $sql = "SELECT id, FirstName, LastName, UserName, EmailId, Image FROM admin WHERE UserName = :username"; // Adjust the query to match your database schema
     $query = $dbh->prepare($sql);
