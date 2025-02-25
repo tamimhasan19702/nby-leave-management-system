@@ -42,6 +42,7 @@ if (strlen($_SESSION['emplogin']) == 0) {
             $leaveDetails['Phonenumber'] = !empty($result->Phonenumber) ? htmlentities($result->Phonenumber) : null;
             $leaveDetails['LeaveType'] = !empty($result->LeaveType) ? htmlentities($result->LeaveType) : null;
             $leaveDetails['Image'] = !empty($result->Image) ? htmlentities($result->Image) : null;
+            $leaveDetails['Description'] = !empty($result->Description) ? htmlentities($result->Description) : null;
 
             // Decode LeaveDates JSON
             $leaveDates = json_decode($result->LeaveDates);
@@ -60,7 +61,7 @@ if (strlen($_SESSION['emplogin']) == 0) {
             }
 
             $leaveDetails['Status'] = isset($result->Status) ? (int)$result->Status : null;
-            $leaveDetails['AdminRemark'] = !empty($result->AdminRemark) ? htmlentities($result->AdminRemark) : "waiting for Approval";
+            $leaveDetails['AdminRemark'] = !empty($result->AdminRemark) ? htmlentities($result->AdminRemark) : "No Remark Given";
 
             if (!empty($result->AdminRemarkDate)) {
                 $adminRemarkDateTime = new DateTime($result->AdminRemarkDate);

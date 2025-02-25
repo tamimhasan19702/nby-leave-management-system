@@ -55,6 +55,18 @@
                 </div>
             </li>
 
+            <li class="no-padding">
+                <a class="collapsible-header waves-effect waves-grey"><i class="material-icons">money</i>Advance
+                    Salary<i class="nav-drop-icon material-icons">keyboard_arrow_right</i></a>
+                <div class="collapsible-body">
+                    <ul>
+                        <li><a href="apply-leave.php">Apply for Advance</a></li>
+                        <li><a href="leavehistory.php">Request History</a></li>
+                    </ul>
+                </div>
+            </li>
+
+
 
 
             <li class="no-padding">
